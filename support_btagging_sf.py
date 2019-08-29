@@ -97,7 +97,7 @@ logging.info("loaded b-tagging callibration")
 
 logging.info("loading b-tagging efficiencies")
 #bTaggingEfficiencies_filename = std::string(std::getenv("CMSSW_BASE")) + "/src/UserCode/ttbar-leptons-80X/jobing/configs/b-tagging-efficiencies.root";
-bTaggingEfficiencies_filename = '${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/analysis/b-tagging/v9.38-for-b-effs/beff_histos.root'
+bTaggingEfficiencies_filename = '${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/lab_log/b-tagging/v9.38-for-b-effs/beff_histos.root'
 gSystem.ExpandPathName(bTaggingEfficiencies_filename)
 bTaggingEfficiencies_file = TFile(bTaggingEfficiencies_filename)
 

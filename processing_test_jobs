@@ -142,3 +142,5 @@ time python channel_distrs_full_loop.py --do-W-stitching  -l logss temp/ channel
 
 time python channel_distrs_full_loop.py --do-W-stitching  -l logss temp/ channels_nom_sys_muon_sel_main -i root://se01.indiacms.res.in:1094//cms/store/user/asikdar/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/CRAB3_MC_TTTo2L2Nu/190502_110028/0000/NtuplerAnalyzer_test_METfiltersOFF_TTTo2L2Nu_recordAll_1.root
 
+time python channel_distrs_full_loop.py --do-W-stitching  -l logss temp/ channels_nom_sys_muon_sel_main -i gstore_outdirs/94v1/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/Ntupler_94v1_MC2017legacy_Fall17_TTTo2L2Nu/190819_112003/0000/MC2017legacy_Fall17_TTTo2L2Nu_1.root
+

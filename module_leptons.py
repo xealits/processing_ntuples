@@ -54,15 +54,15 @@ muon_unc_sys_trg = 0.005
 """
 tests:
 
-root -l ../analysis/muon-effs//2016_23Sep_tracking_more_BCDEF_fits.root
-root -l ../analysis/muon-effs//2016_23Sep_MuonID_EfficienciesAndSF_BCDEF.root
-root -l ../analysis/muon-effs//2016_23Sep_MuonISO_EfficienciesAndSF_BCDEF.root
-root -l ../analysis/muon-effs//2016_23Sep_SingleMuonTrigger_EfficienciesAndSF_RunBtoF.root
+root -l ../lab_log/muon-effs//2016_23Sep_tracking_more_BCDEF_fits.root
+root -l ../lab_log/muon-effs//2016_23Sep_MuonID_EfficienciesAndSF_BCDEF.root
+root -l ../lab_log/muon-effs//2016_23Sep_MuonISO_EfficienciesAndSF_BCDEF.root
+root -l ../lab_log/muon-effs//2016_23Sep_SingleMuonTrigger_EfficienciesAndSF_RunBtoF.root
 
-root -l ../analysis/muon-effs//2016_23Sep_tracking_more_GH_fits.root
-root -l ../analysis/muon-effs//2016_23Sep_MuonID_EfficienciesAndSF_GH.root
-root -l ../analysis/muon-effs//2016_23Sep_MuonISO_EfficienciesAndSF_GH.root
-root -l ../analysis/muon-effs//2016_23Sep_SingleMuonTrigger_EfficienciesAndSF_Period4.root
+root -l ../lab_log/muon-effs//2016_23Sep_tracking_more_GH_fits.root
+root -l ../lab_log/muon-effs//2016_23Sep_MuonID_EfficienciesAndSF_GH.root
+root -l ../lab_log/muon-effs//2016_23Sep_MuonISO_EfficienciesAndSF_GH.root
+root -l ../lab_log/muon-effs//2016_23Sep_SingleMuonTrigger_EfficienciesAndSF_Period4.root
 
 ratio_eff_aeta_dr030e030_corr->Draw()
 ratio_eff_vtx_dr030e030_corr->Draw()
@@ -72,9 +72,9 @@ TightISO_TightID_pt_eta->Get("pt_abseta_ratio")->Draw("colz")
 IsoMu24_OR_IsoTkMu24_PtEtaBins->Get("pt_abseta_ratio")->Draw("colz")
 """
 
-muon_effs_dirname = "${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/analysis/muon-effs/"
+muon_effs_dirname = "${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/lab_log/muon-effs/"
 gSystem.ExpandPathName(muon_effs_dirname    )
-#TString muon_effs_dirname = "analysis/muon-effs/";
+#TString muon_effs_dirname = "lab_log/muon-effs/";
 logging.info("muon SFs from " + muon_effs_dirname)
 
 muon_effs_tracking_BCDEF_file  = TFile(muon_effs_dirname + "/2016_23Sep_tracking_more_BCDEF_fits.root" )
@@ -391,9 +391,9 @@ def dilepton_and_sfs(eff1, unc1, eff2, unc2):
 
  the trig eff for dilepton case is: apply negative of it for both leptons
 
-root -l ../analysis/electron-effs//2016_Sept23_ElectronReconstructionSF_egammaEffi.txt_EGM2D.root
-root -l ../analysis/electron-effs//2016_Sept23_ElectronID_TightCutBased_egammaEffi.txt_EGM2D.root
-root -l ../analysis/electron-effs//2016_03Feb_TriggerSF_Run2016All_v1.root
+root -l ../lab_log/electron-effs//2016_Sept23_ElectronReconstructionSF_egammaEffi.txt_EGM2D.root
+root -l ../lab_log/electron-effs//2016_Sept23_ElectronID_TightCutBased_egammaEffi.txt_EGM2D.root
+root -l ../lab_log/electron-effs//2016_03Feb_TriggerSF_Run2016All_v1.root
 
 EGamma_EffData2D->GetZaxis()->SetRangeUser(0.9,1.1)
 EGamma_SF2D->GetZaxis()->SetRangeUser(0.9,1.1)
@@ -411,7 +411,7 @@ Ele27_WPTight_Gsf->Draw("colz text")
 
 logging.info("unpacking electron eff SFs")
 
-electron_effs_dirname = "${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/analysis/electron-effs"
+electron_effs_dirname = "${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/lab_log/electron-effs"
 gSystem.ExpandPathName(electron_effs_dirname)
 
 electron_effs_tracking_all_file  = TFile(electron_effs_dirname + "/2016_Sept23_ElectronReconstructionSF_egammaEffi.txt_EGM2D.root")
@@ -424,7 +424,7 @@ electron_effs_id_all_file  = TFile(electron_effs_dirname + "/2016_Sept23_Electro
 electron_effs_id_all_histo = electron_effs_id_all_file.Get("EGamma_SF2D")
 logging.info("Y id")
 
-#analysis/electron-effs/2016_03Feb_TriggerSF_Run2016All_v1.root
+#lab_log/electron-effs/2016_03Feb_TriggerSF_Run2016All_v1.root
 electron_effs_trg_all_file  = TFile(electron_effs_dirname + "/2016_03Feb_TriggerSF_Run2016All_v1.root")
 electron_effs_trg_all_histo = electron_effs_trg_all_file.Get("Ele27_WPTight_Gsf")
 logging.info("Y trigger")
