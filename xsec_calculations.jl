@@ -75,14 +75,18 @@ bt_stat = 0.009
 
 
 
-# and the actual calculation:
+# and the actual calculation
+
+# fiducial (visible) phase space
 
 xsec_el_vis = [el_sig el_stat el_sys 0.025 ]
 xsec_mu_vis = [mu_sig mu_stat mu_sys 0.025 ]
 xsec_bt_vis = [bt_sig bt_stat bt_sys 0.025 ]
 
+# expected vis xsecs
 xsec_vis = 831.76 * accept
 
+# scale everything to expected (!!!) visible xsec
 xsec_visible_el = xsec_el_vis * xsec_vis[1]
 xsec_visible_mu = xsec_mu_vis * xsec_vis[2]
 xsec_visible_bt = xsec_bt_vis * xsec_vis[3]
@@ -92,9 +96,30 @@ println(xsec_visible_mu)
 println(xsec_visible_bt)
 
 
+# scale uncertainties to the measured (!!!) visible xsec
+xsec_el_meas = el_sig * 831.76 * acc_el
+xsec_mu_meas = mu_sig * 831.76 * acc_mu
+xsec_bt_meas = bt_sig * 831.76 * acc_bt
+
+println(xsec_el_meas, " ", xsec_el_meas .* [el_stat el_sys 0.025])
+println(xsec_mu_meas, " ", xsec_mu_meas .* [mu_stat mu_sys 0.025])
+println(xsec_bt_meas, " ", xsec_bt_meas .* [bt_stat bt_sys 0.025])
+
+
+
+# full phase space
+
 el_sys_extr = sum([el_sys acc_el_err / acc_el].^2) ^ 0.5
 mu_sys_extr = sum([mu_sys acc_mu_err / acc_mu].^2) ^ 0.5
 bt_sys_extr = sum([bt_sys acc_bt_err / acc_bt].^2) ^ 0.5
+
+println(el_sys, "\t", acc_el_err / acc_el)
+println(mu_sys, "\t", acc_mu_err / acc_mu)
+println(bt_sys, "\t", acc_bt_err / acc_bt)
+
+println(el_sys_extr)
+println(mu_sys_extr)
+println(bt_sys_extr)
 
 xsec_el_extr = [el_sig el_stat el_sys_extr  0.025]
 xsec_mu_extr = [mu_sig mu_stat mu_sys_extr  0.025]
