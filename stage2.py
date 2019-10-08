@@ -18,7 +18,7 @@ OLD_MINIAOD_JETS = False
 DO_W_STITCHING = False
 ALL_JETS = False
 with_bSF = True
-WITH_RECOIL_CORRECTIONS = True
+WITH_RECOIL_CORRECTIONS = False
 N_RECOIL_JETS = 0
 
 ISO_LEPS    = True
@@ -44,9 +44,9 @@ PROP_ALL_JETS    = True
 REQUIRE_MLB = False
 
 def PASSES_FUNC(pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all):
-    #return pass_mu or pass_el or pass_elmu or pass_mu_all or pass_el_all or pass_mumu
+    return pass_mu or pass_el or pass_elmu or pass_mu_all or pass_el_all or pass_mumu
     #return pass_elmu
-    return pass_mu or pass_el # or pass_elmu_el or pass_mumu or pass_elel
+    #return pass_mu or pass_el or pass_elmu_el or pass_elmu # or pass_mumu or pass_elel
 
 
 def passes_wjets_control_selection(passed_triggers, leps, N_jets, taus, proc_met):
@@ -4420,11 +4420,12 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         notpasses_presel = tt_channel_presel_stage < 1
         notpasses_wjets  = selection_wjets_control < 1
 
-        #if notpasses_tt_leptau and notpasses_em and notpasses_dy_tautau and notpasses_dy_mumu and notpasses_wjets and notpasses_alliso and notpasses_presel:
         # only main selection and preselection
         #if notpasses_tt_leptau and notpasses_presel:
         # only main selection
-        if notpasses_tt_leptau:
+        #if notpasses_tt_leptau:
+        #if notpasses_tt_leptau and notpasses_em and notpasses_dy_tautau and notpasses_dy_mumu and notpasses_wjets and notpasses_alliso and notpasses_presel:
+        if notpasses_tt_leptau and notpasses_em and notpasses_dy_tautau and notpasses_dy_mumu:
             continue
 
         # SAVE SELECTION, objects and weights
