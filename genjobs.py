@@ -549,7 +549,8 @@ queue
     with open(submition_file, 'w') as f:
         f.write('\n'.join(job_submit_template.format(mem_size=args.mem_size, jobsh=j_fname, job_name=j_fname.split('/')[-1]) for j_fname in job_filenames) + '\n')
 
-    logging.info("submition file %s" % submition_file)
+    # submition file
+    logging.info("source %s" % submition_file)
 
 elif args.submit == 'online':
     com_file_template = """
