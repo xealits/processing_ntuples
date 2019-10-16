@@ -689,8 +689,9 @@ if args.per_weight and dtag not in ('data', 'SingleMuon', 'SingleElectron'):
     #weight_counter = tfile.Get('ntupler/weight_counter')
     #out_histo.Scale(1./weight_counter.GetBinContent(2))
     for histo in output_histos.values():
-        histo.Scale(1./weight_counter.GetBinContent(2))
-
+        norm_factor = 1./weight_counter.GetBinContent(2)
+        histo.Scale(norm_factor)
+        logging.info("normalization to generated number of MC events: %s %f" % (histo.GetName(), norm_factor))
 
 # scale MC
 if args.try_xsec and dtag not in ('data', 'SingleMuon', 'SingleElectron'):
@@ -699,10 +700,12 @@ if args.try_xsec and dtag not in ('data', 'SingleMuon', 'SingleElectron'):
     #out_histo.Scale(xsec)
     for histo in output_histos.values():
         histo.Scale(xsec)
+        logging.info("normalization to cross section: %s %f" % (histo.GetName(), xsec))
 
 if args.scale:
     for histo in output_histos.values():
         histo.Scale(args.scale)
+        logging.info("normalization to user's scale: %s %f" % (histo.GetName(), args.scale))
 
 if args.histo_color:
     for histo in output_histos.values():
