@@ -72,7 +72,7 @@ TightISO_TightID_pt_eta->Get("pt_abseta_ratio")->Draw("colz")
 IsoMu24_OR_IsoTkMu24_PtEtaBins->Get("pt_abseta_ratio")->Draw("colz")
 """
 
-muon_effs_dirname = "${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/lab_log/muon-effs/"
+muon_effs_dirname = "${CMSSW_BASE}/src/UserCode/proc/common_info/muon-effs/"
 gSystem.ExpandPathName(muon_effs_dirname    )
 #TString muon_effs_dirname = "lab_log/muon-effs/";
 logging.info("muon SFs from " + muon_effs_dirname)
@@ -411,7 +411,7 @@ Ele27_WPTight_Gsf->Draw("colz text")
 
 logging.info("unpacking electron eff SFs")
 
-electron_effs_dirname = "${CMSSW_BASE}/src/UserCode/NtuplerAnalyzer/lab_log/electron-effs"
+electron_effs_dirname = "${CMSSW_BASE}/src/UserCode/proc/common_info/electron-effs"
 gSystem.ExpandPathName(electron_effs_dirname)
 
 electron_effs_tracking_all_file  = TFile(electron_effs_dirname + "/2016_Sept23_ElectronReconstructionSF_egammaEffi.txt_EGM2D.root")

@@ -1853,6 +1853,224 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
     all_vector_branches = [] # for resetting them on each event
 
+    # procedures to meta-program the definitions
+    # each type has a Python exec and a C Macro definition
+    language_difinitions_vars = {
+    # check if capital letters matter [Ll]?
+    'L': ("{varname} = array('L', [0]) ; ttree_out.Branch('{varname}', {varname}, '{varname}/l')", ""),
+    'i': ("{varname} = array('i', [0]) ; ttree_out.Branch('{varname}', {varname}, '{varname}/I')", ""),
+    'f': ("{varname} = array('f', [0]) ; ttree_out.Branch('{varname}', {varname}, '{varname}/f')", ""),
+    'LorentzVector_Class':  ("{varname} = LorentzVector_Class(0., 0., 0., 0.) ; ttree_out.Branch('{varname}', {varname})", ""),
+    'IntVector':      ("{varname} = ROOT.IntVector()      ; ttree_out.Branch('{varname}', {varname}) ; all_vector_branches.append({varname})", ""),
+    'DoubleVector':   ("{varname} = ROOT.DoubleVector()   ; ttree_out.Branch('{varname}', {varname}) ; all_vector_branches.append({varname})", ""),
+    'LorentzVectorS': ("{varname} = ROOT.LorentzVectorS() ; ttree_out.Branch('{varname}', {varname}) ; all_vector_branches.append({varname})", ""),
+    }
+
+    # definitions
+    # varname: type
+    stage2_vars = {
+    'indexevents': 'L',
+    'runNumber':   'i',
+    'lumi':        'i',
+
+    'gen_proc_id' :  'i',
+
+    'selection_stage' :  'i',
+    'selection_stage_presel' :  'i',
+
+    'selection_stage_TESUp' :  'i',
+    'selection_stage_TESDown' :  'i',
+
+    'selection_stage_JESUp' :  'i',
+    'selection_stage_JESDown' :  'i',
+
+    'selection_stage_JERUp' :  'i',
+    'selection_stage_JERDown' :  'i',
+
+    'selection_stage_tt_alliso' :  'i',
+    'selection_stage_wjets' :  'i',
+
+    'selection_stage_dy'         : 'i',
+    'selection_stage_dy_TESUp'   : 'i',
+    'selection_stage_dy_TESDown' : 'i',
+    'selection_stage_dy_JERUp'   : 'i',
+    'selection_stage_dy_JERDown' : 'i',
+    'selection_stage_dy_JESUp'   : 'i',
+    'selection_stage_dy_JESDown' : 'i',
+
+    'selection_stage_dy_mumu'         : 'i',
+    'selection_stage_dy_mumu_TESUp'   : 'i',
+    'selection_stage_dy_mumu_TESDown' : 'i',
+    'selection_stage_dy_mumu_JERUp'   : 'i',
+    'selection_stage_dy_mumu_JERDown' : 'i',
+    'selection_stage_dy_mumu_JESUp'   : 'i',
+    'selection_stage_dy_mumu_JESDown' : 'i',
+
+    'selection_stage_em'         : 'i',
+    'selection_stage_em_TESUp'   : 'i',
+    'selection_stage_em_TESDown' : 'i',
+    'selection_stage_em_JERUp'   : 'i',
+    'selection_stage_em_JERDown' : 'i',
+    'selection_stage_em_JESUp'   : 'i',
+    'selection_stage_em_JESDown' : 'i',
+
+    'nup' :  'i',
+    'amcatnlo_w' :  'f',
+
+    'event_jets_lj_var' :  'f',
+    'event_jets_lj_w_mass' :  'f',
+    'event_jets_lj_t_mass' :  'f',
+    'event_jets_input_has' :  'f',
+    'event_jets_found_has' :  'f',
+    'event_jets_n_jets' :  'i',
+    'event_jets_n_bjets' :  'i',
+    'event_jets_n_jets_lepmatched' :  'i',
+    'event_jets_alliso_n_jets' :  'i',
+    'event_jets_alliso_n_bjets' :  'i',
+    'event_weight' :  'f',
+    'event_weight_init' :  'f',
+    'event_weight_PU' :  'f',
+    'event_weight_PU_el' :  'f',
+    'event_weight_PU_mu' :  'f',
+    'event_weight_PU_bcdef' :  'f',
+    'event_weight_PU_gh' :  'f',
+    'event_weight_PU_per_epoch' :  'f',
+    'event_weight_th' :  'f',
+    'event_weight_bSF' :  'f',
+    'event_weight_bSFUp' :  'f',
+    'event_weight_bSFDown' :  'f',
+    'event_weight_bSF_JERUp' :  'f',
+    'event_weight_bSF_JERDown' :  'f',
+    'event_weight_bSF_JESUp' :  'f',
+    'event_weight_bSF_JESDown' :  'f',
+    'event_weight_toppt' :  'f',
+    'event_weight_LEPall' :  'f',
+    'event_weight_LEP_PU' :  'f',
+    'event_weight_LEPmuBID' :  'f',
+    'event_weight_LEPmuBTRG' :  'f',
+    'event_weight_LEPmuHID' :  'f',
+    'event_weight_LEPmuHTRG' :  'f',
+    'event_weight_LEPmu0ID' :  'f',
+    'event_weight_LEPmu0TRG' :  'f',
+    'event_weight_LEPmu0TRGUp' :  'f',
+    'event_weight_LEPmuTRGctrlUp' :  'f',
+    'event_weight_LEPmuTRGctrlDown' :  'f',
+    'event_weight_LEPelID' :  'f',
+    'event_weight_LEPelTRG' :  'f',
+    'event_weight_LEPmuIDUp' :  'f',
+    'event_weight_LEPmuIDDown' :  'f',
+    'event_weight_LEPmuTRGUp' :  'f',
+    'event_weight_LEPmuTRGDown' :  'f',
+    'event_weight_LEPelIDUp' :  'f',
+    'event_weight_LEPelIDDown' :  'f',
+    'event_weight_LEPelTRGUp' :  'f',
+    'event_weight_LEPelTRGDown' :  'f',
+    'event_weight_PUUp' :  'f',
+    'event_weight_PUDown' :  'f',
+    'event_weight_PUUp_el' :  'f',
+    'event_weight_PUDown_el' :  'f',
+    'event_weight_PUUp_mu' :  'f',
+    'event_weight_PUDown_mu' :  'f',
+    'event_weight_PUUp_bcdef' :  'f',
+    'event_weight_PUDown_bcdef' :  'f',
+    'event_weight_PUUp_gh' :  'f',
+    'event_weight_PUDown_gh' :  'f',
+    'event_weight_PetersonUp' :  'f',
+    'event_weight_FragUp' :  'f',
+    'event_weight_FragDown' :  'f',
+    'event_weight_SemilepBRUp' :  'f',
+    'event_weight_SemilepBRDown' :  'f',
+    'event_weight_me_f_rUp' :  'f',
+    'event_weight_me_f_rDn' :  'f',
+    'event_weight_me_fUp_r' :  'f',
+    'event_weight_me_fDn_r' :  'f',
+    'event_weight_me_frUp' :  'f',
+    'event_weight_me_frDn' :  'f',
+    'event_weight_AlphaS_up' :  'f',
+    'event_weight_AlphaS_dn' :  'f',
+    'event_weight_pdf' : 'DoubleVector',
+
+    'event_met'         : 'LorentzVector_Class',
+    'event_met_JERUp'   : 'LorentzVector_Class',
+    'event_met_JERDown' : 'LorentzVector_Class',
+    'event_met_JESUp'   : 'LorentzVector_Class',
+    'event_met_JESDown' : 'LorentzVector_Class',
+    'event_met_TESUp'   : 'LorentzVector_Class',
+    'event_met_TESDown' : 'LorentzVector_Class',
+    'event_met_init'    : 'LorentzVector_Class',
+    'event_met_init2'   : 'LorentzVector_Class',
+
+    'event_met_lep_mt_init'  : 'f',
+    'event_met_lep_mt_init2' : 'f',
+    'event_met_lep_mt' : 'f',
+    'event_met_lep_mt_JERUp'   : 'f',
+    'event_met_lep_mt_JERDown' : 'f',
+    'event_met_lep_mt_JESUp'   : 'f',
+    'event_met_lep_mt_JESDown' : 'f',
+    'event_met_lep_mt_TESUp'   : 'f',
+    'event_met_lep_mt_TESDown' : 'f',
+    'event_dilep_mass' : 'f',
+
+    'event_top_masses_medium' : 'DoubleVector',
+    'event_top_masses_loose' : 'DoubleVector',
+    'event_top_masses_closest' :  'f',
+
+    'event_leptons' : 'LorentzVectorS',
+    'event_leptons_ids' : 'IntVector',
+    'event_leptons_dxy' : 'DoubleVector',
+    'event_leptons_genmatch' : 'IntVector',
+    'event_leptons_alliso_reliso' : 'DoubleVector',
+    'event_leptons_alliso_p4' : 'LorentzVectorS',
+    'event_leptons_alliso_pdgId' : 'IntVector',
+    'event_taus_alliso_p4' : 'LorentzVectorS',
+    'event_taus_alliso_pdgId' : 'IntVector',
+    'event_taus_alliso_IDlev' : 'IntVector',
+    'event_candidate_taus' : 'LorentzVectorS',
+    'event_candidate_taus_ids' : 'IntVector',
+    'event_taus' : 'LorentzVectorS',
+    'event_taus_ids' : 'IntVector',
+    'event_taus_IDlev' : 'IntVector',
+    'event_taus_TES_up' : 'DoubleVector',
+    'event_taus_TES_down' : 'DoubleVector',
+    'event_taus_genmatch' : 'IntVector',
+    'event_taus_pat_sv_sign' : 'DoubleVector',
+    'event_taus_pat_sv_leng' : 'DoubleVector',
+    'event_taus_sv_sign' : 'DoubleVector',
+    'event_taus_sv_leng' : 'DoubleVector',
+    'event_taus_sv_dalitz_m1' : 'DoubleVector',
+    'event_taus_sv_dalitz_m2' : 'DoubleVector',
+    'event_taus_track_energy' : 'DoubleVector',
+    'event_taus_jet_bdiscr' : 'DoubleVector',
+    'event_taus_l' : 'LorentzVectorS',
+    'event_jets_b' : 'LorentzVectorS',
+    'event_jets_b_bdiscr' : 'DoubleVector',
+    'event_jets_JERUp' : 'DoubleVector',
+    'event_jets_JERDown' : 'DoubleVector',
+    'event_jets_JESUp' : 'DoubleVector',
+    'event_jets_JESDown' : 'DoubleVector',
+    'event_jets_b_genmatch' : 'IntVector',
+    'event_jets_b_bSFweight' : 'DoubleVector',
+    'event_jets_r' : 'LorentzVectorS',
+    'event_jets_r_bdiscr' : 'DoubleVector',
+    'event_jets_r_genmatch' : 'IntVector',
+    'event_jets_r_bSFweight' : 'DoubleVector',
+    'event_jets_l' : 'LorentzVectorS',
+    'event_jets_l_bdiscr' : 'DoubleVector',
+    'event_jets_l_genmatch' : 'IntVector',
+    'event_jets_l_bSFweight' : 'DoubleVector',
+    'event_jets_t' : 'LorentzVectorS',
+    'event_jets_t_bdiscr' : 'DoubleVector',
+    'event_jets_t_genmatch' : 'IntVector',
+    'event_jets_t_bSFweight' : 'DoubleVector',
+    }
+
+    # this loop exec-utes the following commented out definitions
+    for varname, vartype in stage2_vars.items():
+        vardef_py = language_difinitions_vars[vartype][0].format(varname=varname)
+        #exec(vardef_py)
+        exec vardef_py in globals(), locals()
+
+    '''
     #ttree_out = TTree( 'ttree_out', 'tree with stage2 selection' ) # INPUT NOW
     indexevents  = array( 'L', [ 0 ] )
     ttree_out.Branch( 'indexevents', indexevents, 'indexevents/l' )
@@ -2364,6 +2582,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
     event_jets_t_bSFweight = ROOT.DoubleVector()
     ttree_out.Branch("event_jets_t_bSFweight", event_jets_t_bSFweight)
     all_vector_branches.append(event_jets_t_bSFweight)
+    '''
 
     # <<<<<<<<<<<<<<
 
