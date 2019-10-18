@@ -16,6 +16,7 @@ parser.add_argument('--no-queue',     action='store_true', help="do not prepare 
 parser.add_argument('--only-nominal', action='store_true', help="only nominal syst")
 
 parser.add_argument('--condor', action='store_true', help="make submit files for condor batch jobs")
+parser.add_argument('--project-src-dir', type=str, default='/lstore/cms/olek/CMSSW_8_0_26_patch1/src/', help='set the path to your CMSSW/src/')
 parser.add_argument('--job-dir', type=str, default='batch_jobs/', help='set a custom directory for job files')
 parser.add_argument('--chan-groups', type=str, help='set the channel groups for jobs')
 
@@ -49,19 +50,19 @@ template_out_dir = 'jobsums/distrs/{nt}_{proc}_{distrs_run}/all/{dtag}/'
 if args.no_queue:
     template_queue_job = "%s"
 else:
-    template_queue_job = """
-#!/bin/sh
-export X509_USER_PROXY=/home/t3cms/olek/x509_proxy
+    template_queue_job = """#!/bin/sh
+#export X509_USER_PROXY=/home/t3cms/olek/x509_proxy
 export SCRAM_ARCH=slc6_amd64_gcc530
 export BUILD_ARCH=slc6_amd64_gcc530
 export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 source $VO_CMS_SW_DIR/cmsset_default.sh
 export CMS_PATH=$VO_CMS_SW_DIR
-cd /lstore/cms/olek/CMSSW_8_0_26_patch1/src/
+#cd /lstore/cms/olek/CMSSW_8_0_26_patch1/src/
+cd {project_src_dir}
 cmsenv
 cd UserCode/proc/
 
-%s
+{commands}
 """
 
 
@@ -187,7 +188,7 @@ for dtag, systs in requested_dtags.items():
               #command = '\n'.join(template_command.format(inp_file=inp_file, out_file=out_file, definitions=a_def) for a_def in defs)
 
           all_commands = '\n'.join(commands)
-          f.write(template_queue_job % all_commands + '\n')
+          f.write(template_queue_job.format(project_src_dir=args.project_src_dir, commands=all_commands) + '\n')
 
       # in case of condor make an additional .sub file
       if args.condor:
