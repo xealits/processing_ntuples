@@ -1080,6 +1080,15 @@ sample_info = {
 'MC2016_Summer16_WJets_amcatnlo',
 'MC2016_Summer16_WJets_amcatnlo_ext2_v2',
 
+'MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1',
+'MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1',
+'MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1',
+'MC2017legacy_Fall17_TTTo2L2Nu',
+'MC2017legacy_Fall17_TTTo2L2Nu_v2',
+'MC2017legacy_Fall17_TTToHadronic_13TeV',
+'MC2017legacy_Fall17_TTToSemiLeptonic_v2',
+'MC2017legacy_Fall17_WJets_madgraph_v2',
+
 'MC2016_Summer16_WWTo2L2Nu_powheg',
 'MC2016_Summer16_WWToLNuQQ_powheg',
 'MC2016_Summer16_WZTo1L1Nu2Q_amcatnlo_madspin',

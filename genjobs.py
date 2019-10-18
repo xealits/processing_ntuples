@@ -490,7 +490,7 @@ source $VO_CMS_SW_DIR/cmsset_default.sh
 export CMS_PATH=$VO_CMS_SW_DIR
 cd {project_dir}
 cmsenv
-cd UserCode/NtuplerAnalyzer/proc/
+cd UserCode/proc/
 {{job}}
 """
     '''eval `scramv1 runtime -sh`
@@ -516,7 +516,7 @@ queue
     # after boot.tcsh everything is in the vars
     #project_dir = '/lstore/cms/olek/CMSSW_8_0_26_patch1/src/'
     project_dir = vars_for_the_job['CMSSW_BASE'] + '/src/'
-    ntupler_proc_dir = 'UserCode/NtuplerAnalyzer/proc/'
+    ntupler_proc_dir = 'UserCode/proc/'
     vars_for_the_job.update(project_dir=project_dir)
 
     if 'X509_USER_PROXY' not in vars_for_the_job:
@@ -541,7 +541,8 @@ queue
             f.write(job_template.format(job=a_job))
 
         # if you submit condor, then make a .sub file for the job
-        with open(job_filename + '.sub', 'w') as f:
+        if args.batch_system == 'condor':
+          with open(job_filename + '.sub', 'w') as f:
             f.write(condor_subfile_template.format(jobsh=job_filename, jobsh_name=job_filename.split('/')[-1]))
 
     #make the queue submition file
@@ -557,7 +558,7 @@ elif args.submit == 'online':
 cd
 source bootup.tcsh
 cmsenv
-cd UserCode/NtuplerAnalyzer/proc
+cd UserCode/proc
 
 {queue_commands}
 

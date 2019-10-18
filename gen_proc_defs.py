@@ -89,6 +89,9 @@ genprocs_ltau_tt   ['mu'] = ('tt',    [('mutau', [genproc_tt_mutau, genproc_tt_m
 dtags_procs = {
 'MC2016_Summer16_DYJetsToLL_10to50_amcatnlo'   : genprocs_ltau_dy,
 'MC2016_Summer16_DYJetsToLL_50toInf_madgraph'  : genprocs_ltau_dy,
+
+'MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1'  : genprocs_ltau_dy,
+
 'MC2016_Summer16_QCD_HT-100-200'    : genprocs_ltau_qcd,
 'MC2016_Summer16_QCD_HT-1000-1500'  : genprocs_ltau_qcd,
 'MC2016_Summer16_QCD_HT-1500-2000'  : genprocs_ltau_qcd,
@@ -139,6 +142,14 @@ dtags_procs = {
 'MC2016_Summer16_TTJets_powheg_isrdown'        : genprocs_ltau_tt,
 'MC2016_Summer16_TTJets_powheg_isrup'          : genprocs_ltau_tt,
 
+'MC2017legacy_Fall17_TTTo2L2Nu'               : genprocs_ltau_tt, # TODO: could be optimized here, no need to check all tt channels, only dileptons would do
+'MC2017legacy_Fall17_TTTo2L2Nu_v2'            : genprocs_ltau_tt,
+'MC2017legacy_Fall17_TTToHadronic_13TeV'      : genprocs_ltau_tt,
+'MC2017legacy_Fall17_TTToSemiLeptonic_v2'     : genprocs_ltau_tt,
+
+'MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1'    : genprocs_ltau_s_top,
+'MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1' : genprocs_ltau_s_top,
+
 'MC2016_Summer16_WWTo2L2Nu_powheg'             : genprocs_ltau_dibosons,
 'MC2016_Summer16_WWToLNuQQ_powheg'             : genprocs_ltau_dibosons,
 'MC2016_Summer16_WZTo1L1Nu2Q_amcatnlo_madspin' : genprocs_ltau_dibosons,
@@ -153,6 +164,8 @@ dtags_procs = {
 'MC2016_Summer16_W4Jets_madgraph'  : genprocs_ltau_wjets,
 'MC2016_Summer16_WJets_madgraph'   : genprocs_ltau_wjets,
 'MC2016_Summer16_WJets_amcatnlo'   : genprocs_ltau_wjets,
+
+'MC2017legacy_Fall17_WJets_madgraph_v2'   : genprocs_ltau_wjets,
 
 'SingleMuon'     : {'el': ('data', [])},
 'SingleElectron' : {'el': ('data', [])},
