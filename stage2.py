@@ -12,6 +12,10 @@ from random import random as u_random
 from gen_proc_defs import *
 import math
 
+#import stage2_interface
+#from stage2_interface import stage2_interface_define_here
+from stage2_interface import *
+
 #import pdb
 
 OLD_MINIAOD_JETS = False
@@ -1843,7 +1847,16 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
 
     # >>>>>>>>>>>>>> make output tree of the stage2 selection
+    stage2_ttree_out = ttree_out
+    #exec(stage2_interface_define_here)
+    logging.info("stage2_interface:define_interface_here")
+    for varname, vartype in stage2_vars.items():
+        vardef_py = language_difinitions_vars[vartype][0].format(varname=varname)
+        #exec(vardef_py)
+        exec vardef_py in globals(), locals()
+    logging.info("stage2_interface:define_interface_here DONE")
 
+    """
     # lor vector for selected objects (particles and met)
     LorentzVector_Class = LorentzVector('ROOT::Math::PxPyPzE4D<double>')
     # vector of these for particles
@@ -2082,6 +2095,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
     ttree_out.Branch( 'lumi', lumi, 'lumi/I' )
     ...
     '''
+    """
 
     # <<<<<<<<<<<<<<
 
