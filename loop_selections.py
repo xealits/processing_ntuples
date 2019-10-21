@@ -15,6 +15,8 @@ parser.add_argument('-d', '--debug',  action='store_true', help="DEBUG level of 
 parser.add_argument('--no-queue',     action='store_true', help="do not prepare a queue job")
 parser.add_argument('--only-nominal', action='store_true', help="only nominal syst")
 
+parser.add_argument('--condor', action='store_true', help="make submit files for condor batch jobs")
+parser.add_argument('--project-src-dir', type=str, default='/lstore/cms/olek/CMSSW_8_0_26_patch1/src/', help='set the path to your CMSSW/src/')
 parser.add_argument('--job-dir', type=str, default='batch_jobs/', help='set a custom directory for job files')
 parser.add_argument('--chan-groups', type=str, help='set the channel groups for jobs')
 
@@ -48,19 +50,19 @@ template_out_dir = 'jobsums/distrs/{nt}_{proc}_{distrs_run}/all/{dtag}/'
 if args.no_queue:
     template_queue_job = "%s"
 else:
-    template_queue_job = """
-#!/bin/sh
-export X509_USER_PROXY=/home/t3cms/olek/x509_proxy
+    template_queue_job = """#!/bin/sh
+#export X509_USER_PROXY=/home/t3cms/olek/x509_proxy
 export SCRAM_ARCH=slc6_amd64_gcc530
 export BUILD_ARCH=slc6_amd64_gcc530
 export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 source $VO_CMS_SW_DIR/cmsset_default.sh
 export CMS_PATH=$VO_CMS_SW_DIR
-cd /lstore/cms/olek/CMSSW_8_0_26_patch1/src/
+#cd /lstore/cms/olek/CMSSW_8_0_26_patch1/src/
+cd {project_src_dir}
 cmsenv
-cd UserCode/NtuplerAnalyzer/proc/
+cd UserCode/proc/
 
-%s
+{commands}
 """
 
 
@@ -105,12 +107,15 @@ all_std_chan_groups = ['tt_dileptons',
                      'tt_leptau_Tight', 'tt_leptau_Tight_lj', 'tt_leptau_Tight_ljout',
                      'dy_dileptons', 'wjets']
 
-now_chan_groups = ['tt_dileptons', 'wjets', 'dy_dileptons', 'fit_tt_leptau', 'fit_tt_leptau_lj', 'fit_tt_leptau_ljout', 'fit_tt_leptau_Vloose', 'fit_tt_leptau_Vloose_lj', 'fit_tt_leptau_Vloose_ljout']
-
+#now_chan_groups = ['tt_dileptons', 'wjets', 'dy_dileptons', 'fit_tt_leptau', 'fit_tt_leptau_lj', 'fit_tt_leptau_ljout', 'fit_tt_leptau_Vloose', 'fit_tt_leptau_Vloose_lj', 'fit_tt_leptau_Vloose_ljout']
+#now_chan_groups = ['tt_leptau','fit_tt_leptau','tt_elmu','tt_elmu_tight']
+now_chan_groups = ['tt_leptau','fit_tt_leptau']
 if args.chan_groups:
     now_chan_groups = args.chan_groups.split(',')
 
 # find files of each dtag, construct the job command
+# record submit commands in a list
+sub_commands = []
 for dtag, systs in requested_dtags.items():
   logging.debug('%s %s' % (dtag, repr(systs)))
 
@@ -183,5 +188,34 @@ for dtag, systs in requested_dtags.items():
               #command = '\n'.join(template_command.format(inp_file=inp_file, out_file=out_file, definitions=a_def) for a_def in defs)
 
           all_commands = '\n'.join(commands)
-          f.write(template_queue_job % all_commands + '\n')
+          f.write(template_queue_job.format(project_src_dir=args.project_src_dir, commands=all_commands) + '\n')
+
+      # in case of condor make an additional .sub file
+      if args.condor:
+          job_subfile_condor = job_script + '.sub'
+          with open(job_subfile_condor, 'w') as f:
+
+              condor_subfile_template = '''executable            = {jobsh}
+arguments             = 
+output                = output/{jobsh_name}.$(ClusterId).$(ProcId).out
+error                 = error/{jobsh_name}.$(ClusterId).$(ProcId).err
+log                   = log/{jobsh_name}.$(ClusterId).log
+queue
+'''
+
+              #
+              job_filename = job_script
+              f.write(condor_subfile_template.format(jobsh=job_filename, jobsh_name=job_filename.split('/')[-1]))
+
+          sub_commands.append('condor_submit %s' % job_subfile_condor)
+
+# write out sub commands for condor
+# this must be done for other job types
+# and it is the same as genjobs for stage2
+# we'll need to refactor this stuff and make a coherent script to submit any type of job
+if args.condor:
+    submit_file = args.job_dir + '/submit'
+    with open(submit_file, 'w') as f:
+        f.write('\n'.join(sub_commands) + '\n')
+        logging.info('wrote condor submit: source %s' % submit_file)
 

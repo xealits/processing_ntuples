@@ -6,7 +6,6 @@ import ctypes
 
 
 
-
 parser = argparse.ArgumentParser(
     formatter_class = argparse.RawDescriptionHelpFormatter,
     description = "sumup TTree Draw",
@@ -54,6 +53,9 @@ else:
 if isfile(args.output) and not args.force:
     print "the file already exists: %s" % args.output
     exit(0)
+
+if args.try_xsec:
+    from per_dtag_script import dtags
 
 # [/]histo_path/histo_name
 histo_name = args.histo_name.split('/')[-1]
@@ -140,8 +142,6 @@ root [11]
 root [11] ttree_out->Draw("event_leptons[0].pt()>>hpts")
 '''
 
-if args.try_xsec:
-    from per_dtag_script import dtags
 
 # Draw command
 # 
@@ -464,6 +464,16 @@ if args.std_histos:
 
 logging.debug('dtag = %s' % dtag)
 
+def find_matched_dtag(dtags, filename):
+    for dt in dtags:
+        if dt in input_files[0]:
+            return dt
+    return None
+
+if args.try_xsec and not dtag:
+    # find the first matching dtag for the first of the input files
+    dtag = find_matched_dtag(dtags, input_files[0])
+
 if args.get_maximum:
    maximum = -1111111.
 
@@ -679,19 +689,23 @@ if args.per_weight and dtag not in ('data', 'SingleMuon', 'SingleElectron'):
     #weight_counter = tfile.Get('ntupler/weight_counter')
     #out_histo.Scale(1./weight_counter.GetBinContent(2))
     for histo in output_histos.values():
-        histo.Scale(1./weight_counter.GetBinContent(2))
-
+        norm_factor = 1./weight_counter.GetBinContent(2)
+        histo.Scale(norm_factor)
+        logging.info("normalization to generated number of MC events: %s %f" % (histo.GetName(), norm_factor))
 
 # scale MC
 if args.try_xsec and dtag not in ('data', 'SingleMuon', 'SingleElectron'):
+    logging.info("trying xsec for %s" % dtag)
     _, xsec = dtags.get(dtag, (None, 1.))
     #out_histo.Scale(xsec)
     for histo in output_histos.values():
         histo.Scale(xsec)
+        logging.info("normalization to cross section: %s %f" % (histo.GetName(), xsec))
 
 if args.scale:
     for histo in output_histos.values():
         histo.Scale(args.scale)
+        logging.info("normalization to user's scale: %s %f" % (histo.GetName(), args.scale))
 
 if args.histo_color:
     for histo in output_histos.values():

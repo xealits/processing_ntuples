@@ -1,9 +1,11 @@
 
-W_lep_br = 0.108;
-W_qar_br = 0.676;
+W_lep_br    = 0.108;
+W_alllep_br = 3*0.108;
+W_qar_br    = 0.676;
 
-W_lep_br2 = W_lep_br*W_lep_br;
-W_qar_br2 = W_qar_br*W_qar_br;
+W_lep_br2    = W_lep_br*W_lep_br;
+W_alllep_br2 = W_alllep_br*W_alllep_br;
+W_qar_br2    = W_qar_br*W_qar_br;
 
 br_tau_electron = 0.1785;
 br_tau_muon     = 0.1736;
@@ -196,8 +198,8 @@ dtag_xsecs = {
 
 ## TODO: need to replay this study..
 ## o.65 factor
-#"MC2016_Summer16_WJets_madgraph":  61526.7 - 9493 - 3120 - 942.3 - 524.2, # 50690 - 9493 - 3120 - 942.3 - 524.2},
-"MC2016_Summer16_WJets_madgraph_reduced":   52940 - 9493 - 3120 - 942.3 - 524.2, # 50690 - 9493 - 3120 - 942.3 - 524.2},
+#"MC2016_Summer16_WJets_madgraph":  61526.7 - 9493 - 3120 - 942.3 - 524.2, # 50690 - 9493 - 3120 - 942.3 - 524.2,
+"MC2016_Summer16_WJets_madgraph_reduced":   52940 - 9493 - 3120 - 942.3 - 524.2, # 50690 - 9493 - 3120 - 942.3 - 524.2,
 "MC2016_Summer16_WJets_madgraph":   52940  , #50690  ,
 "MC2016_Summer16_W0Jets_madgraph":  52940  , #50690  , # with the NUP
 "MC2016_Summer16_W1Jets_madgraph":  9493   ,
@@ -229,12 +231,21 @@ dtag_xsecs = {
  "MC2016_Summer16_WZTo3LNu_powheg"                : 4.42965  ,
  "MC2016_Summer16_ZZTo2L2Nu_powheg"               : 1.256  ,
  "MC2016_Summer16_ZZTo2L2Q_amcatnlo_madspin"      : 3.22   ,
-"MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo_": 10.11, #3.36},
-"MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo": 10.11, #3.36},
-"MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg_": 80.95, #70.69/2},
-"MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg": 80.95, #70.69/2},
-"MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg_": 136.02, #70.69/2},
-"MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg": 136.02, #70.69/2},
+"MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo_": 10.11, #3.36,
+"MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo": 10.11, #3.36,
+"MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg_": 80.95, #70.69/2,
+"MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg": 80.95, #70.69/2,
+"MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg_": 136.02, #70.69/2,
+"MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg": 136.02, #70.69/2,
+
+'MC2017legacy_Fall17_WJets_madgraph_v2'              :  52940.,
+'MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1' :  6225.42,
+'MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1'       :  35.6,
+'MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1'    :  35.6,
+'MC2017legacy_Fall17_TTToHadronic_13TeV'             :  831.76 * W_qar_br2,
+'MC2017legacy_Fall17_TTToSemiLeptonic_v2'            :  831.76 * 2*W_alllep_br*W_qar_br,
+'MC2017legacy_Fall17_TTTo2L2Nu'                      :  831.76 * W_alllep_br2,
+
 }
 
 usual_gen_lumi_weights_1 = {
@@ -381,10 +392,28 @@ usual_gen_lumi_weights = {
 "MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo" : 637697.524850,
 "MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg" : 39844542.965987,
 "MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg" : 68953757.295413,
+
+"MC2017legacy_Fall17_WJets_madgraph_v2" : 23102470.188817,
+"MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" : 18928303.971956,
+"MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1" : 5099879.048270,
+"MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1" : 2349775.859249,
+"MC2017legacy_Fall17_TTToHadronic_13TeV" : 29213134.729453,
+"MC2017legacy_Fall17_TTToSemiLeptonic_v2" : 21966343.919990,
+"MC2017legacy_Fall17_TTTo2L2Nu" : 2923730.883332,
+
 }
 
 
 '''
+'MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1' : 1.,
+'MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1'       : 1.,
+'MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1'    : 1.,
+'MC2017legacy_Fall17_TTTo2L2Nu'                      : 1.,
+'MC2017legacy_Fall17_TTTo2L2Nu_v2'                   : 1.,
+'MC2017legacy_Fall17_TTToHadronic_13TeV'             : 1.,
+'MC2017legacy_Fall17_TTToSemiLeptonic_v2'            : 1.,
+'MC2017legacy_Fall17_WJets_madgraph_v2'              : 1.,
+
 "MC2016_Summer16_DYJetsToLL_50toInf_madgraph" : 42971580.460955,
 "MC2016_Summer16_SingleT_tW_5FS_powheg" : 7079946.591460,
 "MC2016_Summer16_SingleTbar_tW_5FS_powheg" : 7060819.557982,

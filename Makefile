@@ -3,6 +3,26 @@ qwatch:
 	#watch -n ${n} 'qstat | grep " r     " | wc -l ; qstat | wc -l'
 	watch -n ${n} 'qstat -s r | wc -l ; qstat | wc -l'
 
+#log/job_1.2522719.log
+#queue_dir/94v3/processing1/jobs_dir/job_54
+condor_failed_jobs: queue_dir=queue_dir
+condor_failed_jobs: nt=94v3
+condor_failed_jobs: proc=processing1
+condor_failed_jobs: log
+	grep -L "Normal termination" log/* > condor_failed_jobs
+	sed -i -e 's,\.[0-9][^/]*$$,,' -e 's,^log,${queue_dir}/${nt}/${proc}/jobs_dir/,' condor_failed_jobs 
+
+#condor_submit /afs/cern.ch/work/o/otoldaie/public/CMSSW_9_4_9/src/UserCode/NtuplerAnalyzer/proc/./queue_dir/94v3/processing1/jobs_dir/job_19.sub
+condor_failed_jobs_submit: condor_failed_jobs
+	sed -e 's,^,condor_submit ,' -e 's,$$,.sub,' condor_failed_jobs > condor_failed_jobs_submit
+
+condor_failed_output: queue_dir=queue_dir
+condor_failed_output: nt=94v3
+condor_failed_output: proc=processing1
+condor_failed_output: condor_failed_jobs
+	grep '^python' `cat condor_failed_jobs` > condor_failed_output
+	sed -i -e 's,^.*\(lstore_outdirs[^ ]*/\).*/\([^/]*.root\),\1/\2,' condor_failed_output
+
 clear_gstore_failed: nt=v37
 clear_gstore_failed:
 	for f in `find gstore_outdirs/${nt}/ -name failed -type d | sed 's,gstore_outdirs/,,'`; do \
