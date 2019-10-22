@@ -23,7 +23,7 @@
 
 using namespace std;
 
-#define cout_expr(Name)   cout << #Name << " = " << Name << std::endl
+#define cout_expr(Name)   cout << #Name << " = " << (Name) << std::endl
 
 /** Set this to \c 's' to stop the program on error. Otherwise execure error actions. */
 char error_mode = 'a';
