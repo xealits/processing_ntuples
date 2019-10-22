@@ -89,7 +89,7 @@
   <bin name="stacked_histo_distr"            file="stacked_histo_distr.cc"></bin>
 -->
 
-  <bin name="sumup_loop"            file="sumup_loop.C"></bin>
+  <bin name="sumup_loop"            file="sumup_loop_up.C"></bin>
 
 </environment>
 
