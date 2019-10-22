@@ -46,10 +46,13 @@ FILE * error_log;
 
 /* --------------------------------------------------------------- */
 /* STD DEFS */
-
-/* the processing functions in the name space of the stage2 interface
- */
 //#include "std_defs.h"
+
+/*
+ * The distributions:
+ * processing functions in the name space of the stage2 interface,
+ * definitions of histograms with various ranges.
+ */
 
 enum Systematics {NOMINAL, JERUp, JERDown, JESUp, JESDown, TESUp, TESDown};
 
@@ -59,7 +62,7 @@ typedef struct {
 	bool linear = true;
 	double linear_min;
 	double linear_max;
-	double custom_bins[];
+	double* custom_bins;
 } TH1D_range;
 
 /*
@@ -145,7 +148,9 @@ so it must be a function
  */ 
 
 
-// name, def
+/*
+ * name, def
+ */
 map<const char*, TH1D_def> create_TH1D_distr_definitions()
 {
 	map<const char*, TH1D_def> m;
@@ -154,8 +159,22 @@ map<const char*, TH1D_def> create_TH1D_distr_definitions()
 	// despicable!
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
 	r = {40, true,  0, 200};                                                     m["leading_lep_pt"] = {leading_lep_pt, r};
-	r = {14, false, 0,   0, {0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}}; m["Mt_lep_met_c"]   = {Mt_lep_met, r};
-	r = {20, false, 0, 250};                                                     m["Mt_lep_met_f"]   = {Mt_lep_met, r};
+
+	//r = {14, false,-1,  -1, .custom_bins=(double[]){0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	//r = {2, false,-1,  -1, .custom_bins=(double[]){{0},{16},{32}}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	//r = {2, false,-1,  -1, {0.,16.,32.}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	// it seems gcc on lxplus is buggy
+	//static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64};
+	//r = {5, false,-1,  -1}; r.custom_bins = Mt_lep_met_c_bins; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	// -- ok, this works
+	//r = {2, false,-1,  -1, (static double*){0.,16.,32.}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	//static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64}; r = {5, false,-1,  -1, Mt_lep_met_c_bins}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64}; r = {(sizeof(Mt_lep_met_c_bins) / sizeof(Mt_lep_met_c_bins[0]))-1, false,-1,  -1, Mt_lep_met_c_bins}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	// ok! this needs a wrapper-macro
+	cout_expr(r.custom_bins[0]);
+	cout_expr(r.custom_bins[1]);
+
+	r = {20, true,  0, 250};                                                     m["Mt_lep_met_f"]   = {Mt_lep_met,     r};
 
 	//set_range_linear(r, 40, 0, 200);                                         m["leading_lep_pt"] = {leading_lep_pt, r};
 	//set_range_custom(r, (double[]){0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}); m["Mt_lep_met_c"]   = {Mt_lep_met, r};
@@ -171,17 +190,154 @@ map<const char*, TH1D_def> create_TH1D_distr_definitions()
 
 map<const char*, TH1D_def> std_defs_distrs = create_TH1D_distr_definitions();
 
+/*
+ * A helper function creating the instances of TH1D_distrs with a specific name from the given definition.
+ */
 TH1D_distr create_TH1D_distr(TH1D_def& def, TString name)
 {
 	TH1D* histo;
 	if (def.range.linear)
+		{
+		cout << "making linear bins histogram " << endl;
 		histo = (TH1D*) new TH1D(name, name, def.range.nbins, def.range.linear_min, def.range.linear_max);
+		}
 	else
+		{
+		cout << "making custom bins histogram " << def.range.nbins << " " << def.range.custom_bins << endl;
 		histo = (TH1D*) new TH1D(name, name, def.range.nbins, def.range.custom_bins);
+		cout << "making custom bins histogram DONW" << endl;
+		}
 	//TH1D_distr a_distr = {ahist, def.func, 0.};
 	//distrs.push_back(a_distr);
 	return {histo, def.func, 0.};
 }
+
+/*
+ * The final state channels:
+ * boolean functions whether the event passes a selection or no.
+
+old std_defs.py:
+
+'mu_sel':          (lambda sel_stage, ev: (sel_stage==  9 or sel_stage==  7), main_sel_stages),
+'mu_sel_ss':       (lambda sel_stage, ev: (sel_stage==  8 or sel_stage==  6), main_sel_stages),
+'el_sel':          (lambda sel_stage, ev: (sel_stage== 19 or sel_stage== 17), main_sel_stages),
+'el_sel_ss':       (lambda sel_stage, ev: (sel_stage== 18 or sel_stage== 16), main_sel_stages),
+
+'tt_elmu':        (lambda sel_stage, ev: (sel_stage> 200 and sel_stage < 210 and ev.event_leptons[0].pt() > 30. and ev.event_leptons[1].pt() > 30.), {'NOMINAL': lambda ev: ev.selection_stage_em}),
+'tt_elmu_tight':  (lambda sel_stage, ev: (sel_stage == 205 and ev.event_leptons[0].pt() > 30. and ev.event_leptons[1].pt() > 30.), {'NOMINAL': lambda ev: ev.selection_stage_em}),
+ */
+
+bool channel_mu_sel(Systematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	else relevant_selection_stage = NT_selection_stage;
+	return relevant_selection_stage == 9 && relevant_selection_stage == 7;
+	}
+
+bool channel_mu_sel_ss(Systematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	else relevant_selection_stage = NT_selection_stage;
+	return relevant_selection_stage == 8 && relevant_selection_stage == 6;
+	}
+
+bool channel_el_sel(Systematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	else relevant_selection_stage = NT_selection_stage;
+	return relevant_selection_stage == 19 && relevant_selection_stage == 17;
+	}
+
+bool channel_el_sel_ss(Systematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	else relevant_selection_stage = NT_selection_stage;
+	return relevant_selection_stage == 18 && relevant_selection_stage == 16;
+	}
+
+
+bool channel_tt_elmu(Systematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_em_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_em_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_em_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_em_TESDown;
+	else relevant_selection_stage = NT_selection_stage_em;
+	return relevant_selection_stage > 200 && relevant_selection_stage < 210;
+	}
+
+bool channel_tt_elmu_tight(Systematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_em_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_em_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_em_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_em_TESDown;
+	else relevant_selection_stage = NT_selection_stage_em;
+	return relevant_selection_stage == 205;
+	}
+
+typedef bool (*channel_def_func)(Systematics);
+
+// the map of strings to channel definitions
+#define quick_set_chandef(m, chan_name) m[#chan_name] = channel_ ## chan_name
+map<const char*, bool (*)(Systematics)> create_channel_definitions()
+{
+	map<const char*, bool (*)(Systematics)> m;
+	//m["el_sel"] = channel_el_sel;
+	quick_set_chandef(m, el_sel);
+	quick_set_chandef(m, el_sel_ss);
+	quick_set_chandef(m, mu_sel);
+	quick_set_chandef(m, mu_sel_ss);
+
+	quick_set_chandef(m, tt_elmu);
+	quick_set_chandef(m, tt_elmu_tight);
+
+	return m;
+}
+
+map<const char*, channel_def_func> std_defs_channels = create_channel_definitions();
+
+// each final state channel holds a list of histograms to record
+typedef struct{
+	channel_def_func chan_def;
+	vector<TH1D_distr> distrs;
+} channel_histos;
 
 /* --------------------------------------------------------------- */
 
@@ -209,21 +365,38 @@ unsigned int cur_var = 0;
 //TString dir(argv[4]);
 //TString dtag1(argv[5]);
 
-// define histograms for the distributions
-vector<TH1D_distr> distrs;
-
 /* Here we will parse user's request for figures
  * to create the structure filled up in the event loop.
  */
 
-{
+//// define histograms for the distributions
+//vector<TH1D_distr> distrs;
+
+// define a nested list: list of channels, each containing a list of histograms to record
+vector<channel_histos> requested_channels;
+
+// final state channels
+const char* requested_channel_names[] = {"el_sel", "mu_sel", "tt_elmu", "tt_elmu_tight", NULL};
+for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
+	{
+
+	// distributions
+	vector<TH1D_distr> distrs;
 	//TH1D* ahist = (TH1D*) new TH1D("lep_pt", "lep_pt", 40, 0, 200);
 	//TH1D_distr a_distr = {ahist, leading_lep_pt, 0.};
-	TH1D_distr a_distr = create_TH1D_distr(std_defs_distrs["leading_lep_pt"], "inclChan_anyProc_NOMINAL_" "leading_lep_pt");
+
+	// test
+	//cout_expr(TString(*requested_channel));
+	//cout_expr(TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
+
+	TH1D_distr a_distr;
+	//a_distr = create_TH1D_distr(std_defs_distrs["leading_lep_pt"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
+	//distrs.push_back(a_distr);
+	a_distr = create_TH1D_distr(std_defs_distrs["Mt_lep_met_c"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "Mt_lep_met_c");
 	distrs.push_back(a_distr);
-	a_distr = create_TH1D_distr(std_defs_distrs["Mt_lep_met_c"], "inclChan_anyProc_NOMINAL_" "Mt_lep_met_c");
-	distrs.push_back(a_distr);
-}
+
+	requested_channels.push_back({std_defs_channels[*requested_channel], distrs});
+	}
 
 // process input files
 for (; cur_var<argc; cur_var++)
@@ -294,11 +467,28 @@ what we need is...
 		// set the systematic
 		Systematics systematic = NOMINAL;
 
+		/*
 		for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
 			{
 			// TODO memoize, optimize
 			double val = distrs[distr_i].func(systematic);
 			distrs[distr_i].histo->Fill(val);
+			}
+		*/
+
+		for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
+			{
+			// test the event passed the final state channel event selection
+			if (!requested_channels[chan_i].chan_def(systematic)) continue;
+
+			// fill in the histograms
+			vector<TH1D_distr>& distrs = requested_channels[chan_i].distrs;
+			for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
+				{
+				// TODO memoize, optimize
+				double val = distrs[distr_i].func(systematic);
+				distrs[distr_i].histo->Fill(val);
+				}
 			}
 
 		}
@@ -330,10 +520,26 @@ for(std::map<TString, double>::iterator it = xsecs.begin(); it != xsecs.end(); +
 TFile* output_file  = (TFile*) new TFile("outtest.root", "RECREATE");
 output_file->Write();
 
+/*
 for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
 	{
 	distrs[distr_i].histo->Print(); // for the tests
 	distrs[distr_i].histo->Write();
+	}
+*/
+
+for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
+	{
+	//TODO create nested TDirectories for easier manual management, or do they slow down hadd?
+
+	// output the histograms
+	vector<TH1D_distr>& distrs = requested_channels[chan_i].distrs;
+	for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
+		{
+		// TODO memoize, optimize
+		distrs[distr_i].histo->Print();
+		distrs[distr_i].histo->Write();
+		}
 	}
 
 output_file->Close();
