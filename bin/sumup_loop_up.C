@@ -234,7 +234,7 @@ map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
 	// -- ok, this works
 	//r = {2, false,-1,  -1, (static double*){0.,16.,32.}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
 	//static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64}; r = {5, false,-1,  -1, Mt_lep_met_c_bins}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
-	static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64}; r = {(sizeof(Mt_lep_met_c_bins) / sizeof(Mt_lep_met_c_bins[0]))-1, false,-1,  -1, Mt_lep_met_c_bins}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
+	static double bins_Mt_lep_met_c[] = {0,16,32,44,54,64}; r = {(sizeof(bins_Mt_lep_met_c) / sizeof(bins_Mt_lep_met_c[0]))-1, false,-1,  -1, bins_Mt_lep_met_c}; m["Mt_lep_met_c"]   = {distr_Mt_lep_met,     r};
 	// ok! this needs a wrapper-macro
 	cout_expr(r.custom_bins[0]);
 	cout_expr(r.custom_bins[1]);
@@ -252,7 +252,7 @@ map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
 
 	r = {25, true,  0, 200};   m["met_f2"] = {distr_met, r};
 	r = {30, true,  0, 300};   m["met_f"]  = {distr_met, r};
-	static double met_c_bins[] = {0,20,40,60,80,100,120,140,200,500}; r = {(sizeof(met_c_bins) / sizeof(met_c_bins[0]))-1, false,  -1, -1, met_c_bins};   m["met_c"]  = {distr_met, r};
+	static double bins_met_c[] = {0,20,40,60,80,100,120,140,200,500}; r = {(sizeof(bins_met_c) / sizeof(bins_met_c[0]))-1, false,  -1, -1, bins_met_c};   m["met_c"]  = {distr_met, r};
 
 	return m;
 }
@@ -412,6 +412,7 @@ typedef bool (*channel_def_func)(Systematics);
 \return map<const char*, channel_def_func>
  */
 
+#define quick_set_chandef(m, chan_name) m[#chan_name] = channel_ ## chan_name
 map<const char*, channel_def_func> create_known_channel_definitions()
 {
 	map<const char*, bool (*)(Systematics)> m;
