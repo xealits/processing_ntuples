@@ -36,15 +36,15 @@ using namespace std;
 
 #define cout_expr(Name)   cout << #Name << " = " << (Name) << std::endl
 
-/** \var
+/**
 The mode of `Stopif` behavior: on a stop execute `error_action` or abort the program
 Set this to \c 's' to stop the program on error. Otherwise execure error actions. */
 char error_mode = 'a';
 
-/** \var where to write errors? if this is \c NULL, write to \c stderr. */
+/** where to write errors? if this is \c NULL, write to \c stderr. */
 FILE * error_log;
 
-/** \def \brief Macro to handle exceptions: if assertion true print an error, then execute a user action or abort the program.
+/** \brief Macro to handle exceptions: if assertion true print an error, then execute a user action or abort the program.
 
 \param assertion any expression
 \param error_action any other expression
@@ -79,8 +79,9 @@ Example: `Stopif(!TFile::Open(input_file), continue, "cannot Open the file %s", 
  */
 
 
-/** \enum \ingroup Enumerations
- *  \brief The identifiers for all systematics.
+/**
+\ingroup Enumerations
+\brief The identifiers for all systematics.
 
 The systematic corrections to objects usually change the energy of the object (not the direction),
 get propagated to MET if needed,
@@ -89,8 +90,8 @@ The object systematics are:
 \c JERUp, \c JERDown,
 \c JESUp, \c JESDown,
 \c TESUp, \c TESDown.
-
  */
+
 enum Systematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights and object corrections */,
  JERUp   /**< jet energy resolution Up corrections are applied to jets. */,
  JERDown /**< jet energy resolution Down corrections are applied to jets */,
@@ -101,7 +102,7 @@ enum Systematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights an
 };
 
 
-/** \typedef \brief The definition of TH1D ranges, linear and custom.
+/** \brief The definition of TH1D ranges, linear and custom.
 
 The custom range is defined by setting `.linear = false` and the pointer `.custom_bins` to an array.
 I use \c static memory to set the arrays and pointers, like this:
@@ -138,7 +139,7 @@ TH1D_range range_custom_base(const double custom_bins[], unsigned int nbins)
 #define set_range_custom(range_var, ...) unsigned int nbins = sizeof(__VA_ARGS__)/sizeof(__VA_ARGS__[0]) ; range_var = {(nbins), false, -1, -1, __VA_ARGS__}
 */
 
-/** \typedef \brief The definition of an output histogram
+/** \brief The definition of an output histogram
 
  The function calculating the parameter, and the range of the histogram to store it.
  */
@@ -148,7 +149,7 @@ typedef struct {
 	TH1D_range range;
 } TH1D_def;
 
-/** \typedef \brief An instance of an output histogram.
+/** \brief An instance of an output histogram.
 
  The function calculating the parameter, the `TH1D*` to the histogram object, the current calculated value (placeholder for future memoization).
  */
@@ -211,7 +212,8 @@ so it must be a function
  */ 
 
 
-/** \fn \brief The initialization function for the definitions of the known distributions.
+/**
+\brief The initialization function for the definitions of the known distributions.
 
 \return map<const char*, TH1D_def>
  */
@@ -257,7 +259,7 @@ map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
 	return m;
 }
 
-/** \var \brief The known distributions.
+/** \brief The known distributions.
  */
 
 map<const char*, TH1D_def> known_defs_distrs = create_known_TH1D_distr_definitions();
@@ -268,7 +270,7 @@ map<const char*, TH1D_def> known_defs_distrs = create_known_TH1D_distr_definitio
  */
 
 
-/** \fn \brief A helper function creating the instances of TH1D_distrs with a specific name from the given TH1D_def definition.
+/** \brief A helper function creating the instances of TH1D_distrs with a specific name from the given TH1D_def definition.
 
 Creates a `new TH1D(name, ..., range)` according to the linear or custom range in the TH1D_def definition.
 
@@ -397,7 +399,7 @@ bool channel_tt_elmu_tight(Systematics sys)
 	}
 
 
-/** \typedef \brief The channel-defining `bool` function.
+/** \brief The channel-defining `bool` function.
 
 Each final state channel is defined by a `bool` function,
 that is calculated in the name space of the input `TTree` branches.
@@ -409,7 +411,7 @@ typedef bool (*channel_def_func)(Systematics);
 
 #define quick_set_chandef(m, chan_name) m[#chan_name] = channel_ ## chan_name
 
-/** \fn \brief The initialization function for the `bool` functions of the known distributions.
+/** \brief The initialization function for the `bool` functions of the known distributions.
 
 \return map<const char*, channel_def_func>
  */
@@ -430,12 +432,12 @@ map<const char*, channel_def_func> create_known_channel_definitions()
 }
 
 
-/** \var \brief The known channels.
+/** \brief The known channels.
  */
 map<const char*, channel_def_func> known_defs_channels = create_known_channel_definitions();
 
 
-/** \typedef \brief A channel definition with corresponding output histograms.
+/** \brief A channel definition with corresponding output histograms.
 
 Each final state channel is defined by a `bool` function and holds a list of histograms to record.
  */
@@ -448,7 +450,7 @@ typedef struct{
 /* --------------------------------------------------------------- */
 
 
-/** \fn \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
+/** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
 
 It parses the requested channels, systematics and distributions;
 prepares the structure of the loop;
