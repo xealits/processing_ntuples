@@ -1,3 +1,14 @@
+/**
+\file sumup_loop_up.C
+\mainpage The sumup_loop plotting routine.
+\brief A flexible plotting program.
+ */
+
+/*! 
+    \defgroup Enumerations
+        Public enumeration types
+*/
+
 #include <iostream>
 
 #include "TSystem.h"
@@ -25,11 +36,24 @@ using namespace std;
 
 #define cout_expr(Name)   cout << #Name << " = " << (Name) << std::endl
 
-/** Set this to \c 's' to stop the program on error. Otherwise execure error actions. */
+/**
+The mode of `Stopif` behavior: on a stop execute `error_action` or abort the program
+Set this to \c 's' to stop the program on error. Otherwise execure error actions. */
 char error_mode = 'a';
 
 /** where to write errors? if this is \c NULL, write to \c stderr. */
 FILE * error_log;
+
+/** \brief Macro to handle exceptions: if assertion true print an error, then execute a user action or abort the program.
+
+\param assertion any expression
+\param error_action any other expression
+\param ... a printf-like coma-separated input: "foo %s bar", string
+
+Set the error_mode to \c 's' to stop the program on error. Otherwise execure error actions.
+
+Example: `Stopif(!TFile::Open(input_file), continue, "cannot Open the file %s", input_file);` in a loop over filenames, to continue if a file is not found.*/
+
 #define Stopif(assertion, error_action, ...) {                           \
 	if (assertion){                                                  \
 		fprintf(error_log ? error_log : stderr, __VA_ARGS__);    \
@@ -54,9 +78,39 @@ FILE * error_log;
  * definitions of histograms with various ranges.
  */
 
-enum Systematics {NOMINAL, JERUp, JERDown, JESUp, JESDown, TESUp, TESDown};
 
-// one struct for TH1D ranges, linear and custom bins
+/** \ingroup Enumerations
+ *  \brief The identifiers for all systematics.
+
+The systematic corrections to objects usually change the energy of the object (not the direction),
+get propagated to MET if needed,
+and recompute all corresponding `stage_selection` parameters.
+The object systematics are:
+\c JERUp, \c JERDown,
+\c JESUp, \c JESDown,
+\c TESUp, \c TESDown.
+
+ */
+enum Systematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights and object corrections */,
+ JERUp   /**< jet energy resolution Up corrections are applied to jets. */,
+ JERDown /**< jet energy resolution Down corrections are applied to jets */,
+ JESUp   /**< jet energy scale Up corrections are applied to jets */,
+ JESDown /**< jet energy scale Down corrections are applied to jets */,
+ TESUp   /**< tau energy scale Up corrections are applied to jets */,
+ TESDown /**< tau energy scale Down corrections are applied to jets */
+};
+
+
+/** \brief The definition of TH1D ranges, linear and custom.
+
+The custom range is defined by setting `.linear = false` and the pointer `.custom_bins` to an array.
+I use \c static memory to set the arrays and pointers, like this:
+
+    static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64};
+    r = {(sizeof(Mt_lep_met_c_bins) / sizeof(Mt_lep_met_c_bins[0]))-1, false,-1,  -1, Mt_lep_met_c_bins};
+
+ */
+
 typedef struct {
 	unsigned int nbins;
 	bool linear = true;
@@ -84,11 +138,20 @@ TH1D_range range_custom_base(const double custom_bins[], unsigned int nbins)
 #define set_range_custom(range_var, ...) unsigned int nbins = sizeof(__VA_ARGS__)/sizeof(__VA_ARGS__[0]) ; range_var = {(nbins), false, -1, -1, __VA_ARGS__}
 */
 
+/** \brief The definition of an output histogram
+
+ The function calculating the parameter, and the range of the histogram to store it.
+ */
 
 typedef struct {
 	double (*func)(Systematics);
 	TH1D_range range;
 } TH1D_def;
+
+/** \brief An instance of an output histogram.
+
+ The function calculating the parameter, the `TH1D*` to the histogram object, the current calculated value (placeholder for future memoization).
+ */
 
 typedef struct {
 	TH1D* histo;
@@ -96,12 +159,12 @@ typedef struct {
 	double value;
 } TH1D_distr;
 
-double leading_lep_pt(Systematics sys)
+double distr_leading_lep_pt(Systematics sys)
 	{
 	return NT_event_leptons[0].pt();
 	}
 
-double Mt_lep_met(Systematics sys)
+double distr_Mt_lep_met(Systematics sys)
 	{
 
 	if      (sys == NOMINAL) return NT_event_met_lep_mt;
@@ -115,7 +178,7 @@ double Mt_lep_met(Systematics sys)
 	else return NT_event_met_lep_mt;
 	}
 
-double met(Systematics sys)
+double distr_met(Systematics sys)
 	{
 
 	if      (sys == NOMINAL) return NT_event_met.pt();
@@ -148,17 +211,19 @@ so it must be a function
  */ 
 
 
-/*
- * name, def
+/** \brief The initialization function for the definitions of the known distributions.
+
+\return map<const char*, TH1D_def>
  */
-map<const char*, TH1D_def> create_TH1D_distr_definitions()
+
+map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
 {
 	map<const char*, TH1D_def> m;
 	TH1D_range r;
 	//r = {.nbins=40, .linear_min=0, .linear_max=200}; m["leading_lep_pt"] = {leading_lep_pt, r};
 	// despicable!
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
-	r = {40, true,  0, 200};                                                     m["leading_lep_pt"] = {leading_lep_pt, r};
+	r = {40, true,  0, 200};                                                     m["leading_lep_pt"] = {distr_leading_lep_pt, r};
 
 	//r = {14, false,-1,  -1, .custom_bins=(double[]){0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
 	//r = {2, false,-1,  -1, .custom_bins=(double[]){{0},{16},{32}}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
@@ -174,7 +239,7 @@ map<const char*, TH1D_def> create_TH1D_distr_definitions()
 	cout_expr(r.custom_bins[0]);
 	cout_expr(r.custom_bins[1]);
 
-	r = {20, true,  0, 250};                                                     m["Mt_lep_met_f"]   = {Mt_lep_met,     r};
+	r = {20, true,  0, 250};                                                     m["Mt_lep_met_f"]   = {distr_Mt_lep_met,     r};
 
 	//set_range_linear(r, 40, 0, 200);                                         m["leading_lep_pt"] = {leading_lep_pt, r};
 	//set_range_custom(r, (double[]){0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}); m["Mt_lep_met_c"]   = {Mt_lep_met, r};
@@ -185,14 +250,33 @@ map<const char*, TH1D_def> create_TH1D_distr_definitions()
 	//m["Mt_lep_met_c"]   = {Mt_lep_met, range_custom_base({0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}, 14)};
 	//m["Mt_lep_met_f"]   = {Mt_lep_met, range_linear(20, 0, 250)};
 
+	r = {25, true,  0, 200};   m["met_f2"] = {distr_met, r};
+	r = {30, true,  0, 300};   m["met_f"]  = {distr_met, r};
+	static double met_c_bins[] = {0,20,40,60,80,100,120,140,200,500}; r = {(sizeof(met_c_bins) / sizeof(met_c_bins[0]))-1, false,  -1, -1, met_c_bins};   m["met_c"]  = {distr_met, r};
+
 	return m;
 }
 
-map<const char*, TH1D_def> std_defs_distrs = create_TH1D_distr_definitions();
+/** \brief The known distributions.
+ */
+
+map<const char*, TH1D_def> known_defs_distrs = create_known_TH1D_distr_definitions();
+
 
 /*
- * A helper function creating the instances of TH1D_distrs with a specific name from the given definition.
+ * 
  */
+
+
+/** \brief A helper function creating the instances of TH1D_distrs with a specific name from the given TH1D_def definition.
+
+Creates a `new TH1D(name, ..., range)` according to the linear or custom range in the TH1D_def definition.
+
+\param  TH1D_def& def
+\param  TString   name
+\return TH1D_distr
+ */
+
 TH1D_distr create_TH1D_distr(TH1D_def& def, TString name)
 {
 	TH1D* histo;
@@ -312,11 +396,23 @@ bool channel_tt_elmu_tight(Systematics sys)
 	return relevant_selection_stage == 205;
 	}
 
+
+/** \brief The channel-defining `bool` function.
+
+Each final state channel is defined by a `bool` function,
+that is calculated in the name space of the input `TTree` branches.
+It takes the `Systematics` identifier as input,
+and returns `bool` whether event passes this channel selection or not.
+ */
 typedef bool (*channel_def_func)(Systematics);
 
-// the map of strings to channel definitions
-#define quick_set_chandef(m, chan_name) m[#chan_name] = channel_ ## chan_name
-map<const char*, bool (*)(Systematics)> create_channel_definitions()
+
+/** \brief The initialization function for the `bool` functions of the known distributions.
+
+\return map<const char*, channel_def_func>
+ */
+
+map<const char*, channel_def_func> create_known_channel_definitions()
 {
 	map<const char*, bool (*)(Systematics)> m;
 	//m["el_sel"] = channel_el_sel;
@@ -331,20 +427,38 @@ map<const char*, bool (*)(Systematics)> create_channel_definitions()
 	return m;
 }
 
-map<const char*, channel_def_func> std_defs_channels = create_channel_definitions();
 
-// each final state channel holds a list of histograms to record
+/** \brief The known channels.
+ */
+map<const char*, channel_def_func> known_defs_channels = create_known_channel_definitions();
+
+
+/** \brief A channel definition with corresponding output histograms.
+
+Each final state channel is defined by a `bool` function and holds a list of histograms to record.
+ */
+
 typedef struct{
-	channel_def_func chan_def;
-	vector<TH1D_distr> distrs;
+	channel_def_func chan_def; /**< \brief `bool` function defining whether an event passes the channel selection */
+	vector<TH1D_distr> distrs; /**< \brief distributions to record in this final state channel */
 } channel_histos;
 
 /* --------------------------------------------------------------- */
 
 
-//#define DTAG_ARGS_START 5
+/** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
 
-//int stacked_histo_distr (int argc, char *argv[])
+It parses the requested channels, systematics and distributions;
+prepares the structure of the loop;
+loops over all given files and `TTree`s in them,
+recording the distributions at the requested systematics;
+applies final corrections to the distributions;
+and if asked normalizes the distribution to `cross_section/gen_lumi`;
+finally all histograms are written out in the standard format `channel/process/systematic/channel_process_systematic_distr`.
+
+The input now: `input_filename [input_filename+]`.
+ */
+
 int main (int argc, char *argv[])
 {
 argc--;
@@ -359,8 +473,6 @@ if (argc < 1)
 
 gROOT->Reset();
 
-unsigned int cur_var = 0;
-
 //Int_t rebin_factor(atoi(argv[3]));
 //TString dir(argv[4]);
 //TString dtag1(argv[5]);
@@ -374,6 +486,7 @@ unsigned int cur_var = 0;
 
 // define a nested list: list of channels, each containing a list of histograms to record
 vector<channel_histos> requested_channels;
+
 
 // final state channels
 const char* requested_channel_names[] = {"el_sel", "mu_sel", "tt_elmu", "tt_elmu_tight", NULL};
@@ -390,15 +503,16 @@ for (const char** requested_channel = requested_channel_names; *requested_channe
 	//cout_expr(TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
 
 	TH1D_distr a_distr;
-	//a_distr = create_TH1D_distr(std_defs_distrs["leading_lep_pt"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
+	//a_distr = create_TH1D_distr(known_defs_distrs["leading_lep_pt"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
 	//distrs.push_back(a_distr);
-	a_distr = create_TH1D_distr(std_defs_distrs["Mt_lep_met_c"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "Mt_lep_met_c");
+	a_distr = create_TH1D_distr(known_defs_distrs["Mt_lep_met_c"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "Mt_lep_met_c");
 	distrs.push_back(a_distr);
 
-	requested_channels.push_back({std_defs_channels[*requested_channel], distrs});
+	requested_channels.push_back({known_defs_channels[*requested_channel], distrs});
 	}
 
 // process input files
+unsigned int cur_var = 0;
 for (; cur_var<argc; cur_var++)
 	{
 	TString input_filename(argv[cur_var]);
