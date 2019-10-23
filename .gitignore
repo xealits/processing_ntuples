@@ -3,3 +3,6 @@
 *.root
 *.png
 *.pdf
+__init__.py
+!studies/*png
+!studies/*/*png
