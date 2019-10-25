@@ -35,6 +35,7 @@
 using namespace std;
 
 #define cout_expr(Name)   cout << #Name << " = " << (Name) << std::endl
+#define cerr_expr(Name)   cerr << #Name << " = " << Name << std::endl
 
 /**
 The mode of `Stopif` behavior: on a stop execute `error_action` or abort the program
@@ -450,6 +451,53 @@ typedef struct{
 /* --------------------------------------------------------------- */
 
 
+/* --------------------------------------------------------------- */
+// DTAGS, dtags, all dtag-related info, x-secs, systematics, gen processes
+
+
+double W_lep_br    = 0.108;
+double W_alllep_br = 3*0.108;
+double W_qar_br    = 0.676;
+
+double W_lep_br2    = W_lep_br*W_lep_br;
+double W_alllep_br2 = W_alllep_br*W_alllep_br;
+double W_qar_br2    = W_qar_br*W_qar_br;
+
+double br_tau_electron = 0.1785;
+double br_tau_muon     = 0.1736;
+double br_tau_lepton   = br_tau_electron + br_tau_muon;
+double br_tau_hadronic = 1. - br_tau_lepton;
+
+double ttbar_xsec = 831.76; // at 13 TeV
+
+typedef struct {
+	double cross_section;
+	double usual_gen_lumi;
+	// gen procs?
+	// all available systematics
+} dtag_info;
+
+map<const char*, dtag_info> create_dtags_info()
+	{
+	map<const char*, dtag_info> m;
+	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section=52940.,                             .usual_gen_lumi= 23102470.188817};
+	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=6225.42,                            .usual_gen_lumi= 18928303.971956};
+	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=35.6,                               .usual_gen_lumi= 5099879.048270};
+	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=35.6,                               .usual_gen_lumi= 2349775.859249};
+	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=831.76 * W_qar_br2,                 .usual_gen_lumi= 29213134.729453};
+	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=831.76 * 2*W_alllep_br*W_qar_br,    .usual_gen_lumi= 21966343.919990};
+	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=831.76 * W_alllep_br2,              .usual_gen_lumi= 2923730.883332};
+
+	return m;
+	}
+
+map<const char*, dtag_info> known_dtags_info = create_dtags_info();
+
+
+
+/* --------------------------------------------------------------- */
+
+
 /** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
 
 It parses the requested channels, systematics and distributions;
@@ -485,6 +533,34 @@ gROOT->Reset();
  * to create the structure filled up in the event loop.
  */
 
+// figure out the dtag of the input files from the first input file
+TString first_input_filename(argv[0]);
+// loop over known dtags and find whether any of the matches
+map<const char*, dtag_info>::iterator a_dtag_info = known_dtags_info.begin();
+const char* main_dtag = NULL;
+while (a_dtag_info != known_dtags_info.end())
+	{
+	// Accessing KEY from element pointed by it.
+	TString dtag_name(a_dtag_info->first);
+	if (first_input_filename.Contains(dtag_name))
+		{
+		main_dtag = a_dtag_info->first;
+		break;
+		}
+	// Increment the Iterator to point to next entry
+	a_dtag_info++;
+	}
+
+// test if no dtag was recognized
+Stopif(!main_dtag, ;, "could not recognize any known dtag in %s", first_input_filename.Data());
+//if (main_dtag.EqualTo(""))
+//	{
+//	cerr_expr();
+//	}
+
+dtag_info main_dtag_info = known_dtags_info[main_dtag];
+cerr_expr(main_dtag << " : " << main_dtag_info.cross_section);
+
 //// define histograms for the distributions
 //vector<TH1D_distr> distrs;
 
@@ -516,8 +592,8 @@ for (const char** requested_channel = requested_channel_names; *requested_channe
 	}
 
 // process input files
-unsigned int cur_var = 0;
-for (; cur_var<argc; cur_var++)
+
+for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	{
 	TString input_filename(argv[cur_var]);
 
