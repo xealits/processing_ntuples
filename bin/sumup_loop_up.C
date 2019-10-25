@@ -34,7 +34,7 @@
 
 using namespace std;
 
-#define cout_expr(Name)   cout << #Name << " = " << (Name) << std::endl
+#define cout_expr(Name)   cout << #Name << " = " << Name << std::endl
 #define cerr_expr(Name)   cerr << #Name << " = " << Name << std::endl
 
 /**
@@ -82,7 +82,7 @@ Example: `Stopif(!TFile::Open(input_file), continue, "cannot Open the file %s", 
 
 /**
 \ingroup Enumerations
-\brief The identifiers for all systematics.
+\brief The identifiers for all object-related systematics.
 
 The systematic corrections to objects usually change the energy of the object (not the direction),
 get propagated to MET if needed,
@@ -91,17 +91,103 @@ The object systematics are:
 \c JERUp, \c JERDown,
 \c JESUp, \c JESDown,
 \c TESUp, \c TESDown.
+
+The event-weight systematics are:
+\c PUUp,  \c PUDown,
+\c bSFUp, \c bSFDown,
+and many more, especially many PDF weights.
+
+The twofold nature of the effect of systematics, change in objects-event-selection and event weight,
+calls for special treatment.
+The event weights are just produced from an event, the same way as distributions.
+But corrections to objects and correspondinly to event selection
+are a bit different.
+Therefore, setting a systematic propagates as input to the functions
+calculating distributions and the functions calculating event selection.
+At the same time, there are functions calculating event weights.
+They are implemented in usual manner.
+
+At the end, each systematic defines 3 things: "a name", enum ObjSys, weight function.
+The "name" is given to the recorded histograms,
+enum ObjSys sets the calculations of distrs and channels,
+weight function defines the corrected event weight.
  */
 
-enum Systematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights and object corrections */,
+enum ObjSystematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights and object corrections */,
+/* object-related systematics */
  JERUp   /**< jet energy resolution Up corrections are applied to jets. */,
  JERDown /**< jet energy resolution Down corrections are applied to jets */,
  JESUp   /**< jet energy scale Up corrections are applied to jets */,
  JESDown /**< jet energy scale Down corrections are applied to jets */,
- TESUp   /**< tau energy scale Up corrections are applied to jets */,
- TESDown /**< tau energy scale Down corrections are applied to jets */
+ TESUp   /**< tau energy scale Up corrections are applied to taus */,
+ TESDown /**< tau energy scale Down corrections are applied to taus */
 };
 
+/** \brief systematic function calculates event weight in the given systematic correction
+
+This should scale all right to any number of systematics, including all PDF systematics.
+ */
+
+double _sysweight_NOMINAL()
+	{
+	return NT_event_weight;
+	}
+
+typedef double (*_T_sysweight_func)();
+typedef struct {ObjSystematics obj_sys_id; _T_sysweight_func weight_func;} _T_systematic_definition;
+
+#define _sysweight(sysname, weight_expr)   \
+double _sysweight_ ##sysname(void)          \
+	{                                  \
+	return weight_expr; \
+	}
+
+_sysweight(PUUp, NT_event_weight*NT_event_weight_PUUp    )
+_sysweight(PUDown, NT_event_weight*NT_event_weight_PUDown  )
+_sysweight(bSFUp, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFUp   / NT_event_weight_bSF : 0.))
+_sysweight(bSFDown, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFDown / NT_event_weight_bSF : 0.))
+_sysweight(LEPelIDUp, NT_event_weight*NT_event_weight_LEPelIDUp   )
+_sysweight(LEPelIDDown, NT_event_weight*NT_event_weight_LEPelIDDown )
+_sysweight(LEPelTRGUp, NT_event_weight*NT_event_weight_LEPelTRGUp  )
+_sysweight(LEPelTRGDown, NT_event_weight*NT_event_weight_LEPelTRGDown)
+_sysweight(LEPmuIDUp, NT_event_weight*NT_event_weight_LEPmuIDUp   )
+_sysweight(LEPmuIDDown, NT_event_weight*NT_event_weight_LEPmuIDDown )
+_sysweight(LEPmuTRGUp, NT_event_weight*NT_event_weight_LEPmuTRGUp  )
+_sysweight(LEPmuTRGDown, NT_event_weight*NT_event_weight_LEPmuTRGDown)
+
+
+#define _quick_objsys_define(sysname) m[#sysname] = {sysname, _sysweight_NOMINAL}
+#define _quick_wgtsys_define(sysname) m[#sysname] = {NOMINAL, _sysweight_##sysname}
+
+map<TString, _T_systematic_definition> create_known_systematics()
+	{
+	map<TString, _T_systematic_definition> m;
+	m["NOMINAL"] = {NOMINAL, _sysweight_NOMINAL};
+
+	_quick_objsys_define(JERUp);
+	_quick_objsys_define(JERDown);
+	_quick_objsys_define(JESUp);
+	_quick_objsys_define(JESDown);
+	_quick_objsys_define(TESUp);
+	_quick_objsys_define(TESDown);
+
+	_quick_wgtsys_define(PUUp);
+	_quick_wgtsys_define(PUDown);
+	_quick_wgtsys_define(bSFUp);
+	_quick_wgtsys_define(bSFDown);
+	_quick_wgtsys_define(LEPelIDUp);
+	_quick_wgtsys_define(LEPelIDDown);
+	_quick_wgtsys_define(LEPelTRGUp);
+	_quick_wgtsys_define(LEPelTRGDown);
+	_quick_wgtsys_define(LEPmuIDUp);
+	_quick_wgtsys_define(LEPmuIDDown);
+	_quick_wgtsys_define(LEPmuTRGUp);
+	_quick_wgtsys_define(LEPmuTRGDown);
+
+	return m;
+	}
+
+map<TString, _T_systematic_definition> known_systematics = create_known_systematics();
 
 /** \brief The definition of TH1D ranges, linear and custom.
 
@@ -146,7 +232,7 @@ TH1D_range range_custom_base(const double custom_bins[], unsigned int nbins)
  */
 
 typedef struct {
-	double (*func)(Systematics);
+	double (*func)(ObjSystematics);
 	TH1D_range range;
 } TH1D_def;
 
@@ -157,16 +243,16 @@ typedef struct {
 
 typedef struct {
 	TH1D* histo;
-	double (*func)(Systematics);
+	double (*func)(ObjSystematics);
 	double value;
 } TH1D_distr;
 
-double distr_leading_lep_pt(Systematics sys)
+double distr_leading_lep_pt(ObjSystematics sys)
 	{
 	return NT_event_leptons[0].pt();
 	}
 
-double distr_Mt_lep_met(Systematics sys)
+double distr_Mt_lep_met(ObjSystematics sys)
 	{
 
 	if      (sys == NOMINAL) return NT_event_met_lep_mt;
@@ -180,7 +266,7 @@ double distr_Mt_lep_met(Systematics sys)
 	else return NT_event_met_lep_mt;
 	}
 
-double distr_met(Systematics sys)
+double distr_met(ObjSystematics sys)
 	{
 
 	if      (sys == NOMINAL) return NT_event_met.pt();
@@ -219,9 +305,9 @@ so it must be a function
 \return map<const char*, TH1D_def>
  */
 
-map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
+map<TString, TH1D_def> create_known_TH1D_distr_definitions()
 {
-	map<const char*, TH1D_def> m;
+	map<TString, TH1D_def> m;
 	TH1D_range r;
 	//r = {.nbins=40, .linear_min=0, .linear_max=200}; m["leading_lep_pt"] = {leading_lep_pt, r};
 	// despicable!
@@ -239,8 +325,8 @@ map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
 	//static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64}; r = {5, false,-1,  -1, Mt_lep_met_c_bins}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
 	static double bins_Mt_lep_met_c[] = {0,16,32,44,54,64}; r = {(sizeof(bins_Mt_lep_met_c) / sizeof(bins_Mt_lep_met_c[0]))-1, false,-1,  -1, bins_Mt_lep_met_c}; m["Mt_lep_met_c"]   = {distr_Mt_lep_met,     r};
 	// ok! this needs a wrapper-macro
-	cout_expr(r.custom_bins[0]);
-	cout_expr(r.custom_bins[1]);
+	cerr_expr(r.custom_bins[0]);
+	cerr_expr(r.custom_bins[1]);
 
 	r = {20, true,  0, 250};                                                     m["Mt_lep_met_f"]   = {distr_Mt_lep_met,     r};
 
@@ -263,7 +349,7 @@ map<const char*, TH1D_def> create_known_TH1D_distr_definitions()
 /** \brief The known distributions.
  */
 
-map<const char*, TH1D_def> known_defs_distrs = create_known_TH1D_distr_definitions();
+map<TString, TH1D_def> known_defs_distrs = create_known_TH1D_distr_definitions();
 
 
 /*
@@ -314,7 +400,7 @@ old std_defs.py:
 'tt_elmu_tight':  (lambda sel_stage, ev: (sel_stage == 205 and ev.event_leptons[0].pt() > 30. and ev.event_leptons[1].pt() > 30.), {'NOMINAL': lambda ev: ev.selection_stage_em}),
  */
 
-bool channel_mu_sel(Systematics sys)
+bool channel_mu_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -328,7 +414,7 @@ bool channel_mu_sel(Systematics sys)
 	return relevant_selection_stage == 9 && relevant_selection_stage == 7;
 	}
 
-bool channel_mu_sel_ss(Systematics sys)
+bool channel_mu_sel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -342,7 +428,7 @@ bool channel_mu_sel_ss(Systematics sys)
 	return relevant_selection_stage == 8 && relevant_selection_stage == 6;
 	}
 
-bool channel_el_sel(Systematics sys)
+bool channel_el_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -356,7 +442,7 @@ bool channel_el_sel(Systematics sys)
 	return relevant_selection_stage == 19 && relevant_selection_stage == 17;
 	}
 
-bool channel_el_sel_ss(Systematics sys)
+bool channel_el_sel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -371,7 +457,7 @@ bool channel_el_sel_ss(Systematics sys)
 	}
 
 
-bool channel_tt_elmu(Systematics sys)
+bool channel_tt_elmu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
@@ -385,7 +471,7 @@ bool channel_tt_elmu(Systematics sys)
 	return relevant_selection_stage > 200 && relevant_selection_stage < 210;
 	}
 
-bool channel_tt_elmu_tight(Systematics sys)
+bool channel_tt_elmu_tight(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
@@ -404,30 +490,30 @@ bool channel_tt_elmu_tight(Systematics sys)
 
 Each final state channel is defined by a `bool` function,
 that is calculated in the name space of the input `TTree` branches.
-It takes the `Systematics` identifier as input,
+It takes the `ObjSystematics` identifier as input,
 and returns `bool` whether event passes this channel selection or not.
  */
-typedef bool (*channel_def_func)(Systematics);
+typedef bool (*_T_channel_def_func)(ObjSystematics);
 
 
-#define quick_set_chandef(m, chan_name) m[#chan_name] = channel_ ## chan_name
+#define _quick_set_chandef(m, chan_name) m[#chan_name] = channel_ ## chan_name
 
 /** \brief The initialization function for the `bool` functions of the known distributions.
 
-\return map<const char*, channel_def_func>
+\return map<const char*, _T_channel_def_func>
  */
 
-map<const char*, channel_def_func> create_known_channel_definitions()
+map<TString, _T_channel_def_func> create_known_channel_definitions()
 {
-	map<const char*, bool (*)(Systematics)> m;
+	map<TString, bool (*)(ObjSystematics)> m;
 	//m["el_sel"] = channel_el_sel;
-	quick_set_chandef(m, el_sel);
-	quick_set_chandef(m, el_sel_ss);
-	quick_set_chandef(m, mu_sel);
-	quick_set_chandef(m, mu_sel_ss);
+	_quick_set_chandef(m, el_sel);
+	_quick_set_chandef(m, el_sel_ss);
+	_quick_set_chandef(m, mu_sel);
+	_quick_set_chandef(m, mu_sel_ss);
 
-	quick_set_chandef(m, tt_elmu);
-	quick_set_chandef(m, tt_elmu_tight);
+	_quick_set_chandef(m, tt_elmu);
+	_quick_set_chandef(m, tt_elmu_tight);
 
 	return m;
 }
@@ -435,24 +521,100 @@ map<const char*, channel_def_func> create_known_channel_definitions()
 
 /** \brief The known channels.
  */
-map<const char*, channel_def_func> known_defs_channels = create_known_channel_definitions();
+map<TString, _T_channel_def_func> known_defs_channels = create_known_channel_definitions();
 
-
-/** \brief A channel definition with corresponding output histograms.
-
-Each final state channel is defined by a `bool` function and holds a list of histograms to record.
- */
-
-typedef struct{
-	channel_def_func chan_def; /**< \brief `bool` function defining whether an event passes the channel selection */
-	vector<TH1D_distr> distrs; /**< \brief distributions to record in this final state channel */
-} channel_histos;
 
 /* --------------------------------------------------------------- */
 
 
 /* --------------------------------------------------------------- */
 // DTAGS, dtags, all dtag-related info, x-secs, systematics, gen processes
+
+// (sub-)processes in a dtag are defined by whether gen_proc_id integer falls inside inclusive range of IDs [min_gen_id, max_gen_id]
+// a number of standard definitions are given
+// so a user can define them per final state channel
+
+/*
+In principle, since the definition of a gen-level processes
+is done with a simple integer in stage2, I could implement
+definitions of processes with some ranges of gen ID.
+
+typedef struct {
+	int min;
+	int max;
+} proc_ID_range;
+
+But I want to use functions operating in the name space of the TTree interface,
+the same way as for the channel definitions.
+It would is a much more flexible solution,
+it is easily extensible to processing raw ntuples.
+
+However, it requires more typing, therefore I will make some short-hand macro.
+*/
+
+bool _genproc_tt_eltau3ch()
+	{
+	return NT_gen_proc_id == 42;
+	}
+
+typedef bool (*_T_genproc_def_func)(void);
+
+// a short-hand macro
+
+#define _genproc(procname, procID)         \
+bool _genproc_ ##procname(void)            \
+	{                                  \
+	return NT_gen_proc_id == (procID); \
+	}
+
+_genproc(tt_eltau,    41)
+_genproc(tt_mutau3ch, 32)
+_genproc(tt_mutau,    31)
+
+
+/** \brief The definition of (sub-)processes for a given dtag
+
+Contains gen ID ranges for all possible sub-processes and the handy groups.
+ */
+
+typedef struct {
+	TString catchall_name;    /**< \brief name for the inclusive process, or catch-all case */
+	map<TString, _T_genproc_def_func> all;    /**< \brief all possible sub-processes */
+	map<TString, _T_genproc_def_func> groups; /**< \brief groups of sub-processes */
+} proc_ID_defs;
+
+map<TString, proc_ID_defs> create_procs_info()
+	{
+	map<TString, proc_ID_defs> m;
+
+	m["tt"] = {
+		.catchall_name = "tt_other",
+		.all={
+			{"tt_eltau3ch" , _genproc_tt_eltau3ch},
+			{"tt_eltau"    , _genproc_tt_eltau   },
+			{"tt_mutau3ch" , _genproc_tt_mutau3ch},
+			{"tt_mutau"    , _genproc_tt_mutau   },
+			},
+		.groups={}};
+
+//genproc_tt_ljb       = 24
+//genproc_tt_ljw       = 23
+//genproc_tt_ljo       = 22
+//genproc_tt_lj        = 21
+//genproc_tt_taultauh  = 12
+//genproc_tt_taulj     = 11
+//
+//genproc_tt_elmu       = 3
+//genproc_tt_ltaul      = 2
+//genproc_tt_taueltaumu = 1
+//
+//genproc_tt_other = 0
+
+
+	return m;
+	}
+
+map<TString, proc_ID_defs> known_procs_info = create_procs_info();
 
 
 double W_lep_br    = 0.108;
@@ -471,31 +633,94 @@ double br_tau_hadronic = 1. - br_tau_lepton;
 double ttbar_xsec = 831.76; // at 13 TeV
 
 typedef struct {
-	double cross_section;
-	double usual_gen_lumi;
-	// gen procs?
+	double       cross_section;
+	double       usual_gen_lumi;
+	proc_ID_defs procs;
 	// all available systematics
 } dtag_info;
 
-map<const char*, dtag_info> create_dtags_info()
+map<TString, dtag_info> create_dtags_info()
 	{
-	map<const char*, dtag_info> m;
-	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section=52940.,                             .usual_gen_lumi= 23102470.188817};
-	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=6225.42,                            .usual_gen_lumi= 18928303.971956};
-	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=35.6,                               .usual_gen_lumi= 5099879.048270};
-	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=35.6,                               .usual_gen_lumi= 2349775.859249};
-	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=831.76 * W_qar_br2,                 .usual_gen_lumi= 29213134.729453};
-	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=831.76 * 2*W_alllep_br*W_qar_br,    .usual_gen_lumi= 21966343.919990};
-	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=831.76 * W_alllep_br2,              .usual_gen_lumi= 2923730.883332};
+	//map<const char*, dtag_info> m;
+	map<TString, dtag_info> m;
+
+	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            , .usual_gen_lumi= 23102470.188817, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          , .usual_gen_lumi= 18928303.971956, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           , .usual_gen_lumi=  5099879.048270, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           , .usual_gen_lumi=  2349775.859249, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              , .usual_gen_lumi= 29213134.729453, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br , .usual_gen_lumi= 21966343.919990, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           , .usual_gen_lumi=  2923730.883332, .procs=known_procs_info["tt"]};
 
 	return m;
 	}
 
-map<const char*, dtag_info> known_dtags_info = create_dtags_info();
+map<TString, dtag_info> known_dtags_info = create_dtags_info();
 
 
 
 /* --------------------------------------------------------------- */
+
+
+/* --------------------------------------------------------------- */
+/* the struct-s of the structure of the event loop
+// since systematics affect event selection (final state channel) and distributions
+// they must be up the hierarchy
+// process definition is purely gen-level, independent from reco
+// it can be the top-most level for a dtag
+// but in daily usage we usually hadd everything, open a final state and look at distributions in the same or different processes.
+// Ok, purely for the sake of symmetry and easy memorization, let's just revert the nesting w.r.t the usual one:
+SYSTEMATIC / PROCESS / CHANNEL / channel_process_systematic_distrname
+*/
+
+
+/** \brief A definition of systematics distributions: requested systematics with record histograms
+ */
+
+typedef struct{
+	_T_systematic_definition syst_def; /**< \brief the definition of a given systematic */
+	vector<TH1D_distr> histos;         /**< \brief the distributions to record */
+} _T_syst_histos;
+
+/** \brief A definition of processes: requested processes and systematics with record histograms
+ */
+
+typedef struct{
+	_T_genproc_def_func proc_def;   /**< \brief `bool` function defining whether an event passes this gen proc definition */
+	vector<_T_syst_histos> systs;  /**< \brief the systeamtics with distributions to record */
+} _T_proc_syst_histos;
+
+/** \brief A full channel definition with instances of output histograms.
+
+Each final state channel is defined by a `bool` function and holds a list of histograms to record.
+ */
+
+typedef struct{
+	_T_channel_def_func chan_def;        /**< \brief `bool` function defining whether an event passes the channel selection */
+	vector<_T_proc_syst_histos> procs;  /**< \brief the per-proc systematic distributions to record */
+	vector<_T_syst_histos> catchall_proc;  /**< \brief the systeamtics with distributions to record in the catchall process */
+} _T_channel_proc_syst_histos;
+
+
+
+typedef struct{
+	_T_channel_def_func chan_def;      /**< \brief `bool` function defining whether an event passes the channel selection */
+	vector<TH1D_distr> histos;         /**< \brief the distributions to record */
+} _T_chan_histos;
+
+typedef struct{
+	_T_genproc_def_func proc_def;  /**< \brief `bool` function defining whether an event passes this gen proc definition */
+	vector<_T_chan_histos> chans;  /**< \brief the channels with distributions to record */
+} _T_proc_chan_histos;
+
+typedef struct{
+	_T_systematic_definition syst_def;  /**< \brief the definition of a given systematic */
+	vector<_T_proc_chan_histos> procs;  /**< \brief the per-proc channels with distributions to record */
+	vector<_T_chan_histos> catchall_proc;  /**< \brief the channels with distributions to record in the catchall process */
+} _T_syst_proc_chan_histos;
+
+/* --------------------------------------------------------------- */
+
 
 
 /** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
@@ -536,15 +761,15 @@ gROOT->Reset();
 // figure out the dtag of the input files from the first input file
 TString first_input_filename(argv[0]);
 // loop over known dtags and find whether any of the matches
-map<const char*, dtag_info>::iterator a_dtag_info = known_dtags_info.begin();
-const char* main_dtag = NULL;
+map<TString, dtag_info>::iterator a_dtag_info = known_dtags_info.begin();
+TString main_dtag("");
 while (a_dtag_info != known_dtags_info.end())
 	{
 	// Accessing KEY from element pointed by it.
-	TString dtag_name(a_dtag_info->first);
+	TString dtag_name = a_dtag_info->first;
 	if (first_input_filename.Contains(dtag_name))
 		{
-		main_dtag = a_dtag_info->first;
+		main_dtag = dtag_name;
 		break;
 		}
 	// Increment the Iterator to point to next entry
@@ -552,7 +777,8 @@ while (a_dtag_info != known_dtags_info.end())
 	}
 
 // test if no dtag was recognized
-Stopif(!main_dtag, ;, "could not recognize any known dtag in %s", first_input_filename.Data());
+//Stopif(!main_dtag, ;, "could not recognize any known dtag in %s", first_input_filename.Data());
+Stopif(main_dtag.EqualTo(""), ;, "could not recognize any known dtag in %s", first_input_filename.Data());
 //if (main_dtag.EqualTo(""))
 //	{
 //	cerr_expr();
@@ -565,40 +791,110 @@ cerr_expr(main_dtag << " : " << main_dtag_info.cross_section);
 //vector<TH1D_distr> distrs;
 
 // define a nested list: list of channels, each containing a list of histograms to record
-vector<channel_histos> requested_channels;
+vector<_T_syst_proc_chan_histos> distrs_to_record;
 
 
 // final state channels
 const char* requested_channel_names[] = {"el_sel", "mu_sel", "tt_elmu", "tt_elmu_tight", NULL};
-for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
+vector<TString> requested_procs   = {"all"};
+const char* requested_systematics[]   = {"NOMINAL", NULL};
+const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
+
+// set the known processes according to the request: whetehr groups of processes are requested or not
+// check if all known processes are requested
+map<TString, _T_genproc_def_func> known_procs;
+if (TString(requested_procs[0]) == "all")
 	{
+	known_procs = main_dtag_info.procs.all;
+	// and reset the requested processes to all known processes for this dtag
+	requested_procs.clear();
+	// loop over all known processes
+	for (const auto& proc: main_dtag_info.procs.all)
+		{
+		cout_expr(proc.first);
+		requested_procs.push_back(proc.first);
+		}
+	}
 
-	// distributions
-	vector<TH1D_distr> distrs;
-	//TH1D* ahist = (TH1D*) new TH1D("lep_pt", "lep_pt", 40, 0, 200);
-	//TH1D_distr a_distr = {ahist, leading_lep_pt, 0.};
+else
+	{
+	known_procs = main_dtag_info.procs.groups;
+	//known_procs = main_dtag_info.procs.all;
+	// populate definitions of groups with the fine-grain definitions of all processes			
+	known_procs.insert(main_dtag_info.procs.all.begin(), main_dtag_info.procs.all.end());
+	}
 
-	// test
-	//cout_expr(TString(*requested_channel));
-	//cout_expr(TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
+// name of the catchall process for the defined dtag
+TString procname_catchall = main_dtag_info.procs.catchall_name;
 
-	TH1D_distr a_distr;
-	//a_distr = create_TH1D_distr(known_defs_distrs["leading_lep_pt"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "leading_lep_pt");
-	//distrs.push_back(a_distr);
-	a_distr = create_TH1D_distr(known_defs_distrs["Mt_lep_met_c"], TString(*requested_channel) + "_anyProc_NOMINAL_" + "Mt_lep_met_c");
-	distrs.push_back(a_distr);
+for (const char** requested_sys = requested_systematics; *requested_sys != NULL; requested_sys++)
+	{
+	// find the definition of this channel
+	TString systname(*requested_sys);
+	Stopif(known_systematics.find(systname) == known_systematics.end(), continue, "Do not know a systematic %s", systname.Data());
 
-	requested_channels.push_back({known_defs_channels[*requested_channel], distrs});
+	_T_syst_proc_chan_histos systematic = {.syst_def = known_systematics[systname]};
+
+	// define processes
+	bool is_catchall_proc_done = false; // it will be set with the first defined process
+
+	// loop over requested processes and find their definitions for recording in this channel
+	//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
+	for (const auto& procname: requested_procs)
+		{
+		// find the definition of this channel
+		//TString procname(*requested_proc);
+		Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
+
+		_T_proc_chan_histos process = {.proc_def=known_procs[procname]};
+		//vector<_T_chan_histos> catchall_process;
+
+		// define channels
+		for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
+			{
+			// find the definition of this channel
+			TString channame(*requested_channel);
+			Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
+
+			_T_chan_histos channel          = {.chan_def=known_defs_channels[channame]};
+			_T_chan_histos channel_catchall = {.chan_def=known_defs_channels[channame]};
+
+			// define distributions
+			// create the histograms for all of these definitions
+			for (const char** requested_distr = requested_distrs; *requested_distr != NULL; requested_distr++)
+				{
+				TString distrname(*requested_distr);
+				Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
+
+				TH1D_distr a_distr = create_TH1D_distr(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname);
+				channel.histos.push_back(a_distr);
+
+				if (!is_catchall_proc_done)
+					{
+					TH1D_distr a_distr = create_TH1D_distr(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname);
+					channel_catchall.histos.push_back(a_distr);
+					}
+				}
+
+			if (!is_catchall_proc_done)
+				systematic.catchall_proc.push_back(channel_catchall);
+			process.chans.push_back(channel);
+			}
+
+		if (!is_catchall_proc_done) is_catchall_proc_done = true;
+		systematic.procs.push_back(process);
+		}
+
+	distrs_to_record.push_back(systematic);
 	}
 
 // process input files
-
 for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	{
 	TString input_filename(argv[cur_var]);
 
-	cout_expr(cur_var);
-	cout_expr(input_filename);
+	cerr_expr(cur_var);
+	cerr_expr(input_filename);
 
 	//dtags.push_back(dtag);
 	//files.push_back(TFile::Open(dir + "/" + dtag + ".root"));
@@ -617,49 +913,25 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	#include "stage2_interface.h"
 
 	//// just a test
-	//if (NT_output_ttree) cout_expr(NT_output_ttree->GetEntries());
+	//if (NT_output_ttree) cerr_expr(NT_output_ttree->GetEntries());
 	//else cout << "NO TTREE" << std::endl;
 
 	unsigned int n_entries = NT_output_ttree->GetEntries();
-	cout_expr(n_entries);
+	cerr_expr(n_entries);
 
 	for (unsigned int ievt = 0; ievt < n_entries; ievt++)
 		{
 		NT_output_ttree->GetEntry(ievt);
 
 		//// tests
-		////cout_expr(NT_runNumber);
-		cout_expr(NT_event_leptons[0].pt());
-		//cout_expr(NT_event_leptons_genmatch[0]);
+		////cerr_expr(NT_runNumber);
+		cerr_expr(NT_event_leptons[0].pt());
+		//cerr_expr(NT_event_leptons_genmatch[0]);
 
 		Stopif(ievt > 10, break, "reached 10 events, exiting");
 
-/*
-in Python:
-
-            # calculate parameters for the requested distrs
-            for dname, distr_func, _ in chan_distrs:
-                if dname in event_distrs:
-                    param = event_distrs[dname]
-                else:
-                    param = distr_func.get(sname, distr_func['NOMINAL'])(ev)
-
-                # record along the way
-                #histos[(chan_name, event_chan_proc, sname, dname)].Fill(param, weight)
-                record(histos, (chan_name, event_chan_proc, sname, dname), param, weight)
-                # 3 loops deep calculation
-
-
-# separated the procedure for profilimng performance
-def record(histos, def_tuple, param, weight):
-    histos[def_tuple].Fill(param, weight)
-
-what we need is...
--- that and + 2D distributions
-*/
-
-		// set the systematic
-		Systematics systematic = NOMINAL;
+		// set the object systematic
+		ObjSystematics systematic = NOMINAL;
 
 		/*
 		for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
@@ -670,11 +942,11 @@ what we need is...
 			}
 		*/
 
+		/*
 		for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 			{
 			// test the event passed the final state channel event selection
 			if (!requested_channels[chan_i].chan_def(systematic)) continue;
-
 			// fill in the histograms
 			vector<TH1D_distr>& distrs = requested_channels[chan_i].distrs;
 			for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
@@ -683,6 +955,52 @@ what we need is...
 				double val = distrs[distr_i].func(systematic);
 				distrs[distr_i].histo->Fill(val);
 				}
+			}
+		*/
+
+		for (int si=0; si<distrs_to_record.size(); si++)
+			{
+			ObjSystematics obj_systematic = distrs_to_record[si].syst_def.obj_sys_id;
+			double event_weight       = distrs_to_record[si].syst_def.weight_func();
+
+			// assign the gen process
+			// loop over procs check if this event passes
+			// if not get the catchall proc
+			vector<_T_chan_histos>* channels = NULL;
+			for (int pi=0; pi<distrs_to_record[si].procs.size(); pi++)
+				{
+				if (distrs_to_record[si].procs[pi].proc_def())
+					{
+					channels = &distrs_to_record[si].procs[pi].chans;
+					break;
+					}
+				}
+
+			if (channels == NULL)
+				channels = & distrs_to_record[si].catchall_proc;
+
+			// record distributions in all final states where the event passes
+			for (int ci=0; ci<channels->size(); ci++)
+				{
+				_T_chan_histos& chan = (*channels)[ci];
+
+				// check if event passes the channel selection
+				if (!chan.chan_def(obj_systematic)) continue;
+
+				// record all distributions with the given event weight
+				for (int di=0; di<chan.histos.size(); di++)
+					{
+					TH1D_distr& distr_def = chan.histos[di];
+					// TODO memoize if possible
+					double value = distr_def.func(obj_systematic);
+					distr_def.histo->Fill(value, event_weight);
+					}
+				}
+
+			//for (int pi=0; pi<distrs_to_record.size(); si++)
+			//	{
+			//	for (int si=0; si<distrs_to_record.size(); si++)
+			//	}
 			}
 
 		}
@@ -722,6 +1040,7 @@ for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
 	}
 */
 
+/*
 for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 	{
 	//TODO create nested TDirectories for easier manual management, or do they slow down hadd?
@@ -733,6 +1052,36 @@ for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 		// TODO memoize, optimize
 		distrs[distr_i].histo->Print();
 		distrs[distr_i].histo->Write();
+		}
+	}
+*/
+
+for (int si=0; si<distrs_to_record.size(); si++)
+	{
+	// merge defined processes and the catchall
+	vector<_T_proc_chan_histos>& all_procs = distrs_to_record[si].procs;
+	//vector<_T_chan_histos>& catchall_proc  = distrs_to_record[si].catchall_proc;
+	//all_procs.insert(all_procs.end(), catchall_proc.begin(), catchall_proc.end());
+
+	for(const auto& proc: all_procs)
+		{
+		for(const auto& chan: proc.chans)
+			{
+			for(const auto& histo_def: chan.histos)
+				{
+				histo_def.histo->Print();
+				histo_def.histo->Write();
+				}
+			}
+		}
+
+	// same for catchall
+	for(const auto& chan: distrs_to_record[si].catchall_proc)
+		{
+		for(const auto& histo_def: chan.histos)
+			{
+			histo_def.histo->Write();
+			}
 		}
 	}
 
