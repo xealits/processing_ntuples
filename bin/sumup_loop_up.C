@@ -674,6 +674,14 @@ it is easily extensible to processing raw ntuples.
 However, it requires more typing, therefore I will make some short-hand macro.
 */
 
+/** \brief passes all events, to use in inclusive cases
+*/
+
+bool NT_genproc_inclusive()
+	{
+	return true;
+	}
+
 bool NT_genproc_tt_eltau3ch()
 	{
 	return NT_gen_proc_id == 42;
@@ -689,14 +697,14 @@ bool NT_genproc_ ##procname(void)            \
 	return NT_gen_proc_id == (procID); \
 	}
 
-NT_genproc(tt_eltau,    41)
+NT_genproc(tt_eltau1ch, 41)
 NT_genproc(tt_mutau3ch, 32)
-NT_genproc(tt_mutau,    31)
+NT_genproc(tt_mutau1ch, 31)
 
 NT_genproc(tt_ljb        , 24)
 NT_genproc(tt_ljw        , 23)
 NT_genproc(tt_ljo        , 22)
-NT_genproc(tt_lj         , 21)
+NT_genproc(tt_ljz        , 21)
 NT_genproc(tt_taultauh   , 12)
 NT_genproc(tt_taulj      , 11)
 NT_genproc(tt_elmu       , 3)
@@ -704,6 +712,20 @@ NT_genproc(tt_ltaul      , 2)
 NT_genproc(tt_taueltaumu , 1)
 //NT_genproc(tt_other      , 0) // no "tt_other"! it is a catchall process, they are handled automatically
 
+bool NT_genproc_tt_eltau()
+	{
+	return NT_gen_proc_id > 40 && NT_gen_proc_id < 43;
+	}
+
+#define NT_genproc_range(procname, procID_min, procID_max)         \
+bool NT_genproc_ ##procname(void)          \
+	{                                  \
+	return NT_gen_proc_id > (procID_min) && NT_gen_proc_id < (procID_max); \
+	}
+
+NT_genproc_range(tt_mutau, 30, 33)
+
+NT_genproc_range(tt_lj, 20, 30)
 
 
 /** \brief The definition of (sub-)processes for a given dtag
@@ -715,7 +737,18 @@ typedef struct {
 	TString catchall_name;    /**< \brief name for the inclusive process, or catch-all case */
 	map<TString, _F_genproc_def> all;    /**< \brief all possible sub-processes */
 	map<TString, _F_genproc_def> groups; /**< \brief groups of sub-processes */
+	map<TString, vector<TString>> channel_standard; /**< \brief standard sub-processes per channel */
 } _S_proc_ID_defs;
+
+// standard per-channel processes
+vector<TString> _tt_procs_eltau = {"tt_eltau", "tt_taulj", "tt_lj"};
+vector<TString> _tt_procs_mutau = {"tt_mutau", "tt_taulj", "tt_lj"};
+vector<TString> _tt_procs_elmu  = {"tt_elmu",  "tt_ltaul"};
+//vector<TString> _tt_procs_mumu  = {"tt_inclusive"};
+//vector<TString> _tt_procs_elel  = {"tt_inclusive"};
+// actually empty vectors must work, the catchall process will handle this
+vector<TString> _tt_procs_mumu  = {};
+vector<TString> _tt_procs_elel  = {};
 
 map<TString, _S_proc_ID_defs> create_known_procs_info()
 	{
@@ -725,14 +758,14 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 		.catchall_name = "tt_other",
 		.all={
 			{"tt_eltau3ch" , NT_genproc_tt_eltau3ch},
-			{"tt_eltau"    , NT_genproc_tt_eltau   },
+			{"tt_eltau1ch" , NT_genproc_tt_eltau1ch},
 			{"tt_mutau3ch" , NT_genproc_tt_mutau3ch},
-			{"tt_mutau"    , NT_genproc_tt_mutau   },
+			{"tt_mutau1ch" , NT_genproc_tt_mutau1ch},
 
 			{"tt_ljb"        , NT_genproc_tt_ljb        },
 			{"tt_ljw"        , NT_genproc_tt_ljw        },
 			{"tt_ljo"        , NT_genproc_tt_ljo        },
-			{"tt_lj"         , NT_genproc_tt_lj         },
+			{"tt_ljz"        , NT_genproc_tt_ljz        },
 			{"tt_taultauh"   , NT_genproc_tt_taultauh   },
 			{"tt_taulj"      , NT_genproc_tt_taulj      },
 			{"tt_elmu"       , NT_genproc_tt_elmu       },
@@ -740,7 +773,31 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"tt_taueltaumu" , NT_genproc_tt_taueltaumu },
 			//{"tt_other"      , NT_genproc_tt_other      },
 			},
-		.groups={}};
+
+		.groups={
+			{"tt_eltau" , NT_genproc_tt_eltau},
+			{"tt_mutau" , NT_genproc_tt_mutau},
+			{"tt_lj"    , NT_genproc_tt_lj},
+			{"tt_inclusive" , NT_genproc_inclusive},
+			},
+
+		.channel_standard = {
+			{"el_sel",    _tt_procs_eltau},
+			{"mu_sel",    _tt_procs_eltau},
+			{"el_sel_ss", _tt_procs_mutau},
+			{"mu_sel_ss", _tt_procs_mutau},
+
+			{"tt_elmu",       _tt_procs_elmu},
+			{"tt_elmu_tight", _tt_procs_elmu},
+			{"dy_mutau",      _tt_procs_mutau},
+			{"dy_mutau_ss",   _tt_procs_mutau},
+			{"dy_eltau",      _tt_procs_eltau},
+			{"dy_eltau_ss",   _tt_procs_eltau},
+			{"dy_mumu",       _tt_procs_mumu},
+			{"dy_elel",       _tt_procs_mumu},
+
+			}
+		};
 
 //genproc_tt_ljb       = 24
 //genproc_tt_ljw       = 23
@@ -760,7 +817,6 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 	}
 
 map<TString, _S_proc_ID_defs> known_procs_info = create_known_procs_info();
-
 
 double W_lep_br    = 0.108;
 double W_alllep_br = 3*0.108;
@@ -914,7 +970,9 @@ vector<T_syst_chan_proc_histos> distrs_to_record;
 
 // final state channels
 const char* requested_channel_names[] = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_mumu", "dy_elel", NULL};
-vector<TString> requested_procs   = {"all"};
+//const char* requested_channel_names[] = {"tt_elmu", NULL};
+//vector<TString> requested_procs   = {"all"};
+vector<TString> requested_procs   = {"std"};
 const char* requested_systematics[]   = {"NOMINAL",
  "JERUp",
  "JERDown",
@@ -935,6 +993,8 @@ const char* requested_systematics[]   = {"NOMINAL",
 "LEPmuTRGUp",
 "LEPmuTRGDown",
  NULL};
+
+//requested_systematics[0] = "NOMINAL"; requested_systematics[1] = NULL;
 
 const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
 
@@ -964,6 +1024,7 @@ else
 
 // name of the catchall process for the defined dtag
 TString procname_catchall = main_dtag_info.procs.catchall_name;
+map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.procs.channel_standard;
 
 for (const char** requested_sys = requested_systematics; *requested_sys != NULL; requested_sys++)
 	{
@@ -982,16 +1043,26 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 
 		T_chan_proc_histos channel          = {.chan_def=known_defs_channels[channame]};
 
+		// check if standard processes per channels are requested
+		vector<TString>* process_definitions_to_use = &requested_procs;
+		if ((*process_definitions_to_use)[0] == "std")
+			{
+			// TODO in case of an unknown process set an inclusive definition
+			Stopif(known_std_procs_per_channel.find(channame) == known_std_procs_per_channel.end(), continue, "Do not know standard processes for the channel %s", channame.Data())
+			// set the standard processes
+			process_definitions_to_use = &known_std_procs_per_channel[channame];
+			}
+
 		// define processes
-		bool is_catchall_proc_done = false; // it will be set with the first defined process
+		bool is_catchall_proc_done = false; // TODO: it will be set with the first defined process, but make it work always -- push_back an additional process with the inclusive definition
 
 		// loop over requested processes and find their definitions for recording in this channel
 		//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
-		for (const auto& procname: requested_procs)
+		for (const auto& procname: (*process_definitions_to_use))
 			{
 			// find the definition of this channel
 			//TString procname(*requested_proc);
-			// if (procname == "std") ...
+
 			Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
 
 			T_proc_histos process = {.proc_def=known_procs[procname]};
@@ -1102,6 +1173,7 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 					// TODO memoize if possible
 					double value = histo_torecord.func(obj_systematic);
 					histo_torecord.histo->Fill(value, event_weight);
+					//histo_torecord.histo->Fill(value);
 					}
 				// <-- I keep the loops with explicit indexes, since the indexes can be used to implement memoization
 
