@@ -821,20 +821,20 @@ SYSTEMATIC / PROCESS / CHANNEL / channel_process_systematic_distrname
 
 
 typedef struct{
-	_F_channel_def chan_def;      /**< \brief `bool` function defining whether an event passes the channel selection */
+	_F_genproc_def proc_def;  /**< \brief `bool` function defining whether an event passes this gen proc definition */
 	vector<TH1D_histo> histos;         /**< \brief the distributions to record */
-} T_chan_histos;
+} T_proc_histos;
 
 typedef struct{
-	_F_genproc_def proc_def;  /**< \brief `bool` function defining whether an event passes this gen proc definition */
-	vector<T_chan_histos> chans;  /**< \brief the channels with distributions to record */
-} T_proc_chan_histos;
+	_F_channel_def chan_def;      /**< \brief `bool` function defining whether an event passes the channel selection */
+	vector<T_proc_histos> procs;  /**< \brief the channels with distributions to record */
+	vector<TH1D_histo> catchall_proc_histos;  /**< \brief the channels with distributions to record in the catchall process */
+} T_chan_proc_histos;
 
 typedef struct{
 	_S_systematic_definition syst_def;  /**< \brief the definition of a given systematic */
-	vector<T_proc_chan_histos> procs;  /**< \brief the per-proc channels with distributions to record */
-	vector<T_chan_histos> catchall_proc;  /**< \brief the channels with distributions to record in the catchall process */
-} T_syst_proc_chan_histos;
+	vector<T_chan_proc_histos> chans;  /**< \brief the per-proc channels with distributions to record */
+} T_syst_chan_proc_histos;
 
 /* --------------------------------------------------------------- */
 
@@ -909,7 +909,7 @@ cerr_expr(main_dtag << " : " << main_dtag_info.cross_section);
 //vector<TH1D_histo> distrs;
 
 // define a nested list: list of channels, each containing a list of histograms to record
-vector<T_syst_proc_chan_histos> distrs_to_record;
+vector<T_syst_chan_proc_histos> distrs_to_record;
 
 
 // final state channels
@@ -971,31 +971,30 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 	TString systname(*requested_sys);
 	Stopif(known_systematics.find(systname) == known_systematics.end(), continue, "Do not know a systematic %s", systname.Data());
 
-	T_syst_proc_chan_histos systematic = {.syst_def = known_systematics[systname]};
+	T_syst_chan_proc_histos systematic = {.syst_def = known_systematics[systname]};
 
-	// define processes
-	bool is_catchall_proc_done = false; // it will be set with the first defined process
-
-	// loop over requested processes and find their definitions for recording in this channel
-	//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
-	for (const auto& procname: requested_procs)
+	// define channels
+	for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
 		{
 		// find the definition of this channel
-		//TString procname(*requested_proc);
-		Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
+		TString channame(*requested_channel);
+		Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
 
-		T_proc_chan_histos process = {.proc_def=known_procs[procname]};
-		//vector<T_chan_histos> catchall_process;
+		T_chan_proc_histos channel          = {.chan_def=known_defs_channels[channame]};
 
-		// define channels
-		for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
+		// define processes
+		bool is_catchall_proc_done = false; // it will be set with the first defined process
+
+		// loop over requested processes and find their definitions for recording in this channel
+		//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
+		for (const auto& procname: requested_procs)
 			{
 			// find the definition of this channel
-			TString channame(*requested_channel);
-			Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
+			//TString procname(*requested_proc);
+			// if (procname == "std") ...
+			Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
 
-			T_chan_histos channel          = {.chan_def=known_defs_channels[channame]};
-			T_chan_histos channel_catchall = {.chan_def=known_defs_channels[channame]};
+			T_proc_histos process = {.proc_def=known_procs[procname]};
 
 			// define distributions
 			// create the histograms for all of these definitions
@@ -1005,22 +1004,21 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 				Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
 
 				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname);
-				channel.histos.push_back(a_distr);
+				process.histos.push_back(a_distr);
 
 				if (!is_catchall_proc_done)
 					{
 					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname);
-					channel_catchall.histos.push_back(a_distr);
+					channel.catchall_proc_histos.push_back(a_distr);
 					}
 				}
 
-			if (!is_catchall_proc_done)
-				systematic.catchall_proc.push_back(channel_catchall);
-			process.chans.push_back(channel);
+			channel.procs.push_back(process);
+			// together with the first requested processes the catchall processes has been set up
+			if (!is_catchall_proc_done) is_catchall_proc_done = true;
 			}
 
-		if (!is_catchall_proc_done) is_catchall_proc_done = true;
-		systematic.procs.push_back(process);
+		systematic.chans.push_back(channel);
 		}
 
 	distrs_to_record.push_back(systematic);
@@ -1050,10 +1048,6 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	#define NTUPLE_INTERFACE_CONNECT
 	#include "stage2_interface.h"
 
-	//// just a test
-	//if (NT_output_ttree) cerr_expr(NT_output_ttree->GetEntries());
-	//else cout << "NO TTREE" << std::endl;
-
 	unsigned int n_entries = NT_output_ttree->GetEntries();
 	//cerr_expr(n_entries);
 
@@ -1071,64 +1065,40 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 		// set the object systematic
 		ObjSystematics systematic = NOMINAL;
 
-		/*
-		for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
-			{
-			// TODO memoize, optimize
-			double val = distrs[distr_i].func(systematic);
-			distrs[distr_i].histo->Fill(val);
-			}
-		*/
-
-		/*
-		for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
-			{
-			// test the event passed the final state channel event selection
-			if (!requested_channels[chan_i].chan_def(systematic)) continue;
-			// fill in the histograms
-			vector<TH1D_histo>& distrs = requested_channels[chan_i].distrs;
-			for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
-				{
-				// TODO memoize, optimize
-				double val = distrs[distr_i].func(systematic);
-				distrs[distr_i].histo->Fill(val);
-				}
-			}
-		*/
-
 		for (int si=0; si<distrs_to_record.size(); si++)
 			{
 			ObjSystematics obj_systematic = distrs_to_record[si].syst_def.obj_sys_id;
 			double event_weight       = distrs_to_record[si].syst_def.weight_func();
 
-			// assign the gen process
-			// loop over procs check if this event passes
-			// if not get the catchall proc
-			vector<T_chan_histos>* channels = NULL;
-			for (int pi=0; pi<distrs_to_record[si].procs.size(); pi++)
-				{
-				if (distrs_to_record[si].procs[pi].proc_def())
-					{
-					channels = &distrs_to_record[si].procs[pi].chans;
-					break;
-					}
-				}
-
-			if (channels == NULL)
-				channels = & distrs_to_record[si].catchall_proc;
-
 			// record distributions in all final states where the event passes
-			for (int ci=0; ci<channels->size(); ci++)
+			vector<T_chan_proc_histos>& channels = distrs_to_record[si].chans;
+			for (int ci=0; ci<channels.size(); ci++)
 				{
-				T_chan_histos& chan = (*channels)[ci];
+				T_chan_proc_histos& chan = channels[ci];
 
 				// check if event passes the channel selection
 				if (!chan.chan_def(obj_systematic)) continue;
 
-				// record all distributions with the given event weight
-				for (int di=0; di<chan.histos.size(); di++)
+				// assign the gen process
+				// loop over procs check if this event passes
+				// if not get the catchall proc
+				vector<TH1D_histo>* histos = NULL;
+				for (int pi=0; pi<chan.procs.size(); pi++)
 					{
-					TH1D_histo& histo_torecord = chan.histos[di];
+					if (chan.procs[pi].proc_def())
+						{
+						histos = &chan.procs[pi].histos;
+						break;
+						}
+					}
+
+				if (histos == NULL)
+					histos = & chan.catchall_proc_histos;
+
+				// record all distributions with the given event weight
+				for (int di=0; di<histos->size(); di++)
+					{
+					TH1D_histo& histo_torecord = (*histos)[di];
 					// TODO memoize if possible
 					double value = histo_torecord.func(obj_systematic);
 					histo_torecord.histo->Fill(value, event_weight);
@@ -1200,26 +1170,20 @@ for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 for (int si=0; si<distrs_to_record.size(); si++)
 	{
 	// merge defined processes and the catchall
-	vector<T_proc_chan_histos>& all_procs = distrs_to_record[si].procs;
-	//vector<T_chan_histos>& catchall_proc  = distrs_to_record[si].catchall_proc;
-	//all_procs.insert(all_procs.end(), catchall_proc.begin(), catchall_proc.end());
+	vector<T_chan_proc_histos>& all_chans = distrs_to_record[si].chans;
 
-	for(const auto& proc: all_procs)
+	for(const auto& chan: all_chans)
 		{
-		for(const auto& chan: proc.chans)
+		for(const auto& proc: chan.procs)
 			{
-			for(const auto& recorded_histo: chan.histos)
+			for(const auto& recorded_histo: proc.histos)
 				{
 				recorded_histo.histo->Print();
 				recorded_histo.histo->Write();
 				}
 			}
-		}
-
-	// same for catchall
-	for(const auto& chan: distrs_to_record[si].catchall_proc)
-		{
-		for(const auto& recorded_histo: chan.histos)
+		// same for catchall
+		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
 			recorded_histo.histo->Write();
 			}
