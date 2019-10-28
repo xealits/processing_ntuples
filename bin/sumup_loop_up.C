@@ -890,8 +890,8 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	{
 	TString input_filename(argv[cur_var]);
 
-	cerr_expr(cur_var);
-	cerr_expr(input_filename);
+	cerr_expr(cur_var << " " << input_filename);
+	//cerr_expr(input_filename);
 
 	//dtags.push_back(dtag);
 	//files.push_back(TFile::Open(dir + "/" + dtag + ".root"));
@@ -914,7 +914,7 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	//else cout << "NO TTREE" << std::endl;
 
 	unsigned int n_entries = NT_output_ttree->GetEntries();
-	cerr_expr(n_entries);
+	//cerr_expr(n_entries);
 
 	for (unsigned int ievt = 0; ievt < n_entries; ievt++)
 		{
@@ -922,10 +922,10 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 
 		//// tests
 		////cerr_expr(NT_runNumber);
-		cerr_expr(NT_event_leptons[0].pt());
+		//cerr_expr(NT_event_leptons[0].pt());
 		//cerr_expr(NT_event_leptons_genmatch[0]);
 
-		Stopif(ievt > 10, break, "reached 10 events, exiting");
+		//Stopif(ievt > 10, break, "reached 10 events, exiting");
 
 		// set the object systematic
 		ObjSystematics systematic = NOMINAL;

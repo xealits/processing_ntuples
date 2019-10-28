@@ -725,7 +725,7 @@ distr_defs = {
     'elmu_mu_pt':    ({'NOMINAL': lambda ev: ev.event_leptons[0].pt()  if abs(ev.event_leptons_ids[0]) == 13 else (ev.event_leptons[1].pt()  if len(ev.event_leptons_ids)>1 else -111.)},  ('histo-range',  [40,0,200])),
     'elmu_mu_eta':   ({'NOMINAL': lambda ev: ev.event_leptons[0].eta() if abs(ev.event_leptons_ids[0]) == 13 else (ev.event_leptons[1].eta() if len(ev.event_leptons_ids)>1 else -111.)}, ('histo-range',  [26,-2.6,2.6])),
     'tau_sv_sign':   ({'NOMINAL': lambda ev: ev.event_taus_sv_sign[0] if len(ev.event_taus_sv_sign) > 0 else -111.},  ('histo-range',  [42,-1,20])),
-    'tau_pt':        ({'NOMINAL': lambda ev: ev.event_taus[0].pt()    if len(ev.event_taus) > 0   else -111.},    ('histo-range',  [20,0,100])),
+    'tau_pt':        ({'NOMINAL': lambda ev: ev.event_taus[0].pt()    if len(ev.event_taus) > 0   else -111.},    ('histo-range',  [40,0,200])),
     'tau_eta':       ({'NOMINAL': lambda ev: ev.event_taus[0].eta()   if len(ev.event_taus) > 0   else -111.},    ('histo-range',  [26,-2.6,2.6])),
     'bjet_pt':       ({'NOMINAL': lambda ev: ev.event_jets_b[0].pt()  if len(ev.event_jets_b) > 0 else -111.},  ('histo-range',  [20,0,300])),
     'bjet_eta':      ({'NOMINAL': lambda ev: ev.event_jets_b[0].eta() if len(ev.event_jets_b) > 0 else -111.}, ('histo-range',  [26,-2.6,2.6])),
@@ -743,6 +743,7 @@ distr_defs = {
     'relIso_mu':     ({'NOMINAL': lambda ev: ev.event_leptons_alliso_reliso[0] if len(ev.event_leptons_alliso_reliso) > 0 else -111.},  ('custom-range', [0, 0.15, 0.25, 0.5, 1., 2., 4.])),
     'relIso_mu_ext': ({'NOMINAL': lambda ev: ev.event_leptons_alliso_reliso[0] if len(ev.event_leptons_alliso_reliso) > 0 else -111.},  ('custom-range', [0, 0.15, 0.25, 0.5, 1., 2., 4., 8., 16.])),
     'yield':         ({'NOMINAL': lambda ev: 1},     ('histo-range',  [3,0.0,3.0])),
+    'nvtx':          ({'NOMINAL': lambda ev: ev.nvtx}, ('histo-range', [24,0.0,120.0])),
 }
 
 # CHECK: implement multi-dim histos?
