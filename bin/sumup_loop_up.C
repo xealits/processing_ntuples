@@ -481,6 +481,7 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 	}
 
 
+
 bool NT_channel_tt_elmu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
@@ -508,6 +509,96 @@ bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 	else relevant_selection_stage = NT_selection_stage_em;
 	return relevant_selection_stage == 205;
 	}
+
+
+
+bool NT_channel_dy_mutau(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
+	else relevant_selection_stage = NT_selection_stage_dy;
+	return relevant_selection_stage == 102 || relevant_selection_stage == 103;
+	}
+
+bool NT_channel_dy_eltau(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
+	else relevant_selection_stage = NT_selection_stage_dy;
+	return relevant_selection_stage == 112 || relevant_selection_stage == 113;
+	}
+
+bool NT_channel_dy_mutau_ss(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
+	else relevant_selection_stage = NT_selection_stage_dy;
+	return relevant_selection_stage == 202 || relevant_selection_stage == 203;
+	}
+
+bool NT_channel_dy_eltau_ss(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
+	else relevant_selection_stage = NT_selection_stage_dy;
+	return relevant_selection_stage == 212 || relevant_selection_stage == 213;
+	}
+
+
+
+bool NT_channel_dy_mumu(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_mumu;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_TESDown;
+	else relevant_selection_stage = NT_selection_stage_dy_mumu;
+	return relevant_selection_stage == 102 || relevant_selection_stage == 103 || relevant_selection_stage == 105;
+	}
+
+bool NT_channel_dy_elel(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_mumu;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_TESDown;
+	else relevant_selection_stage = NT_selection_stage_dy_mumu;
+	return relevant_selection_stage == 112 || relevant_selection_stage == 113 || relevant_selection_stage == 115;
+	}
+
+
 
 
 /** \brief The channel-defining `bool` function.
@@ -538,6 +629,13 @@ map<TString, _F_channel_def> create_known_channel_definitions()
 
 	_quick_set_chandef(m, tt_elmu);
 	_quick_set_chandef(m, tt_elmu_tight);
+
+	_quick_set_chandef(m, dy_mutau);
+	_quick_set_chandef(m, dy_eltau);
+	_quick_set_chandef(m, dy_mutau_ss);
+	_quick_set_chandef(m, dy_eltau_ss);
+	_quick_set_chandef(m, dy_mumu);
+	_quick_set_chandef(m, dy_elel);
 
 	return m;
 }
@@ -595,6 +693,18 @@ NT_genproc(tt_eltau,    41)
 NT_genproc(tt_mutau3ch, 32)
 NT_genproc(tt_mutau,    31)
 
+NT_genproc(tt_ljb        , 24)
+NT_genproc(tt_ljw        , 23)
+NT_genproc(tt_ljo        , 22)
+NT_genproc(tt_lj         , 21)
+NT_genproc(tt_taultauh   , 12)
+NT_genproc(tt_taulj      , 11)
+NT_genproc(tt_elmu       , 3)
+NT_genproc(tt_ltaul      , 2)
+NT_genproc(tt_taueltaumu , 1)
+//NT_genproc(tt_other      , 0) // no "tt_other"! it is a catchall process, they are handled automatically
+
+
 
 /** \brief The definition of (sub-)processes for a given dtag
 
@@ -618,6 +728,17 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"tt_eltau"    , NT_genproc_tt_eltau   },
 			{"tt_mutau3ch" , NT_genproc_tt_mutau3ch},
 			{"tt_mutau"    , NT_genproc_tt_mutau   },
+
+			{"tt_ljb"        , NT_genproc_tt_ljb        },
+			{"tt_ljw"        , NT_genproc_tt_ljw        },
+			{"tt_ljo"        , NT_genproc_tt_ljo        },
+			{"tt_lj"         , NT_genproc_tt_lj         },
+			{"tt_taultauh"   , NT_genproc_tt_taultauh   },
+			{"tt_taulj"      , NT_genproc_tt_taulj      },
+			{"tt_elmu"       , NT_genproc_tt_elmu       },
+			{"tt_ltaul"      , NT_genproc_tt_ltaul      },
+			{"tt_taueltaumu" , NT_genproc_tt_taueltaumu },
+			//{"tt_other"      , NT_genproc_tt_other      },
 			},
 		.groups={}};
 
@@ -792,9 +913,29 @@ vector<T_syst_proc_chan_histos> distrs_to_record;
 
 
 // final state channels
-const char* requested_channel_names[] = {"el_sel", "mu_sel", "tt_elmu", "tt_elmu_tight", NULL};
+const char* requested_channel_names[] = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_mumu", "dy_elel", NULL};
 vector<TString> requested_procs   = {"all"};
-const char* requested_systematics[]   = {"NOMINAL", NULL};
+const char* requested_systematics[]   = {"NOMINAL",
+ "JERUp",
+ "JERDown",
+ "JESUp",
+ "JESDown",
+ "TESUp",
+ "TESDown",
+"PUUp",
+"PUDown",
+"bSFUp",
+"bSFDown",
+"LEPelIDUp",
+"LEPelIDDown",
+"LEPelTRGUp",
+"LEPelTRGDown",
+"LEPmuIDUp",
+"LEPmuIDDown",
+"LEPmuTRGUp",
+"LEPmuTRGDown",
+ NULL};
+
 const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
 
 // set the known processes according to the request: whetehr groups of processes are requested or not
