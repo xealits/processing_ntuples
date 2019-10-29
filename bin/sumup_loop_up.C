@@ -1091,15 +1091,33 @@ finally all histograms are written out in the standard format `channel/process/s
 The input now: `input_filename [input_filename+]`.
  */
 
+vector<TString> parse_coma_list(char* coma_list)
+	{
+	vector<TString> list;
+
+	// the input is so simple, we can just substitute , for \0 and set up char* array
+	// ok, lets parse with strtok and push_back into a vector
+	char delimeter[] = ",";
+	char* txt;
+	char* scratch;
+
+	txt = strtok_r(coma_list, delimeter, &scratch);
+	list.push_back(TString(txt));
+	while ((txt = strtok_r(NULL, delimeter, &scratch)))
+		list.push_back(TString(txt));
+
+	return list;
+	}
+
 int main (int argc, char *argv[])
 {
 argc--;
 const char* exec_name = argv[0];
 argv++;
 
-if (argc < 3)
+if (argc < 7)
 	{
-	std::cout << "Usage:" << " 0|1<do_WNJets_stitching> output_filename input_filename [input_filename+]" << std::endl;
+	std::cout << "Usage:" << " 0|1<do_WNJets_stitching> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
 	exit(0);
 	}
 
@@ -1111,7 +1129,48 @@ gROOT->Reset();
 //bool normalise_per_weight = <user input>;
 bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
 
+//char* record_systs_definition  = *argv++; argc--;
+//char* record_chans_definition  = *argv++; argc--;
+//char* record_procs_definition  = *argv++; argc--;
+//char* record_distrs_definition = *argv++; argc--;
+//
+//vector<TString> requested_systematics2, requested_channels2, requested_procs2, requested_distrs2;
+//
+//// the input is so simple, we can just substitute , for \0 and set up char* array
+//// ok, lets parse with strtok and push_back into a vector
+//char delimeter[] = ",";
+//char* txt;
+//char* scratch;
+//
+////txt = strtok_r(record_systs_definition, delimeter, &scratch); cout_expr(record_systs_definition); cout_expr("1" << txt << " " << scratch);
+////txt = strtok_r(NULL                   , delimeter, &scratch); cout_expr("2" << (scratch == NULL) << " " << (txt == NULL) << " " << scratch);
+////txt = strtok_r(NULL                   , delimeter, &scratch); cout_expr("3" << (scratch == NULL) << " " << (txt == NULL) << " " << scratch);
+////txt = strtok_r(NULL                   , delimeter, &scratch); cout_expr("4" << (scratch == NULL) << " " << (txt == NULL) << " " << scratch);
+//
+//txt = strtok_r(record_systs_definition, delimeter, &scratch);
+//requested_systematics2.push_back(TString(txt));
+//while ((txt = strtok_r(NULL, delimeter, &scratch)))
+//	requested_systematics2.push_back(TString(txt));
+
+vector<TString> requested_systematics2 = parse_coma_list(*argv++); argc--;
+vector<TString> requested_channels2    = parse_coma_list(*argv++); argc--;
+vector<TString> requested_procs2       = parse_coma_list(*argv++); argc--;
+vector<TString> requested_distrs2      = parse_coma_list(*argv++); argc--;
+
+//// test
+//for (const auto& syst: requested_systematics2)
+//	cout_expr(syst);
+//for (const auto& chan: requested_channels2)
+//	cout_expr(chan);
+//for (const auto& proc: requested_procs2)
+//	cout_expr(proc);
+//for (const auto& distr: requested_distrs2)
+//	cout_expr(distr);
+//
+//exit(0);
+
 const char* output_filename = *argv++; argc--;
+
 
 cerr_expr(do_WNJets_stitching << " " << output_filename);
 /* --------------------- */
