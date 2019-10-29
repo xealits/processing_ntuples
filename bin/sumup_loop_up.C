@@ -395,14 +395,14 @@ TH1D_histo create_TH1D_histo(_TH1D_histo_def& def, TString name)
 	TH1D* histo;
 	if (def.range.linear)
 		{
-		cout << "making linear bins histogram " << endl;
+		//cout << "making linear bins histogram " << endl;
 		histo = (TH1D*) new TH1D(name, name, def.range.nbins, def.range.linear_min, def.range.linear_max);
 		}
 	else
 		{
-		cout << "making custom bins histogram " << def.range.nbins << " " << def.range.custom_bins << endl;
+		//cout << "making custom bins histogram " << def.range.nbins << " " << def.range.custom_bins << endl;
 		histo = (TH1D*) new TH1D(name, name, def.range.nbins, def.range.custom_bins);
-		cout << "making custom bins histogram DONW" << endl;
+		//cout << "making custom bins histogram DONW" << endl;
 		}
 	//TH1D_histo a_distr = {ahist, def.func, 0.};
 	//distrs.push_back(a_distr);
@@ -877,24 +877,206 @@ SYSTEMATIC / PROCESS / CHANNEL / channel_process_systematic_distrname
 
 
 typedef struct{
-	_F_genproc_def proc_def;  /**< \brief `bool` function defining whether an event passes this gen proc definition */
-	vector<TH1D_histo> histos;         /**< \brief the distributions to record */
+	TString name;               /**< \brief keep the name of this process to assign final per-proc normalization */
+	_F_genproc_def proc_def;    /**< \brief `bool` function defining whether an event passes this gen proc definition */
+	vector<TH1D_histo> histos;  /**< \brief the distributions to record */
 } T_proc_histos;
 
 typedef struct{
+	TString name;                 /**< \brief keep the name of this process to assign final per-channel normalization */
 	_F_channel_def chan_def;      /**< \brief `bool` function defining whether an event passes the channel selection */
 	vector<T_proc_histos> procs;  /**< \brief the channels with distributions to record */
 	vector<TH1D_histo> catchall_proc_histos;  /**< \brief the channels with distributions to record in the catchall process */
 } T_chan_proc_histos;
 
 typedef struct{
-	_S_systematic_definition syst_def;  /**< \brief the definition of a given systematic */
+	TString name;                      /**< \brief keep the name of this process to assign final per-systematic normalization */
+	_S_systematic_definition syst_def; /**< \brief the definition of a given systematic */
 	vector<T_chan_proc_histos> chans;  /**< \brief the per-proc channels with distributions to record */
 } T_syst_chan_proc_histos;
 
 /* --------------------------------------------------------------- */
 
 
+/* --------------------------------------------------------------- */
+// final normalizations
+
+// normalization per gen lumi event weight
+TH1D* weight_counter = NULL;
+bool normalise_per_weight = true;
+
+// per dtag cross section
+bool normalise_per_cross_section = true;
+
+//
+map<TString, double> create_known_normalization_per_syst()
+	{
+	map<TString, double> m;
+
+	// old corrections!
+	m["NOMINAL" ] = 1. / 1.01388; // NOMINAL PU factor
+	m["PUUp"    ] = 1. / 0.994846;
+	m["PUDown"  ] = 1. / 1.03657;
+
+	// tt only!
+	m["FragUp"	] = 0.958852; //1.001123,
+	m["FragDown"	] = 1.02936;  //0.999304,
+	m["SemilepBRUp"	] = 1.002650;
+	m["SemilepBRDown"	] = 1.035812;
+	m["PetersonUp"	] = 0.990578;
+
+	m["MrUp"	] = 0.896601;
+	m["MrDown"	] = 1.114154;
+	m["MfUp"	] = 0.980610;
+	m["MfDown"	] = 1.025511;
+	m["MfrUp"	] = 0.874602;
+	m["MfrDown"	] = 1.135832;
+	m["AlphaSDown"	] = 1.015573;
+	m["AlphaSUp"	] = 0.984924;
+	m["PDFCT14n1Up"	] = 0.999214;
+	m["PDFCT14n10Up"	] = 0.992985;
+	m["PDFCT14n11Up"	] = 1.011667;
+	m["PDFCT14n12Up"	] = 0.991012;
+	m["PDFCT14n13Up"	] = 1.011832;
+	m["PDFCT14n14Up"	] = 0.994285;
+	m["PDFCT14n15Up"	] = 1.020625;
+	m["PDFCT14n16Up"	] = 0.985324;
+	m["PDFCT14n17Up"	] = 0.986681;
+	m["PDFCT14n18Up"	] = 1.015958;
+	m["PDFCT14n19Up"	] = 0.999024;
+	m["PDFCT14n2Up"	] = 0.999610;
+	m["PDFCT14n20Up"	] = 1.001383;
+	m["PDFCT14n21Up"	] = 1.000811;
+	m["PDFCT14n22Up"	] = 0.998574;
+	m["PDFCT14n23Up"	] = 1.004126;
+	m["PDFCT14n24Up"	] = 0.996106;
+	m["PDFCT14n25Up"	] = 1.012630;
+	m["PDFCT14n26Up"	] = 0.987756;
+	m["PDFCT14n27Up"	] = 1.003978;
+	m["PDFCT14n28Up"	] = 0.994568;
+	m["PDFCT14n29Up"	] = 1.002681;
+	m["PDFCT14n3Up"	] = 0.991550;
+	m["PDFCT14n30Up"	] = 0.999111;
+	m["PDFCT14n31Up"	] = 1.001791;
+	m["PDFCT14n32Up"	] = 0.997694;
+	m["PDFCT14n33Up"	] = 0.996328;
+	m["PDFCT14n34Up"	] = 1.008113;
+	m["PDFCT14n35Up"	] = 0.985943;
+	m["PDFCT14n36Up"	] = 1.013638;
+	m["PDFCT14n37Up"	] = 0.993136;
+	m["PDFCT14n38Up"	] = 1.010604;
+	m["PDFCT14n39Up"	] = 0.995664;
+	m["PDFCT14n4Up"	] = 0.995349;
+	m["PDFCT14n40Up"	] = 1.004863;
+	m["PDFCT14n41Up"	] = 0.999538;
+	m["PDFCT14n42Up"	] = 1.000247;
+	m["PDFCT14n43Up"	] = 0.997833;
+	m["PDFCT14n44Up"	] = 1.005385;
+	m["PDFCT14n45Up"	] = 1.004722;
+	m["PDFCT14n46Up"	] = 1.001524;
+	m["PDFCT14n47Up"	] = 0.999380;
+	m["PDFCT14n48Up"	] = 0.993950;
+	m["PDFCT14n49Up"	] = 0.993164;
+	m["PDFCT14n5Up"	] = 0.994886;
+	m["PDFCT14n50Up"	] = 1.003200;
+	m["PDFCT14n51Up"	] = 1.001966;
+	m["PDFCT14n52Up"	] = 1.000614;
+	m["PDFCT14n53Up"	] = 0.968178;
+	m["PDFCT14n54Up"	] = 1.010604;
+	m["PDFCT14n55Up"	] = 0.992717;
+	m["PDFCT14n56Up"	] = 1.012645;
+	m["PDFCT14n6Up"	] = 1.004233;
+	m["PDFCT14n7Up"	] = 1.001432;
+	m["PDFCT14n8Up"	] = 0.992782;
+	m["PDFCT14n9Up"	] = 1.008439;
+
+	return m;
+	}
+
+map<TString, double> known_normalization_per_syst = create_known_normalization_per_syst();
+
+map<TString, double> create_known_normalization_per_proc()
+	{
+	map<TString, double> m;
+
+	/* NO! tau ID is only applied in channels where a tau was actually required
+	double tau_ID_correction = 0.95;
+	m["tt_eltau"]    = tau_ID_correction;
+	m["tt_mutau"]    = tau_ID_correction;
+	m["tt_eltau3ch"] = tau_ID_correction;
+	m["tt_mutau3ch"] = tau_ID_correction;
+	m["tt_eltau1ch"] = tau_ID_correction;
+	m["tt_mutau1ch"] = tau_ID_correction;
+
+	m["tt_taultauh"] = tau_ID_correction;
+
+	m["dy_tautau"] = tau_ID_correction;
+	m["s_top_eltau"] = tau_ID_correction;
+	m["s_top_mutau"] = tau_ID_correction;
+	*/
+
+	return m;
+	}
+
+map<TString, double> known_normalization_per_proc = create_known_normalization_per_proc();
+
+
+map<TString, double> create_known_normalization_per_chan()
+	{
+	map<TString, double> m;
+
+	return m;
+	}
+
+map<TString, double> known_normalization_per_chan = create_known_normalization_per_chan();
+
+
+double rogue_mixed_corrections(const TString& name_syst, const TString& name_chan, const TString& name_proc)
+	{
+	double correction = 1.;
+
+	// tau ID correction
+	// apply it in channels with a selected tau
+	// to processes with genuine taus
+	// TODO: it probably must be done via event weight in stage2
+	double tau_ID_correction = 0.95;
+	set<TString> tau_channels  = {"mu_sel", "el_sel", "mu_sel_ss", "el_sel_ss", "mu_selSV", "el_selSV", "mu_selSV_ss", "el_selSV_ss", "dy_mutau", "ctr_old_mu_sel", "ctr_old_mu_sel", "ctr_old_el_sel", "optel_tight_2L1M", "optmu_tight_2L1M"};
+	set<TString> tau_processes = {"tt_mutau3ch", "tt_eltau3ch", "tt_mutau", "tt_eltau", "tt_taultauh", "dy_tautau", "s_top_eltau", "s_top_mutau"};
+	if ((tau_channels.find(name_chan) != tau_channels.end()) && (tau_processes.find(name_proc) != tau_processes.end()))
+		correction *= tau_ID_correction;
+
+	return correction;
+	}
+
+
+void normalise_final(TH1D* histo, double cross_section, double scale, const TString& name_syst, const TString& name_chan, const TString& name_proc)
+	{
+	if (normalise_per_weight)
+		histo->Scale(1./weight_counter->GetBinContent(2));
+
+	if (normalise_per_cross_section)
+		histo->Scale(cross_section);
+
+	/* per-syst/proc/chan systematic corrections
+	*/
+
+	double per_syst_factor = known_normalization_per_syst.find(name_syst) == known_normalization_per_syst.end() ?
+		known_normalization_per_syst["NOMINAL"] :
+		known_normalization_per_syst[name_syst];
+
+	double per_proc_factor = known_normalization_per_proc.find(name_proc) == known_normalization_per_proc.end() ?
+		1. :
+		known_normalization_per_proc[name_proc];
+
+	double per_chan_factor = known_normalization_per_chan.find(name_chan) == known_normalization_per_chan.end() ?
+		1. :
+		known_normalization_per_chan[name_chan];
+
+	double rogue_mixed_correction = rogue_mixed_corrections(name_syst, name_chan, name_proc);
+
+	histo->Scale(scale * per_syst_factor * per_proc_factor * per_chan_factor * rogue_mixed_correction);
+	}
+/* --------------------------------------------------------------- */
 
 /** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
 
@@ -915,13 +1097,25 @@ argc--;
 const char* exec_name = argv[0];
 argv++;
 
-if (argc < 1)
+if (argc < 3)
 	{
-	std::cout << "Usage:" << " input_filename [input_filename+]" << std::endl;
-	exit (0);
+	std::cout << "Usage:" << " 0|1<do_WNJets_stitching> output_filename input_filename [input_filename+]" << std::endl;
+	exit(0);
 	}
 
 gROOT->Reset();
+
+/* --- input options --- */
+
+// set to normalize per gen lumi number of events
+//bool normalise_per_weight = <user input>;
+bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
+
+const char* output_filename = *argv++; argc--;
+
+cerr_expr(do_WNJets_stitching << " " << output_filename);
+/* --------------------- */
+
 
 //Int_t rebin_factor(atoi(argv[3]));
 //TString dir(argv[4]);
@@ -960,6 +1154,13 @@ Stopif(main_dtag.EqualTo(""), ;, "could not recognize any known dtag in %s", fir
 
 S_dtag_info main_dtag_info = known_dtags_info[main_dtag];
 cerr_expr(main_dtag << " : " << main_dtag_info.cross_section);
+
+bool isMC = main_dtag.Contains("MC");
+//if (!isMC) normalise_per_weight = false;
+normalise_per_weight &= isMC;
+
+// for WNJets stiching
+bool skip_nup5_events = do_WNJets_stitching && isMC && main_dtag.Contains("WJets_madgraph");
 
 //// define histograms for the distributions
 //vector<TH1D_histo> distrs;
@@ -1026,13 +1227,16 @@ else
 TString procname_catchall = main_dtag_info.procs.catchall_name;
 map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.procs.channel_standard;
 
+// some info for profiling
+int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
+
 for (const char** requested_sys = requested_systematics; *requested_sys != NULL; requested_sys++)
 	{
 	// find the definition of this channel
 	TString systname(*requested_sys);
 	Stopif(known_systematics.find(systname) == known_systematics.end(), continue, "Do not know a systematic %s", systname.Data());
 
-	T_syst_chan_proc_histos systematic = {.syst_def = known_systematics[systname]};
+	T_syst_chan_proc_histos systematic = {.name=systname, .syst_def = known_systematics[systname]};
 
 	// define channels
 	for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
@@ -1041,7 +1245,7 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 		TString channame(*requested_channel);
 		Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
 
-		T_chan_proc_histos channel          = {.chan_def=known_defs_channels[channame]};
+		T_chan_proc_histos channel          = {.name=channame, .chan_def=known_defs_channels[channame]};
 
 		// check if standard processes per channels are requested
 		vector<TString>* process_definitions_to_use = &requested_procs;
@@ -1065,7 +1269,7 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 
 			Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
 
-			T_proc_histos process = {.proc_def=known_procs[procname]};
+			T_proc_histos process = {.name=procname, .proc_def=known_procs[procname]};
 
 			// define distributions
 			// create the histograms for all of these definitions
@@ -1081,19 +1285,30 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 					{
 					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname);
 					channel.catchall_proc_histos.push_back(a_distr);
+					n_distrs_made +=1;
 					}
+				n_distrs_made +=1;
 				}
 
 			channel.procs.push_back(process);
 			// together with the first requested processes the catchall processes has been set up
-			if (!is_catchall_proc_done) is_catchall_proc_done = true;
+			if (!is_catchall_proc_done)
+				{
+				is_catchall_proc_done = true;
+				n_procs_made +=1;
+				}
+			n_procs_made +=1;
 			}
 
 		systematic.chans.push_back(channel);
+		n_chans_made +=1;
 		}
 
 	distrs_to_record.push_back(systematic);
+	n_systs_made +=1;
 	}
+
+cerr_expr(n_systs_made << " " << n_chans_made << " " << n_procs_made << " " << n_distrs_made);
 
 // process input files
 for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
@@ -1114,6 +1329,22 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	TTree* NT_output_ttree = (TTree*) input_file->Get("ttree_out");
 	Stopif(!NT_output_ttree, continue, "cannot Get TTree in file %s, skipping", input_filename.Data());
 
+	if (normalise_per_weight)
+		{
+		// get weight distribution for the file
+		TH1D* weight_counter_in_file = (TH1D*) input_file->Get("weight_counter");
+		// if the common weight counter is still not set -- clone
+		if (!weight_counter)
+			{
+			weight_counter = (TH1D*) weight_counter_in_file->Clone();
+			weight_counter->SetDirectory(0);
+			}
+		else
+			{
+			weight_counter->Add(weight_counter_in_file);
+			}
+		}
+
 	// open the interface to stage2 TTree-s
 	//#define NTUPLE_INTERFACE_OPEN
 	#define NTUPLE_INTERFACE_CONNECT
@@ -1125,6 +1356,8 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	for (unsigned int ievt = 0; ievt < n_entries; ievt++)
 		{
 		NT_output_ttree->GetEntry(ievt);
+
+		if (skip_nup5_events && NT_nup > 5) continue;
 
 		//// tests
 		////cerr_expr(NT_runNumber);
@@ -1189,6 +1422,10 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 		}
 	}
 
+// if there is still no weight counter when it was requested
+// then no files were processed (probably all were skipped)
+Stopif(normalise_per_weight && !weight_counter, exit(0), "no weight counter even though it was requested, probably no files were processed, exiting")
+
 /*
 for(std::map<TString, double>::iterator it = xsecs.begin(); it != xsecs.end(); ++it)
 	{
@@ -1212,7 +1449,7 @@ for(std::map<TString, double>::iterator it = xsecs.begin(); it != xsecs.end(); +
 // also nickname the MC....
 // per-dtag for now..
 
-TFile* output_file  = (TFile*) new TFile("outtest.root", "RECREATE");
+TFile* output_file  = (TFile*) new TFile(output_filename, "RECREATE");
 output_file->Write();
 
 /*
@@ -1242,6 +1479,7 @@ for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 for (int si=0; si<distrs_to_record.size(); si++)
 	{
 	// merge defined processes and the catchall
+	TString& syst_name = distrs_to_record[si].name;
 	vector<T_chan_proc_histos>& all_chans = distrs_to_record[si].chans;
 
 	for(const auto& chan: all_chans)
@@ -1250,17 +1488,27 @@ for (int si=0; si<distrs_to_record.size(); si++)
 			{
 			for(const auto& recorded_histo: proc.histos)
 				{
-				recorded_histo.histo->Print();
+				//recorded_histo.histo->Print();
+
+				// all final normalizations of the histogram
+				if (isMC)
+					normalise_final(recorded_histo.histo, main_dtag_info.cross_section, 1., syst_name, chan.name, proc.name);
+
 				recorded_histo.histo->Write();
 				}
 			}
 		// same for catchall
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
+			if (isMC)
+				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, 1., syst_name, chan.name, procname_catchall);
 			recorded_histo.histo->Write();
 			}
 		}
 	}
+
+if (normalise_per_weight)
+	weight_counter->Write();
 
 output_file->Close();
 }
