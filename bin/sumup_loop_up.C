@@ -1129,45 +1129,10 @@ gROOT->Reset();
 //bool normalise_per_weight = <user input>;
 bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
 
-//char* record_systs_definition  = *argv++; argc--;
-//char* record_chans_definition  = *argv++; argc--;
-//char* record_procs_definition  = *argv++; argc--;
-//char* record_distrs_definition = *argv++; argc--;
-//
-//vector<TString> requested_systematics2, requested_channels2, requested_procs2, requested_distrs2;
-//
-//// the input is so simple, we can just substitute , for \0 and set up char* array
-//// ok, lets parse with strtok and push_back into a vector
-//char delimeter[] = ",";
-//char* txt;
-//char* scratch;
-//
-////txt = strtok_r(record_systs_definition, delimeter, &scratch); cout_expr(record_systs_definition); cout_expr("1" << txt << " " << scratch);
-////txt = strtok_r(NULL                   , delimeter, &scratch); cout_expr("2" << (scratch == NULL) << " " << (txt == NULL) << " " << scratch);
-////txt = strtok_r(NULL                   , delimeter, &scratch); cout_expr("3" << (scratch == NULL) << " " << (txt == NULL) << " " << scratch);
-////txt = strtok_r(NULL                   , delimeter, &scratch); cout_expr("4" << (scratch == NULL) << " " << (txt == NULL) << " " << scratch);
-//
-//txt = strtok_r(record_systs_definition, delimeter, &scratch);
-//requested_systematics2.push_back(TString(txt));
-//while ((txt = strtok_r(NULL, delimeter, &scratch)))
-//	requested_systematics2.push_back(TString(txt));
-
-vector<TString> requested_systematics2 = parse_coma_list(*argv++); argc--;
-vector<TString> requested_channels2    = parse_coma_list(*argv++); argc--;
-vector<TString> requested_procs2       = parse_coma_list(*argv++); argc--;
-vector<TString> requested_distrs2      = parse_coma_list(*argv++); argc--;
-
-//// test
-//for (const auto& syst: requested_systematics2)
-//	cout_expr(syst);
-//for (const auto& chan: requested_channels2)
-//	cout_expr(chan);
-//for (const auto& proc: requested_procs2)
-//	cout_expr(proc);
-//for (const auto& distr: requested_distrs2)
-//	cout_expr(distr);
-//
-//exit(0);
+vector<TString> requested_systematics = parse_coma_list(*argv++); argc--;
+vector<TString> requested_channels    = parse_coma_list(*argv++); argc--;
+vector<TString> requested_procs       = parse_coma_list(*argv++); argc--;
+vector<TString> requested_distrs      = parse_coma_list(*argv++); argc--;
 
 const char* output_filename = *argv++; argc--;
 
@@ -1229,39 +1194,45 @@ vector<T_syst_chan_proc_histos> distrs_to_record;
 
 
 // final state channels
-const char* requested_channel_names[] = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_mumu", "dy_elel", NULL};
+vector<TString> requested_channels_all = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_mumu", "dy_elel"};
+if (requested_channels[0] == "all")
+	requested_channels = requested_channels_all;
+
 //const char* requested_channel_names[] = {"tt_elmu", NULL};
 //vector<TString> requested_procs   = {"all"};
-vector<TString> requested_procs   = {"std"};
-const char* requested_systematics[]   = {"NOMINAL",
- "JERUp",
- "JERDown",
- "JESUp",
- "JESDown",
- "TESUp",
- "TESDown",
-"PUUp",
-"PUDown",
-"bSFUp",
-"bSFDown",
-"LEPelIDUp",
-"LEPelIDDown",
-"LEPelTRGUp",
-"LEPelTRGDown",
-"LEPmuIDUp",
-"LEPmuIDDown",
-"LEPmuTRGUp",
-"LEPmuTRGDown",
- NULL};
+//vector<TString> requested_procs   = {"std"};
+vector<TString> requested_systematics_all = {"NOMINAL",
+	"JERUp",
+	"JERDown",
+	"JESUp",
+	"JESDown",
+	"TESUp",
+	"TESDown",
+	"PUUp",
+	"PUDown",
+	"bSFUp",
+	"bSFDown",
+	"LEPelIDUp",
+	"LEPelIDDown",
+	"LEPelTRGUp",
+	"LEPelTRGDown",
+	"LEPmuIDUp",
+	"LEPmuIDDown",
+	"LEPmuTRGUp",
+	"LEPmuTRGDown",
+	};
+
+if (requested_systematics[0] == "all")
+	requested_systematics = requested_systematics_all;
 
 //requested_systematics[0] = "NOMINAL"; requested_systematics[1] = NULL;
 
-const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
+//const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
 
 // set the known processes according to the request: whetehr groups of processes are requested or not
 // check if all known processes are requested
 map<TString, _F_genproc_def> known_procs;
-if (TString(requested_procs[0]) == "all")
+if (requested_procs[0] == "all")
 	{
 	known_procs = main_dtag_info.procs.all;
 	// and reset the requested processes to all known processes for this dtag
@@ -1289,19 +1260,17 @@ map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.proc
 // some info for profiling
 int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
 
-for (const char** requested_sys = requested_systematics; *requested_sys != NULL; requested_sys++)
+for (const auto& systname: requested_systematics)
 	{
 	// find the definition of this channel
-	TString systname(*requested_sys);
 	Stopif(known_systematics.find(systname) == known_systematics.end(), continue, "Do not know a systematic %s", systname.Data());
 
 	T_syst_chan_proc_histos systematic = {.name=systname, .syst_def = known_systematics[systname]};
 
 	// define channels
-	for (const char** requested_channel = requested_channel_names; *requested_channel != NULL; requested_channel++)
+	for (const auto& channame: requested_channels)
 		{
 		// find the definition of this channel
-		TString channame(*requested_channel);
 		Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
 
 		T_chan_proc_histos channel          = {.name=channame, .chan_def=known_defs_channels[channame]};
@@ -1332,9 +1301,8 @@ for (const char** requested_sys = requested_systematics; *requested_sys != NULL;
 
 			// define distributions
 			// create the histograms for all of these definitions
-			for (const char** requested_distr = requested_distrs; *requested_distr != NULL; requested_distr++)
+			for (const auto& distrname: requested_distrs)
 				{
-				TString distrname(*requested_distr);
 				Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
 
 				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname);
