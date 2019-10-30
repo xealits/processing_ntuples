@@ -5,7 +5,7 @@ histograms_to_fit: distr_out=jobsums/distrs/
 histograms_to_fit:
 	for dtag in `ls ${stage2_dir}/${nt}/${proc}`; do \
 	   mkdir -p ${distr_out}/${nt}/${proc}/ ; \
-	   time sumup_loop 0 41300 std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
+	   time sumup_loop 1 0 41300 std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
 	done
 
 qwatch: n=10

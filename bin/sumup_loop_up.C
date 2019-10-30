@@ -430,6 +430,7 @@ typedef struct {
  */
 
 typedef struct {
+	TString main_name;
 	TH1D* histo;
 	double (*func)(ObjSystematics);
 	double value;
@@ -554,7 +555,7 @@ Creates a `new TH1D(name, ..., range)` according to the linear or custom range i
 \return TH1D_histo
  */
 
-TH1D_histo create_TH1D_histo(_TH1D_histo_def& def, TString name)
+TH1D_histo create_TH1D_histo(_TH1D_histo_def& def, TString name, TString main_name)
 {
 	TH1D* histo;
 	if (def.range.linear)
@@ -570,7 +571,7 @@ TH1D_histo create_TH1D_histo(_TH1D_histo_def& def, TString name)
 		}
 	//TH1D_histo a_distr = {ahist, def.func, 0.};
 	//distrs.push_back(a_distr);
-	return {histo, def.func, 0.};
+	return {main_name, histo, def.func, 0.};
 }
 
 /*
@@ -1442,7 +1443,7 @@ argv++;
 
 if (argc < 7)
 	{
-	std::cout << "Usage:" << " 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
+	std::cout << "Usage:" << " 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
 	exit(0);
 	}
 
@@ -1452,6 +1453,7 @@ gROOT->Reset();
 
 // set to normalize per gen lumi number of events
 //bool normalise_per_weight = <user input>;
+bool save_in_old_order   = Int_t(atoi(*argv++)) == 1; argc--;
 bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
 Float_t lumi(atof(*argv++)); argc--;
 
@@ -1633,12 +1635,12 @@ for (const auto& systname: requested_systematics)
 				{
 				Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
 
-				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname);
+				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname, distrname);
 				process.histos.push_back(a_distr);
 
 				if (!is_catchall_proc_done)
 					{
-					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname);
+					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname, distrname);
 					channel.catchall_proc_histos.push_back(a_distr);
 					n_distrs_made +=1;
 					}
@@ -1831,7 +1833,83 @@ for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 	}
 */
 
-for (int si=0; si<distrs_to_record.size(); si++)
+if (save_in_old_order)
+  {
+  for (int si=0; si<distrs_to_record.size(); si++)
+	{
+	// merge defined processes and the catchall
+	TString& syst_name = distrs_to_record[si].name;
+	vector<T_chan_proc_histos>& all_chans = distrs_to_record[si].chans;
+
+	output_file->cd();
+	//TDirectory* dir_syst = (TDirectory*) output_file->mkdir(syst_name);
+	//dir_syst->SetDirectory(output_file);
+
+	for(const auto& chan: all_chans)
+		{
+		//dir_syst->cd();
+		//TDirectory* dir_chan = (TDirectory*) dir_syst->mkdir(chan.name);
+		//dir_chan->SetDirectory(dir_syst);
+		for(const auto& proc: chan.procs)
+			{
+			//dir_chan->cd();
+			//TDirectory* dir_proc = (TDirectory*) dir_chan->mkdir(proc.name);
+			//dir_proc->SetDirectory(dir_chan);
+			//dir_proc->cd();
+			for(const auto& recorded_histo: proc.histos)
+				{
+				// the old order of the path
+				//TString path = chan.name + "/" + proc.name + "/" + syst_name + "/";
+
+				// get or create this path
+				output_file->cd();
+				TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
+				chanpath->cd();
+				TDirectory* procpath = chanpath->Get(proc.name) ? (TDirectory*) chanpath->Get(proc.name) :  (TDirectory*) chanpath->mkdir(proc.name);
+				procpath->cd();
+				TDirectory* systpatch = procpath->Get(syst_name) ? (TDirectory*) procpath->Get(syst_name) :  (TDirectory*) procpath->mkdir(syst_name);
+				systpatch->cd();
+
+				TString histoname = chan.name + "_" + proc.name + "_" + syst_name + "_" + recorded_histo.main_name;
+				recorded_histo.histo->SetName(histoname);
+
+				// all final normalizations of the histogram
+				if (isMC)
+					normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, proc.name);
+
+				recorded_histo.histo->Write();
+				}
+			}
+
+		// same for catchall
+		// the old order of the path
+		//TString path = chan.name + "/" + procname_catchall + "/" + syst_name + "/";
+
+		// get or create this path
+		output_file->cd();
+		TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
+		chanpath->cd();
+		TDirectory* procpath = chanpath->Get(procname_catchall) ? (TDirectory*) chanpath->Get(procname_catchall) :  (TDirectory*) chanpath->mkdir(procname_catchall);
+		procpath->cd();
+		TDirectory* systpatch = procpath->Get(syst_name) ? (TDirectory*) procpath->Get(syst_name) :  (TDirectory*) procpath->mkdir(syst_name);
+		systpatch->cd();
+
+		for(const auto& recorded_histo: chan.catchall_proc_histos)
+			{
+			TString histoname = chan.name + "_" + procname_catchall + "_" + syst_name + "_" + recorded_histo.main_name;
+			recorded_histo.histo->SetName(histoname);
+
+			if (isMC)
+				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, procname_catchall);
+			recorded_histo.histo->Write();
+			}
+		}
+	}
+  }
+
+else
+  {
+  for (int si=0; si<distrs_to_record.size(); si++)
 	{
 	// merge defined processes and the catchall
 	TString& syst_name = distrs_to_record[si].name;
@@ -1877,6 +1955,7 @@ for (int si=0; si<distrs_to_record.size(); si++)
 			}
 		}
 	}
+  }
 
 output_file->cd();
 
