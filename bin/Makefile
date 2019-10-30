@@ -1,11 +1,11 @@
 
 test: compile
-	sumup_loop 1 test all std Mt_lep_met_c,leading_lep_pt outfile_test.root MC2017legacy_Fall17_TTTo2L2Nu_1.root foobar ../gstore_outdirs/94v3/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/Ntupler_94v3_MC2017legacy_Fall17_TTTo2L2Nu/191008_124833/0000/MC2017legacy_Fall17_TTTo2L2Nu_1.root
+	sumup_loop 1 41300 test all std Mt_lep_met_c,leading_lep_pt outfile_test.root MC2017legacy_Fall17_TTTo2L2Nu_1.root foobar ../gstore_outdirs/94v3/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/Ntupler_94v3_MC2017legacy_Fall17_TTTo2L2Nu/191008_124833/0000/MC2017legacy_Fall17_TTTo2L2Nu_1.root
 
 time: compile
-	time sumup_loop 1 std all std Mt_lep_met_c,leading_lep_pt outfile_time.root ../lstore_outdirs/94v3/processing1/MC2017legacy_Fall17_TTTo2L2Nu/*root
+	time sumup_loop 1 41300 std all std Mt_lep_met_c,leading_lep_pt outfile_time.root ../lstore_outdirs/94v3/processing1/MC2017legacy_Fall17_TTTo2L2Nu/*root
 
 compile: sumup_loop_up.C
-	scram b
+	time scram b
 	touch compile
 

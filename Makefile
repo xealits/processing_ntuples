@@ -1,3 +1,13 @@
+histograms_to_fit: stage2_dir=lstore_outdirs/
+histograms_to_fit: nt=94v3/
+histograms_to_fit: proc=processing1/
+histograms_to_fit: distr_out=jobsums/distrs/
+histograms_to_fit:
+	for dtag in `ls ${stage2_dir}/${nt}/${proc}`; do \
+	   mkdir -p ${distr_out}/${nt}/${proc}/ ; \
+	   time sumup_loop 0 41300 std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
+	done
+
 qwatch: n=10
 qwatch:
 	#watch -n ${n} 'qstat | grep " r     " | wc -l ; qstat | wc -l'

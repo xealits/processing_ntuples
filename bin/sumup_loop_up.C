@@ -1442,7 +1442,7 @@ argv++;
 
 if (argc < 7)
 	{
-	std::cout << "Usage:" << " 0|1<do_WNJets_stitching> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
+	std::cout << "Usage:" << " 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
 	exit(0);
 	}
 
@@ -1453,6 +1453,7 @@ gROOT->Reset();
 // set to normalize per gen lumi number of events
 //bool normalise_per_weight = <user input>;
 bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
+Float_t lumi(atof(*argv++)); argc--;
 
 vector<TString> requested_systematics = parse_coma_list(*argv++); argc--;
 vector<TString> requested_channels    = parse_coma_list(*argv++); argc--;
@@ -1857,7 +1858,7 @@ for (int si=0; si<distrs_to_record.size(); si++)
 
 				// all final normalizations of the histogram
 				if (isMC)
-					normalise_final(recorded_histo.histo, main_dtag_info.cross_section, 1., syst_name, chan.name, proc.name);
+					normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, proc.name);
 
 				recorded_histo.histo->Write();
 				}
@@ -1871,7 +1872,7 @@ for (int si=0; si<distrs_to_record.size(); si++)
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
 			if (isMC)
-				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, 1., syst_name, chan.name, procname_catchall);
+				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, procname_catchall);
 			recorded_histo.histo->Write();
 			}
 		}
