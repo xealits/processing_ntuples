@@ -166,6 +166,7 @@ double NT_sysweight_ ##sysname(void)          \
 	return weight_expr; \
 	}
 
+// COMMON systematics
 NT_sysweight(PUUp, NT_event_weight*NT_event_weight_PUUp    )
 NT_sysweight(PUDown, NT_event_weight*NT_event_weight_PUDown  )
 NT_sysweight(bSFUp, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFUp   / NT_event_weight_bSF : 0.))
@@ -178,6 +179,90 @@ NT_sysweight(LEPmuIDUp, NT_event_weight*NT_event_weight_LEPmuIDUp   )
 NT_sysweight(LEPmuIDDown, NT_event_weight*NT_event_weight_LEPmuIDDown )
 NT_sysweight(LEPmuTRGUp, NT_event_weight*NT_event_weight_LEPmuTRGUp  )
 NT_sysweight(LEPmuTRGDown, NT_event_weight*NT_event_weight_LEPmuTRGDown)
+
+// TT_OBJ
+NT_sysweight(TOPPTUp   , NT_event_weight*NT_event_weight_toppt    )
+NT_sysweight(TOPPTDown , NT_event_weight    )
+
+NT_sysweight(FragUp        , NT_event_weight*NT_event_weight_FragUp        )
+NT_sysweight(FragDown      , NT_event_weight*NT_event_weight_FragDown      )
+NT_sysweight(SemilepBRUp   , NT_event_weight*NT_event_weight_SemilepBRUp   )
+NT_sysweight(SemilepBRDown , NT_event_weight*NT_event_weight_SemilepBRDown )
+NT_sysweight(PetersonUp    , NT_event_weight*NT_event_weight_PetersonUp    )
+NT_sysweight(PetersonDown  , NT_event_weight                               )
+
+// TT_HARD
+NT_sysweight(MrUp     , NT_event_weight*NT_event_weight_me_f_rUp )
+NT_sysweight(MrDown   , NT_event_weight*NT_event_weight_me_f_rDn )
+NT_sysweight(MfUp     , NT_event_weight*NT_event_weight_me_fUp_r )
+NT_sysweight(MfDown   , NT_event_weight*NT_event_weight_me_fDn_r )
+NT_sysweight(MfrUp    , NT_event_weight*NT_event_weight_me_frUp  ) 
+NT_sysweight(MfrDown  , NT_event_weight*NT_event_weight_me_frDn  ) 
+
+// TT_ALPHA
+NT_sysweight(AlphaSUp     , NT_event_weight*NT_event_weight_AlphaS_up )
+NT_sysweight(AlphaSDown   , NT_event_weight*NT_event_weight_AlphaS_dn )
+
+// TT_PDF all of them
+// maybe a better approach would be to add an index into systematics
+
+NT_sysweight(PDFCT14n1Up     , NT_event_weight*NT_event_weight_pdf[0] )
+NT_sysweight(PDFCT14n2Up     , NT_event_weight*NT_event_weight_pdf[1] )
+NT_sysweight(PDFCT14n3Up     , NT_event_weight*NT_event_weight_pdf[2] )
+NT_sysweight(PDFCT14n4Up     , NT_event_weight*NT_event_weight_pdf[3] )
+NT_sysweight(PDFCT14n5Up     , NT_event_weight*NT_event_weight_pdf[4] )
+NT_sysweight(PDFCT14n6Up     , NT_event_weight*NT_event_weight_pdf[5] )
+NT_sysweight(PDFCT14n7Up     , NT_event_weight*NT_event_weight_pdf[6] )
+NT_sysweight(PDFCT14n8Up     , NT_event_weight*NT_event_weight_pdf[7] )
+NT_sysweight(PDFCT14n9Up     , NT_event_weight*NT_event_weight_pdf[8] )
+NT_sysweight(PDFCT14n10Up    , NT_event_weight*NT_event_weight_pdf[9] )
+NT_sysweight(PDFCT14n11Up    , NT_event_weight*NT_event_weight_pdf[10])
+NT_sysweight(PDFCT14n12Up    , NT_event_weight*NT_event_weight_pdf[11])
+NT_sysweight(PDFCT14n13Up    , NT_event_weight*NT_event_weight_pdf[12])
+NT_sysweight(PDFCT14n14Up    , NT_event_weight*NT_event_weight_pdf[13])
+NT_sysweight(PDFCT14n15Up    , NT_event_weight*NT_event_weight_pdf[14])
+NT_sysweight(PDFCT14n16Up    , NT_event_weight*NT_event_weight_pdf[15])
+NT_sysweight(PDFCT14n17Up    , NT_event_weight*NT_event_weight_pdf[16])
+NT_sysweight(PDFCT14n18Up    , NT_event_weight*NT_event_weight_pdf[17])
+NT_sysweight(PDFCT14n19Up    , NT_event_weight*NT_event_weight_pdf[18])
+NT_sysweight(PDFCT14n20Up    , NT_event_weight*NT_event_weight_pdf[19])
+NT_sysweight(PDFCT14n21Up    , NT_event_weight*NT_event_weight_pdf[20])
+NT_sysweight(PDFCT14n22Up    , NT_event_weight*NT_event_weight_pdf[21])
+NT_sysweight(PDFCT14n23Up    , NT_event_weight*NT_event_weight_pdf[22])
+NT_sysweight(PDFCT14n24Up    , NT_event_weight*NT_event_weight_pdf[23])
+NT_sysweight(PDFCT14n25Up    , NT_event_weight*NT_event_weight_pdf[24])
+NT_sysweight(PDFCT14n26Up    , NT_event_weight*NT_event_weight_pdf[25])
+NT_sysweight(PDFCT14n27Up    , NT_event_weight*NT_event_weight_pdf[26])
+NT_sysweight(PDFCT14n28Up    , NT_event_weight*NT_event_weight_pdf[27])
+NT_sysweight(PDFCT14n29Up    , NT_event_weight*NT_event_weight_pdf[28])
+NT_sysweight(PDFCT14n30Up    , NT_event_weight*NT_event_weight_pdf[29])
+NT_sysweight(PDFCT14n31Up    , NT_event_weight*NT_event_weight_pdf[30])
+NT_sysweight(PDFCT14n32Up    , NT_event_weight*NT_event_weight_pdf[31])
+NT_sysweight(PDFCT14n33Up    , NT_event_weight*NT_event_weight_pdf[32])
+NT_sysweight(PDFCT14n34Up    , NT_event_weight*NT_event_weight_pdf[33])
+NT_sysweight(PDFCT14n35Up    , NT_event_weight*NT_event_weight_pdf[34])
+NT_sysweight(PDFCT14n36Up    , NT_event_weight*NT_event_weight_pdf[35])
+NT_sysweight(PDFCT14n37Up    , NT_event_weight*NT_event_weight_pdf[36])
+NT_sysweight(PDFCT14n38Up    , NT_event_weight*NT_event_weight_pdf[37])
+NT_sysweight(PDFCT14n39Up    , NT_event_weight*NT_event_weight_pdf[38])
+NT_sysweight(PDFCT14n40Up    , NT_event_weight*NT_event_weight_pdf[39])
+NT_sysweight(PDFCT14n41Up    , NT_event_weight*NT_event_weight_pdf[40])
+NT_sysweight(PDFCT14n42Up    , NT_event_weight*NT_event_weight_pdf[41])
+NT_sysweight(PDFCT14n43Up    , NT_event_weight*NT_event_weight_pdf[42])
+NT_sysweight(PDFCT14n44Up    , NT_event_weight*NT_event_weight_pdf[43])
+NT_sysweight(PDFCT14n45Up    , NT_event_weight*NT_event_weight_pdf[44])
+NT_sysweight(PDFCT14n46Up    , NT_event_weight*NT_event_weight_pdf[45])
+NT_sysweight(PDFCT14n47Up    , NT_event_weight*NT_event_weight_pdf[46])
+NT_sysweight(PDFCT14n48Up    , NT_event_weight*NT_event_weight_pdf[47])
+NT_sysweight(PDFCT14n49Up    , NT_event_weight*NT_event_weight_pdf[48])
+NT_sysweight(PDFCT14n50Up    , NT_event_weight*NT_event_weight_pdf[49])
+NT_sysweight(PDFCT14n51Up    , NT_event_weight*NT_event_weight_pdf[50])
+NT_sysweight(PDFCT14n52Up    , NT_event_weight*NT_event_weight_pdf[51])
+NT_sysweight(PDFCT14n53Up    , NT_event_weight*NT_event_weight_pdf[52])
+NT_sysweight(PDFCT14n54Up    , NT_event_weight*NT_event_weight_pdf[53])
+NT_sysweight(PDFCT14n55Up    , NT_event_weight*NT_event_weight_pdf[54])
+NT_sysweight(PDFCT14n56Up    , NT_event_weight*NT_event_weight_pdf[55])
+
 
 
 #define _quick_set_objsys(sysname) m[#sysname] = {sysname, NT_sysweight_NOMINAL}
@@ -207,6 +292,85 @@ map<TString, _S_systematic_definition> create_known_systematics()
 	_quick_set_wgtsys(LEPmuIDDown);
 	_quick_set_wgtsys(LEPmuTRGUp);
 	_quick_set_wgtsys(LEPmuTRGDown);
+
+	_quick_set_wgtsys(PUUp);
+	_quick_set_wgtsys(PUUp);
+
+	_quick_set_wgtsys(TOPPTDown);
+	_quick_set_wgtsys(TOPPTUp);
+	_quick_set_wgtsys(FragUp);
+	_quick_set_wgtsys(FragDown);
+	_quick_set_wgtsys(SemilepBRUp);
+	_quick_set_wgtsys(SemilepBRDown);
+	_quick_set_wgtsys(PetersonUp);
+	_quick_set_wgtsys(PetersonDown);
+
+	_quick_set_wgtsys(MrUp     );
+	_quick_set_wgtsys(MrDown   );
+	_quick_set_wgtsys(MfUp     );
+	_quick_set_wgtsys(MfDown   );
+	_quick_set_wgtsys(MfrUp    );
+	_quick_set_wgtsys(MfrDown  );
+
+	_quick_set_wgtsys(AlphaSUp     );
+	_quick_set_wgtsys(AlphaSDown   );
+
+	_quick_set_wgtsys(PDFCT14n1Up     );
+	_quick_set_wgtsys(PDFCT14n2Up     );
+	_quick_set_wgtsys(PDFCT14n3Up     );
+	_quick_set_wgtsys(PDFCT14n4Up     );
+	_quick_set_wgtsys(PDFCT14n5Up     );
+	_quick_set_wgtsys(PDFCT14n6Up     );
+	_quick_set_wgtsys(PDFCT14n7Up     );
+	_quick_set_wgtsys(PDFCT14n8Up     );
+	_quick_set_wgtsys(PDFCT14n9Up     );
+	_quick_set_wgtsys(PDFCT14n10Up    );
+	_quick_set_wgtsys(PDFCT14n11Up    );
+	_quick_set_wgtsys(PDFCT14n12Up    );
+	_quick_set_wgtsys(PDFCT14n13Up    );
+	_quick_set_wgtsys(PDFCT14n14Up    );
+	_quick_set_wgtsys(PDFCT14n15Up    );
+	_quick_set_wgtsys(PDFCT14n16Up    );
+	_quick_set_wgtsys(PDFCT14n17Up    );
+	_quick_set_wgtsys(PDFCT14n18Up    );
+	_quick_set_wgtsys(PDFCT14n19Up    );
+	_quick_set_wgtsys(PDFCT14n20Up    );
+	_quick_set_wgtsys(PDFCT14n21Up    );
+	_quick_set_wgtsys(PDFCT14n22Up    );
+	_quick_set_wgtsys(PDFCT14n23Up    );
+	_quick_set_wgtsys(PDFCT14n24Up    );
+	_quick_set_wgtsys(PDFCT14n25Up    );
+	_quick_set_wgtsys(PDFCT14n26Up    );
+	_quick_set_wgtsys(PDFCT14n27Up    );
+	_quick_set_wgtsys(PDFCT14n28Up    );
+	_quick_set_wgtsys(PDFCT14n29Up    );
+	_quick_set_wgtsys(PDFCT14n30Up    );
+	_quick_set_wgtsys(PDFCT14n31Up    );
+	_quick_set_wgtsys(PDFCT14n32Up    );
+	_quick_set_wgtsys(PDFCT14n33Up    );
+	_quick_set_wgtsys(PDFCT14n34Up    );
+	_quick_set_wgtsys(PDFCT14n35Up    );
+	_quick_set_wgtsys(PDFCT14n36Up    );
+	_quick_set_wgtsys(PDFCT14n37Up    );
+	_quick_set_wgtsys(PDFCT14n38Up    );
+	_quick_set_wgtsys(PDFCT14n39Up    );
+	_quick_set_wgtsys(PDFCT14n40Up    );
+	_quick_set_wgtsys(PDFCT14n41Up    );
+	_quick_set_wgtsys(PDFCT14n42Up    );
+	_quick_set_wgtsys(PDFCT14n43Up    );
+	_quick_set_wgtsys(PDFCT14n44Up    );
+	_quick_set_wgtsys(PDFCT14n45Up    );
+	_quick_set_wgtsys(PDFCT14n46Up    );
+	_quick_set_wgtsys(PDFCT14n47Up    );
+	_quick_set_wgtsys(PDFCT14n48Up    );
+	_quick_set_wgtsys(PDFCT14n49Up    );
+	_quick_set_wgtsys(PDFCT14n50Up    );
+	_quick_set_wgtsys(PDFCT14n51Up    );
+	_quick_set_wgtsys(PDFCT14n52Up    );
+	_quick_set_wgtsys(PDFCT14n53Up    );
+	_quick_set_wgtsys(PDFCT14n54Up    );
+	_quick_set_wgtsys(PDFCT14n55Up    );
+	_quick_set_wgtsys(PDFCT14n56Up    );
 
 	return m;
 	}
@@ -929,6 +1093,27 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 
 map<TString, _S_proc_ID_defs> known_procs_info = create_known_procs_info();
 
+
+// 'tt'  : (['MC2016_Summer16_TTJets_powheg'],  ["nom,common", "obj", "tt_weights", "tt_hard", "tt_pdf1", "tt_pdf10", "tt_pdf20", "tt_pdf30", "tt_pdf40", "tt_pdf50,tt_alpha"]), #select_sparse_channels
+
+// standard systematics
+
+#define SYSTS_OBJECTS  "JERDown", "JERUp"  , "JESDown", "JESUp"  , "TESDown", "TESUp"
+#define SYSTS_COMMON   "PUUp"   , "PUDown" , "bSFUp"  , "bSFDown", "LEPelIDUp"   , "LEPelIDDown" , "LEPelTRGUp"  , "LEPelTRGDown", "LEPmuIDUp"   , "LEPmuIDDown" , "LEPmuTRGUp"  , "LEPmuTRGDown"
+#define SYSTS_TT_OBJ   "TOPPTDown"     , "TOPPTUp"       , "FragUp"        , "FragDown"      , "SemilepBRUp"   , "SemilepBRDown" , "PetersonUp"    , "PetersonDown"
+#define SYSTS_TT_HARD  "MrUp"     , "MrDown"  , "MfUp"    , "MfDown"  , "MfrUp"   , "MfrDown"
+#define SYSTS_TT_ALPHA "AlphaSUp" , "AlphaSDown"
+#define SYSTS_TT_PDF1  "PDFCT14n1Up"     , "PDFCT14n2Up"     , "PDFCT14n3Up"     , "PDFCT14n4Up"     , "PDFCT14n5Up"     , "PDFCT14n6Up"     , "PDFCT14n7Up"     , "PDFCT14n8Up"     , "PDFCT14n9Up"     , "PDFCT14n10Up"
+#define SYSTS_TT_PDF10 "PDFCT14n11Up"    , "PDFCT14n12Up"    , "PDFCT14n13Up"    , "PDFCT14n14Up"    , "PDFCT14n15Up"    , "PDFCT14n16Up"    , "PDFCT14n17Up"    , "PDFCT14n18Up"    , "PDFCT14n19Up"    , "PDFCT14n20Up"
+#define SYSTS_TT_PDF20 "PDFCT14n21Up"    , "PDFCT14n22Up"    , "PDFCT14n23Up"    , "PDFCT14n24Up"    , "PDFCT14n25Up"    , "PDFCT14n26Up"    , "PDFCT14n27Up"    , "PDFCT14n28Up"    , "PDFCT14n29Up"    , "PDFCT14n30Up"
+#define SYSTS_TT_PDF30 "PDFCT14n31Up"    , "PDFCT14n32Up"    , "PDFCT14n33Up"    , "PDFCT14n34Up"    , "PDFCT14n35Up"    , "PDFCT14n36Up"    , "PDFCT14n37Up"    , "PDFCT14n38Up"    , "PDFCT14n39Up"    , "PDFCT14n40Up"
+#define SYSTS_TT_PDF40 "PDFCT14n41Up"    , "PDFCT14n42Up"    , "PDFCT14n43Up"    , "PDFCT14n44Up"    , "PDFCT14n45Up"    , "PDFCT14n46Up"    , "PDFCT14n47Up"    , "PDFCT14n48Up"    , "PDFCT14n49Up"    , "PDFCT14n50Up"
+#define SYSTS_TT_PDF50 "PDFCT14n51Up"    , "PDFCT14n52Up"    , "PDFCT14n53Up"    , "PDFCT14n54Up"    , "PDFCT14n55Up"    , "PDFCT14n56Up"
+
+#define SYSTS_TT       "NOMINAL", SYSTS_OBJECTS, SYSTS_COMMON, SYSTS_TT_OBJ, SYSTS_TT_HARD, SYSTS_TT_ALPHA, SYSTS_TT_PDF1, SYSTS_TT_PDF10, SYSTS_TT_PDF20, SYSTS_TT_PDF30, SYSTS_TT_PDF40, SYSTS_TT_PDF50
+#define SYSTS_OTHER_MC "NOMINAL", SYSTS_OBJECTS, SYSTS_COMMON
+#define SYSTS_QCD_MC   "NOMINAL"
+
 double W_lep_br    = 0.108;
 double W_alllep_br = 3*0.108;
 double W_qar_br    = 0.676;
@@ -947,7 +1132,8 @@ double ttbar_xsec = 831.76; // at 13 TeV
 typedef struct {
 	double       cross_section;
 	double       usual_gen_lumi;
-	_S_proc_ID_defs procs;
+	_S_proc_ID_defs std_procs;
+	vector<TString> std_systs;
 	// all available systematics
 } S_dtag_info;
 
@@ -956,13 +1142,34 @@ map<TString, S_dtag_info> create_known_dtags_info()
 	//map<const char*, S_dtag_info> m;
 	map<TString, S_dtag_info> m;
 
-	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            , .usual_gen_lumi= 23102470.188817, .procs=known_procs_info["wjets"]};
-	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          , .usual_gen_lumi= 18928303.971956, .procs=known_procs_info["dy"]};
-	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           , .usual_gen_lumi=  5099879.048270, .procs=known_procs_info["stop"]};
-	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           , .usual_gen_lumi=  2349775.859249, .procs=known_procs_info["stop"]};
-	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              , .usual_gen_lumi= 29213134.729453, .procs=known_procs_info["tt"]};
-	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br , .usual_gen_lumi= 21966343.919990, .procs=known_procs_info["tt"]};
-	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           , .usual_gen_lumi=  2923730.883332, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            , 
+		.usual_gen_lumi= 23102470.188817, 
+		.std_procs = known_procs_info["wjets"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          , 
+		.usual_gen_lumi= 18928303.971956, 
+		.std_procs = known_procs_info["dy"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           , 
+		.usual_gen_lumi=  5099879.048270, 
+		.std_procs=known_procs_info["stop"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           , 
+		.usual_gen_lumi=  2349775.859249, 
+		.std_procs=known_procs_info["stop"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              , 
+		.usual_gen_lumi= 29213134.729453, 
+		.std_procs=known_procs_info["tt"],
+		.std_systs = {SYSTS_TT}};
+	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br , 
+		.usual_gen_lumi= 21966343.919990, 
+		.std_procs=known_procs_info["tt"],
+		.std_systs = {SYSTS_TT}};
+	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           , 
+		.usual_gen_lumi=  2923730.883332, 
+		.std_procs=known_procs_info["tt"],
+		.std_systs = {SYSTS_TT}};
 	// I probably need some defaults for not found dtags
 
 	return m;
@@ -1024,6 +1231,8 @@ bool normalise_per_cross_section = true;
 map<TString, double> create_known_normalization_per_syst()
 	{
 	map<TString, double> m;
+
+	// TODO: review these, must the NOMINAL normalization be applied to all the others?
 
 	// old corrections!
 	m["NOMINAL" ] = 1. / 1.01388; // NOMINAL PU factor
@@ -1313,7 +1522,7 @@ if (requested_channels[0] == "all")
 //const char* requested_channel_names[] = {"tt_elmu", NULL};
 //vector<TString> requested_procs   = {"all"};
 //vector<TString> requested_procs   = {"std"};
-vector<TString> requested_systematics_all = {"NOMINAL",
+vector<TString> requested_systematics_test = {"NOMINAL",
 	"JERUp",
 	"JERDown",
 	"JESUp",
@@ -1334,8 +1543,10 @@ vector<TString> requested_systematics_all = {"NOMINAL",
 	"LEPmuTRGDown",
 	};
 
-if (requested_systematics[0] == "all")
-	requested_systematics = requested_systematics_all;
+if (requested_systematics[0] == "test")
+	requested_systematics = requested_systematics_test;
+else if (requested_systematics[0] == "std")
+	requested_systematics = main_dtag_info.std_systs;
 
 //requested_systematics[0] = "NOMINAL"; requested_systematics[1] = NULL;
 
@@ -1346,11 +1557,11 @@ if (requested_systematics[0] == "all")
 map<TString, _F_genproc_def> known_procs;
 if (requested_procs[0] == "all")
 	{
-	known_procs = main_dtag_info.procs.all;
+	known_procs = main_dtag_info.std_procs.all;
 	// and reset the requested processes to all known processes for this dtag
 	requested_procs.clear();
 	// loop over all known processes
-	for (const auto& proc: main_dtag_info.procs.all)
+	for (const auto& proc: main_dtag_info.std_procs.all)
 		{
 		cout_expr(proc.first);
 		requested_procs.push_back(proc.first);
@@ -1359,15 +1570,15 @@ if (requested_procs[0] == "all")
 
 else
 	{
-	known_procs = main_dtag_info.procs.groups;
-	//known_procs = main_dtag_info.procs.all;
+	known_procs = main_dtag_info.std_procs.groups;
+	//known_procs = main_dtag_info.std_procs.all;
 	// populate definitions of groups with the fine-grain definitions of all processes			
-	known_procs.insert(main_dtag_info.procs.all.begin(), main_dtag_info.procs.all.end());
+	known_procs.insert(main_dtag_info.std_procs.all.begin(), main_dtag_info.std_procs.all.end());
 	}
 
 // name of the catchall process for the defined dtag
-TString procname_catchall = main_dtag_info.procs.catchall_name;
-map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.procs.channel_standard;
+TString procname_catchall = main_dtag_info.std_procs.catchall_name;
+map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.std_procs.channel_standard;
 
 // some info for profiling
 int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
