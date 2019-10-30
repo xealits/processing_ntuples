@@ -712,6 +712,16 @@ NT_genproc(tt_ltaul      , 2)
 NT_genproc(tt_taueltaumu , 1)
 //NT_genproc(tt_other      , 0) // no "tt_other"! it is a catchall process, they are handled automatically
 
+NT_genproc(dy_tautau , 1)
+
+NT_genproc(wjets_tauh , 2)
+NT_genproc(wjets_taul , 1)
+
+NT_genproc(stop_el    , 20)
+NT_genproc(stop_mu    , 10)
+NT_genproc(stop_lj    ,  2)
+NT_genproc(stop_elmu  ,  1)
+
 bool NT_genproc_tt_eltau()
 	{
 	return NT_gen_proc_id > 40 && NT_gen_proc_id < 43;
@@ -741,14 +751,36 @@ typedef struct {
 } _S_proc_ID_defs;
 
 // standard per-channel processes
-vector<TString> _tt_procs_eltau = {"tt_eltau", "tt_taulj", "tt_lj"};
-vector<TString> _tt_procs_mutau = {"tt_mutau", "tt_taulj", "tt_lj"};
-vector<TString> _tt_procs_elmu  = {"tt_elmu",  "tt_ltaul"};
-//vector<TString> _tt_procs_mumu  = {"tt_inclusive"};
-//vector<TString> _tt_procs_elel  = {"tt_inclusive"};
+vector<TString> _eltau_tt_procs = {"tt_eltau", "tt_taulj", "tt_lj"};
+vector<TString> _mutau_tt_procs = {"tt_mutau", "tt_taulj", "tt_lj"};
+vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
+//vector<TString> _mumu_tt_procs  = {"tt_inclusive"};
+//vector<TString> _elel_tt_procs  = {"tt_inclusive"};
 // actually empty vectors must work, the catchall process will handle this
-vector<TString> _tt_procs_mumu  = {};
-vector<TString> _tt_procs_elel  = {};
+vector<TString> _mumu_tt_procs  = {};
+vector<TString> _elel_tt_procs  = {};
+
+vector<TString> _eltau_dy_procs = {"dy_tautau"};
+vector<TString> _mutau_dy_procs = {"dy_tautau", };
+vector<TString>  _elmu_dy_procs = {};
+vector<TString>  _mumu_dy_procs = {};
+vector<TString>  _elel_dy_procs = {};
+
+vector<TString> _eltau_stop_procs = {"stop_el", "stop_lj"};
+vector<TString> _mutau_stop_procs = {"stop_mu", "stop_lj"};
+vector<TString>  _elmu_stop_procs = {"stop_elmu"};
+vector<TString>  _mumu_stop_procs = {};
+vector<TString>  _elel_stop_procs = {};
+
+vector<TString> _eltau_wjets_procs = {"wjets_tauh", "wjets_taul"};
+vector<TString> _mutau_wjets_procs = {"wjets_tauh", "wjets_taul"};
+vector<TString>  _elmu_wjets_procs = {};
+vector<TString>  _mumu_wjets_procs = {};
+vector<TString>  _elel_wjets_procs = {};
+
+// ^--- I am not sure this is the best approach to define these standard processes
+//      initially I wanted to have a bunch of general sets, not the concrete per-channel ones
+
 
 map<TString, _S_proc_ID_defs> create_known_procs_info()
 	{
@@ -782,22 +814,101 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			},
 
 		.channel_standard = {
-			{"el_sel",    _tt_procs_eltau},
-			{"mu_sel",    _tt_procs_eltau},
-			{"el_sel_ss", _tt_procs_mutau},
-			{"mu_sel_ss", _tt_procs_mutau},
+			{"el_sel",    _eltau_tt_procs},
+			{"el_sel_ss", _eltau_tt_procs},
+			{"mu_sel",    _mutau_tt_procs},
+			{"mu_sel_ss", _mutau_tt_procs},
 
-			{"tt_elmu",       _tt_procs_elmu},
-			{"tt_elmu_tight", _tt_procs_elmu},
-			{"dy_mutau",      _tt_procs_mutau},
-			{"dy_mutau_ss",   _tt_procs_mutau},
-			{"dy_eltau",      _tt_procs_eltau},
-			{"dy_eltau_ss",   _tt_procs_eltau},
-			{"dy_mumu",       _tt_procs_mumu},
-			{"dy_elel",       _tt_procs_mumu},
+			{"tt_elmu",       _elmu_tt_procs},
+			{"tt_elmu_tight", _elmu_tt_procs},
+			{"dy_mutau",      _mutau_tt_procs},
+			{"dy_mutau_ss",   _mutau_tt_procs},
+			{"dy_eltau",      _eltau_tt_procs},
+			{"dy_eltau_ss",   _eltau_tt_procs},
+			{"dy_mumu",       _mumu_tt_procs},
+			{"dy_elel",       _mumu_tt_procs},
 
 			}
 		};
+
+	m["dy"] = {
+		.catchall_name = "dy_other", // usually we run only on DYTo2L, so this is the elel and mumu
+		.all={
+			{"dy_tautau"   , NT_genproc_dy_tautau},
+			},
+
+		.groups={},
+
+		.channel_standard = {
+			{"el_sel",    _eltau_dy_procs},
+			{"el_sel_ss", _eltau_dy_procs},
+			{"mu_sel",    _mutau_dy_procs},
+			{"mu_sel_ss", _mutau_dy_procs},
+			{"tt_elmu",        _elmu_dy_procs},
+			{"tt_elmu_tight",  _elmu_dy_procs},
+			{"dy_mutau",      _mutau_dy_procs},
+			{"dy_mutau_ss",   _mutau_dy_procs},
+			{"dy_eltau",      _eltau_dy_procs},
+			{"dy_eltau_ss",   _eltau_dy_procs},
+			{"dy_mumu",        _mumu_dy_procs},
+			{"dy_elel",        _mumu_dy_procs},
+			}
+		};
+
+	m["stop"] = {
+		.catchall_name = "stop_other",
+		.all={
+			{"stop_el"   , NT_genproc_stop_el},
+			{"stop_mu"   , NT_genproc_stop_mu},
+			{"stop_lj"   , NT_genproc_stop_lj},
+			{"stop_elmu" , NT_genproc_stop_elmu},
+			},
+
+		.groups={},
+
+		.channel_standard = {
+			{"el_sel",    _eltau_stop_procs},
+			{"el_sel_ss", _eltau_stop_procs},
+			{"mu_sel",    _mutau_stop_procs},
+			{"mu_sel_ss", _mutau_stop_procs},
+			{"tt_elmu",        _elmu_stop_procs},
+			{"tt_elmu_tight",  _elmu_stop_procs},
+			{"dy_mutau",      _mutau_stop_procs},
+			{"dy_mutau_ss",   _mutau_stop_procs},
+			{"dy_eltau",      _eltau_stop_procs},
+			{"dy_eltau_ss",   _eltau_stop_procs},
+			{"dy_mumu",        _mumu_stop_procs},
+			{"dy_elel",        _mumu_stop_procs},
+			}
+		};
+
+	m["wjets"] = {
+		.catchall_name = "wjets_other",
+		.all={
+			{"wjets_tauh"   , NT_genproc_wjets_tauh},
+			{"wjets_taul"   , NT_genproc_wjets_taul},
+			},
+
+		.groups={},
+
+		.channel_standard = {
+			{"el_sel",    _eltau_wjets_procs},
+			{"el_sel_ss", _eltau_wjets_procs},
+			{"mu_sel",    _mutau_wjets_procs},
+			{"mu_sel_ss", _mutau_wjets_procs},
+			{"tt_elmu",        _elmu_wjets_procs},
+			{"tt_elmu_tight",  _elmu_wjets_procs},
+			{"dy_mutau",      _mutau_wjets_procs},
+			{"dy_mutau_ss",   _mutau_wjets_procs},
+			{"dy_eltau",      _eltau_wjets_procs},
+			{"dy_eltau_ss",   _eltau_wjets_procs},
+			{"dy_mumu",        _mumu_wjets_procs},
+			{"dy_elel",        _mumu_wjets_procs},
+			}
+		};
+
+
+
 
 //genproc_tt_ljb       = 24
 //genproc_tt_ljw       = 23
@@ -845,13 +956,14 @@ map<TString, S_dtag_info> create_known_dtags_info()
 	//map<const char*, S_dtag_info> m;
 	map<TString, S_dtag_info> m;
 
-	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            , .usual_gen_lumi= 23102470.188817, .procs=known_procs_info["tt"]};
-	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          , .usual_gen_lumi= 18928303.971956, .procs=known_procs_info["tt"]};
-	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           , .usual_gen_lumi=  5099879.048270, .procs=known_procs_info["tt"]};
-	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           , .usual_gen_lumi=  2349775.859249, .procs=known_procs_info["tt"]};
+	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            , .usual_gen_lumi= 23102470.188817, .procs=known_procs_info["wjets"]};
+	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          , .usual_gen_lumi= 18928303.971956, .procs=known_procs_info["dy"]};
+	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           , .usual_gen_lumi=  5099879.048270, .procs=known_procs_info["stop"]};
+	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           , .usual_gen_lumi=  2349775.859249, .procs=known_procs_info["stop"]};
 	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              , .usual_gen_lumi= 29213134.729453, .procs=known_procs_info["tt"]};
 	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br , .usual_gen_lumi= 21966343.919990, .procs=known_procs_info["tt"]};
 	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           , .usual_gen_lumi=  2923730.883332, .procs=known_procs_info["tt"]};
+	// I probably need some defaults for not found dtags
 
 	return m;
 	}
