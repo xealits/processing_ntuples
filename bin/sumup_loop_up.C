@@ -1399,17 +1399,7 @@ void normalise_final(TH1D* histo, double cross_section, double scale, const TStr
 	}
 /* --------------------------------------------------------------- */
 
-/** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
-
-It parses the requested channels, systematics and distributions;
-prepares the structure of the loop;
-loops over all given files and `TTree`s in them,
-recording the distributions at the requested systematics;
-applies final corrections to the distributions;
-and if asked normalizes the distribution to `cross_section/gen_lumi`;
-finally all histograms are written out in the standard format `channel/process/systematic/channel_process_systematic_distr`.
-
-The input now: `input_filename [input_filename+]`.
+/** \brief parse char* coma-separated string into vector<TString>
  */
 
 vector<TString> parse_coma_list(char* coma_list)
@@ -1429,6 +1419,20 @@ vector<TString> parse_coma_list(char* coma_list)
 
 	return list;
 	}
+
+
+/** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
+
+It parses the requested channels, systematics and distributions;
+prepares the structure of the loop;
+loops over all given files and `TTree`s in them,
+recording the distributions at the requested systematics;
+applies final corrections to the distributions;
+and if asked normalizes the distribution to `cross_section/gen_lumi`;
+finally all histograms are written out in the standard format `channel/process/systematic/channel_process_systematic_distr`.
+
+The input now: `input_filename [input_filename+]`.
+ */
 
 int main (int argc, char *argv[])
 {
@@ -1832,10 +1836,21 @@ for (int si=0; si<distrs_to_record.size(); si++)
 	TString& syst_name = distrs_to_record[si].name;
 	vector<T_chan_proc_histos>& all_chans = distrs_to_record[si].chans;
 
+	output_file->cd();
+	TDirectory* dir_syst = (TDirectory*) output_file->mkdir(syst_name);
+	//dir_syst->SetDirectory(output_file);
+
 	for(const auto& chan: all_chans)
 		{
+		dir_syst->cd();
+		TDirectory* dir_chan = (TDirectory*) dir_syst->mkdir(chan.name);
+		//dir_chan->SetDirectory(dir_syst);
 		for(const auto& proc: chan.procs)
 			{
+			dir_chan->cd();
+			TDirectory* dir_proc = (TDirectory*) dir_chan->mkdir(proc.name);
+			//dir_proc->SetDirectory(dir_chan);
+			dir_proc->cd();
 			for(const auto& recorded_histo: proc.histos)
 				{
 				//recorded_histo.histo->Print();
@@ -1847,7 +1862,12 @@ for (int si=0; si<distrs_to_record.size(); si++)
 				recorded_histo.histo->Write();
 				}
 			}
+
 		// same for catchall
+		dir_chan->cd();
+		TDirectory* dir_proc_catchall = (TDirectory*) dir_chan->mkdir(procname_catchall);
+		//dir_proc_catchall->SetDirectory(dir_chan);
+		dir_proc_catchall->cd();
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
 			if (isMC)
@@ -1856,6 +1876,8 @@ for (int si=0; si<distrs_to_record.size(); si++)
 			}
 		}
 	}
+
+output_file->cd();
 
 if (normalise_per_weight)
 	weight_counter->Write();
