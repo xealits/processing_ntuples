@@ -36,6 +36,15 @@ nick_info = {
 "s_top_other": {'color': kAzure+3, 'legend': 's.top#rightarrow other'},
 "s_top":       {'color': kAzure,   'legend': 'single top'},
 
+"stop_eltau": {'color': kAzure,   'legend': 's.top#rightarrow e#tau'},
+"stop_el":    {'color': kAzure,   'legend': 's.top#rightarrow e#tau'},
+"stop_mutau": {'color': kAzure,   'legend': 's.top#rightarrow #mu#tau'},
+"stop_mu":    {'color': kAzure,   'legend': 's.top#rightarrow #mu#tau'},
+"stop_elmu":  {'color': kAzure+1, 'legend': 's.top#rightarrow e#mu'},
+"stop_lj":    {'color': kAzure+2, 'legend': 's.top#rightarrow lj'},
+"stop_other": {'color': kAzure+3, 'legend': 's.top#rightarrow other'},
+"stop":       {'color': kAzure,   'legend': 'single top'},
+
 "tt_jj":         {'color': kGreen+4,  'legend': 'tt_jj'},
 "tt_em":         {'color': kYellow-7, 'legend': 'tt_em'},
 "tt_{em}":       {'color': kYellow-7, 'legend': 'tt_{em}'},
@@ -96,6 +105,15 @@ nick_order = {
 "s_top_lj":    -23,
 "s_top_other": -24,
 "s_top":       -24,
+
+"stop_eltau": -20,
+"stop_el":    -20,
+"stop_mutau": -21,
+"stop_mu":    -21,
+"stop_elmu":  -22,
+"stop_lj":    -23,
+"stop_other": -24,
+"stop":       -24,
 
 "wjets":       -30,
 "wjets_other": -30,

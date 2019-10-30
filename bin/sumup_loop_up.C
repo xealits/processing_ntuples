@@ -600,7 +600,7 @@ bool NT_channel_mu_sel(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
 	else relevant_selection_stage = NT_selection_stage;
-	return relevant_selection_stage == 9 && relevant_selection_stage == 7;
+	return relevant_selection_stage == 9 || relevant_selection_stage == 7;
 	}
 
 bool NT_channel_mu_sel_ss(ObjSystematics sys)
@@ -614,7 +614,7 @@ bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
 	else relevant_selection_stage = NT_selection_stage;
-	return relevant_selection_stage == 8 && relevant_selection_stage == 6;
+	return relevant_selection_stage == 8 || relevant_selection_stage == 6;
 	}
 
 bool NT_channel_el_sel(ObjSystematics sys)
@@ -628,7 +628,7 @@ bool NT_channel_el_sel(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
 	else relevant_selection_stage = NT_selection_stage;
-	return relevant_selection_stage == 19 && relevant_selection_stage == 17;
+	return relevant_selection_stage == 19 || relevant_selection_stage == 17;
 	}
 
 bool NT_channel_el_sel_ss(ObjSystematics sys)
@@ -642,7 +642,7 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
 	else relevant_selection_stage = NT_selection_stage;
-	return relevant_selection_stage == 18 && relevant_selection_stage == 16;
+	return relevant_selection_stage == 18 || relevant_selection_stage == 16;
 	}
 
 
@@ -658,7 +658,7 @@ bool NT_channel_tt_elmu(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_em_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_em_TESDown;
 	else relevant_selection_stage = NT_selection_stage_em;
-	return relevant_selection_stage > 200 && relevant_selection_stage < 210;
+	return relevant_selection_stage > 200 || relevant_selection_stage < 210;
 	}
 
 bool NT_channel_tt_elmu_tight(ObjSystematics sys)
