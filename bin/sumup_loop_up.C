@@ -263,6 +263,63 @@ NT_sysweight(PDFCT14n54Up    , NT_event_weight*NT_event_weight_pdf[53])
 NT_sysweight(PDFCT14n55Up    , NT_event_weight*NT_event_weight_pdf[54])
 NT_sysweight(PDFCT14n56Up    , NT_event_weight*NT_event_weight_pdf[55])
 
+NT_sysweight(PDFCT14n1Down     , NT_event_weight)
+NT_sysweight(PDFCT14n2Down     , NT_event_weight)
+NT_sysweight(PDFCT14n3Down     , NT_event_weight)
+NT_sysweight(PDFCT14n4Down     , NT_event_weight)
+NT_sysweight(PDFCT14n5Down     , NT_event_weight)
+NT_sysweight(PDFCT14n6Down     , NT_event_weight)
+NT_sysweight(PDFCT14n7Down     , NT_event_weight)
+NT_sysweight(PDFCT14n8Down     , NT_event_weight)
+NT_sysweight(PDFCT14n9Down     , NT_event_weight)
+NT_sysweight(PDFCT14n10Down    , NT_event_weight)
+NT_sysweight(PDFCT14n11Down    , NT_event_weight)
+NT_sysweight(PDFCT14n12Down    , NT_event_weight)
+NT_sysweight(PDFCT14n13Down    , NT_event_weight)
+NT_sysweight(PDFCT14n14Down    , NT_event_weight)
+NT_sysweight(PDFCT14n15Down    , NT_event_weight)
+NT_sysweight(PDFCT14n16Down    , NT_event_weight)
+NT_sysweight(PDFCT14n17Down    , NT_event_weight)
+NT_sysweight(PDFCT14n18Down    , NT_event_weight)
+NT_sysweight(PDFCT14n19Down    , NT_event_weight)
+NT_sysweight(PDFCT14n20Down    , NT_event_weight)
+NT_sysweight(PDFCT14n21Down    , NT_event_weight)
+NT_sysweight(PDFCT14n22Down    , NT_event_weight)
+NT_sysweight(PDFCT14n23Down    , NT_event_weight)
+NT_sysweight(PDFCT14n24Down    , NT_event_weight)
+NT_sysweight(PDFCT14n25Down    , NT_event_weight)
+NT_sysweight(PDFCT14n26Down    , NT_event_weight)
+NT_sysweight(PDFCT14n27Down    , NT_event_weight)
+NT_sysweight(PDFCT14n28Down    , NT_event_weight)
+NT_sysweight(PDFCT14n29Down    , NT_event_weight)
+NT_sysweight(PDFCT14n30Down    , NT_event_weight)
+NT_sysweight(PDFCT14n31Down    , NT_event_weight)
+NT_sysweight(PDFCT14n32Down    , NT_event_weight)
+NT_sysweight(PDFCT14n33Down    , NT_event_weight)
+NT_sysweight(PDFCT14n34Down    , NT_event_weight)
+NT_sysweight(PDFCT14n35Down    , NT_event_weight)
+NT_sysweight(PDFCT14n36Down    , NT_event_weight)
+NT_sysweight(PDFCT14n37Down    , NT_event_weight)
+NT_sysweight(PDFCT14n38Down    , NT_event_weight)
+NT_sysweight(PDFCT14n39Down    , NT_event_weight)
+NT_sysweight(PDFCT14n40Down    , NT_event_weight)
+NT_sysweight(PDFCT14n41Down    , NT_event_weight)
+NT_sysweight(PDFCT14n42Down    , NT_event_weight)
+NT_sysweight(PDFCT14n43Down    , NT_event_weight)
+NT_sysweight(PDFCT14n44Down    , NT_event_weight)
+NT_sysweight(PDFCT14n45Down    , NT_event_weight)
+NT_sysweight(PDFCT14n46Down    , NT_event_weight)
+NT_sysweight(PDFCT14n47Down    , NT_event_weight)
+NT_sysweight(PDFCT14n48Down    , NT_event_weight)
+NT_sysweight(PDFCT14n49Down    , NT_event_weight)
+NT_sysweight(PDFCT14n50Down    , NT_event_weight)
+NT_sysweight(PDFCT14n51Down    , NT_event_weight)
+NT_sysweight(PDFCT14n52Down    , NT_event_weight)
+NT_sysweight(PDFCT14n53Down    , NT_event_weight)
+NT_sysweight(PDFCT14n54Down    , NT_event_weight)
+NT_sysweight(PDFCT14n55Down    , NT_event_weight)
+NT_sysweight(PDFCT14n56Down    , NT_event_weight)
+
 
 
 #define _quick_set_objsys(sysname) m[#sysname] = {sysname, NT_sysweight_NOMINAL}
@@ -371,6 +428,63 @@ map<TString, _S_systematic_definition> create_known_systematics()
 	_quick_set_wgtsys(PDFCT14n54Up    );
 	_quick_set_wgtsys(PDFCT14n55Up    );
 	_quick_set_wgtsys(PDFCT14n56Up    );
+
+	_quick_set_wgtsys(PDFCT14n1Down     );
+	_quick_set_wgtsys(PDFCT14n2Down     );
+	_quick_set_wgtsys(PDFCT14n3Down     );
+	_quick_set_wgtsys(PDFCT14n4Down     );
+	_quick_set_wgtsys(PDFCT14n5Down     );
+	_quick_set_wgtsys(PDFCT14n6Down     );
+	_quick_set_wgtsys(PDFCT14n7Down     );
+	_quick_set_wgtsys(PDFCT14n8Down     );
+	_quick_set_wgtsys(PDFCT14n9Down     );
+	_quick_set_wgtsys(PDFCT14n10Down    );
+	_quick_set_wgtsys(PDFCT14n11Down    );
+	_quick_set_wgtsys(PDFCT14n12Down    );
+	_quick_set_wgtsys(PDFCT14n13Down    );
+	_quick_set_wgtsys(PDFCT14n14Down    );
+	_quick_set_wgtsys(PDFCT14n15Down    );
+	_quick_set_wgtsys(PDFCT14n16Down    );
+	_quick_set_wgtsys(PDFCT14n17Down    );
+	_quick_set_wgtsys(PDFCT14n18Down    );
+	_quick_set_wgtsys(PDFCT14n19Down    );
+	_quick_set_wgtsys(PDFCT14n20Down    );
+	_quick_set_wgtsys(PDFCT14n21Down    );
+	_quick_set_wgtsys(PDFCT14n22Down    );
+	_quick_set_wgtsys(PDFCT14n23Down    );
+	_quick_set_wgtsys(PDFCT14n24Down    );
+	_quick_set_wgtsys(PDFCT14n25Down    );
+	_quick_set_wgtsys(PDFCT14n26Down    );
+	_quick_set_wgtsys(PDFCT14n27Down    );
+	_quick_set_wgtsys(PDFCT14n28Down    );
+	_quick_set_wgtsys(PDFCT14n29Down    );
+	_quick_set_wgtsys(PDFCT14n30Down    );
+	_quick_set_wgtsys(PDFCT14n31Down    );
+	_quick_set_wgtsys(PDFCT14n32Down    );
+	_quick_set_wgtsys(PDFCT14n33Down    );
+	_quick_set_wgtsys(PDFCT14n34Down    );
+	_quick_set_wgtsys(PDFCT14n35Down    );
+	_quick_set_wgtsys(PDFCT14n36Down    );
+	_quick_set_wgtsys(PDFCT14n37Down    );
+	_quick_set_wgtsys(PDFCT14n38Down    );
+	_quick_set_wgtsys(PDFCT14n39Down    );
+	_quick_set_wgtsys(PDFCT14n40Down    );
+	_quick_set_wgtsys(PDFCT14n41Down    );
+	_quick_set_wgtsys(PDFCT14n42Down    );
+	_quick_set_wgtsys(PDFCT14n43Down    );
+	_quick_set_wgtsys(PDFCT14n44Down    );
+	_quick_set_wgtsys(PDFCT14n45Down    );
+	_quick_set_wgtsys(PDFCT14n46Down    );
+	_quick_set_wgtsys(PDFCT14n47Down    );
+	_quick_set_wgtsys(PDFCT14n48Down    );
+	_quick_set_wgtsys(PDFCT14n49Down    );
+	_quick_set_wgtsys(PDFCT14n50Down    );
+	_quick_set_wgtsys(PDFCT14n51Down    );
+	_quick_set_wgtsys(PDFCT14n52Down    );
+	_quick_set_wgtsys(PDFCT14n53Down    );
+	_quick_set_wgtsys(PDFCT14n54Down    );
+	_quick_set_wgtsys(PDFCT14n55Down    );
+	_quick_set_wgtsys(PDFCT14n56Down    );
 
 	return m;
 	}
@@ -1101,7 +1215,18 @@ map<TString, _S_proc_ID_defs> known_procs_info = create_known_procs_info();
 #define SYSTS_TT_PDF40 "PDFCT14n41Up"    , "PDFCT14n42Up"    , "PDFCT14n43Up"    , "PDFCT14n44Up"    , "PDFCT14n45Up"    , "PDFCT14n46Up"    , "PDFCT14n47Up"    , "PDFCT14n48Up"    , "PDFCT14n49Up"    , "PDFCT14n50Up"
 #define SYSTS_TT_PDF50 "PDFCT14n51Up"    , "PDFCT14n52Up"    , "PDFCT14n53Up"    , "PDFCT14n54Up"    , "PDFCT14n55Up"    , "PDFCT14n56Up"
 
-#define SYSTS_TT       "NOMINAL", SYSTS_OBJECTS, SYSTS_COMMON, SYSTS_TT_OBJ, SYSTS_TT_HARD, SYSTS_TT_ALPHA, SYSTS_TT_PDF1, SYSTS_TT_PDF10, SYSTS_TT_PDF20, SYSTS_TT_PDF30, SYSTS_TT_PDF40, SYSTS_TT_PDF50
+#define SYSTS_TT_PDFDown1  "PDFCT14n1Down"     , "PDFCT14n2Down"     , "PDFCT14n3Down"     , "PDFCT14n4Down"     , "PDFCT14n5Down"     , "PDFCT14n6Down"     , "PDFCT14n7Down"     , "PDFCT14n8Down"     , "PDFCT14n9Down"     , "PDFCT14n10Down"
+#define SYSTS_TT_PDFDown10 "PDFCT14n11Down"    , "PDFCT14n12Down"    , "PDFCT14n13Down"    , "PDFCT14n14Down"    , "PDFCT14n15Down"    , "PDFCT14n16Down"    , "PDFCT14n17Down"    , "PDFCT14n18Down"    , "PDFCT14n19Down"    , "PDFCT14n20Down"
+#define SYSTS_TT_PDFDown20 "PDFCT14n21Down"    , "PDFCT14n22Down"    , "PDFCT14n23Down"    , "PDFCT14n24Down"    , "PDFCT14n25Down"    , "PDFCT14n26Down"    , "PDFCT14n27Down"    , "PDFCT14n28Down"    , "PDFCT14n29Down"    , "PDFCT14n30Down"
+#define SYSTS_TT_PDFDown30 "PDFCT14n31Down"    , "PDFCT14n32Down"    , "PDFCT14n33Down"    , "PDFCT14n34Down"    , "PDFCT14n35Down"    , "PDFCT14n36Down"    , "PDFCT14n37Down"    , "PDFCT14n38Down"    , "PDFCT14n39Down"    , "PDFCT14n40Down"
+#define SYSTS_TT_PDFDown40 "PDFCT14n41Down"    , "PDFCT14n42Down"    , "PDFCT14n43Down"    , "PDFCT14n44Down"    , "PDFCT14n45Down"    , "PDFCT14n46Down"    , "PDFCT14n47Down"    , "PDFCT14n48Down"    , "PDFCT14n49Down"    , "PDFCT14n50Down"
+#define SYSTS_TT_PDFDown50 "PDFCT14n51Down"    , "PDFCT14n52Down"    , "PDFCT14n53Down"    , "PDFCT14n54Down"    , "PDFCT14n55Down"    , "PDFCT14n56Down"
+
+
+#define SYSTS_TT_PDF       SYSTS_TT_PDF1, SYSTS_TT_PDF10, SYSTS_TT_PDF20, SYSTS_TT_PDF30, SYSTS_TT_PDF40, SYSTS_TT_PDF50
+#define SYSTS_TT_PDFDown   SYSTS_TT_PDFDown1, SYSTS_TT_PDFDown10, SYSTS_TT_PDFDown20, SYSTS_TT_PDFDown30, SYSTS_TT_PDFDown40, SYSTS_TT_PDFDown50
+
+#define SYSTS_TT       "NOMINAL", SYSTS_OBJECTS, SYSTS_COMMON, SYSTS_TT_OBJ, SYSTS_TT_HARD, SYSTS_TT_ALPHA, SYSTS_TT_PDF, SYSTS_TT_PDFDown
 #define SYSTS_OTHER_MC "NOMINAL", SYSTS_OBJECTS, SYSTS_COMMON
 #define SYSTS_QCD_MC   "NOMINAL"
 
