@@ -514,22 +514,12 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	//static double Mt_lep_met_c_bins[] = {0,16,32,44,54,64}; r = {5, false,-1,  -1, Mt_lep_met_c_bins}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
 	static double bins_Mt_lep_met_c[] = {0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}; r = {(sizeof(bins_Mt_lep_met_c) / sizeof(bins_Mt_lep_met_c[0]))-1, false,-1,  -1, bins_Mt_lep_met_c}; m["Mt_lep_met_c"]   = {NT_distr_Mt_lep_met,     r};
 	// ok! this needs a wrapper-macro
-	cerr_expr(r.custom_bins[0]);
-	cerr_expr(r.custom_bins[1]);
+	//cerr_expr(r.custom_bins[0]);
+	//cerr_expr(r.custom_bins[1]);
 
-	r = {20, true,  0, 250};                                                     m["Mt_lep_met_f"]   = {NT_distr_Mt_lep_met,     r};
-
-	//set_range_linear(r, 40, 0, 200);                                         m["leading_lep_pt"] = {leading_lep_pt, r};
-	//set_range_custom(r, (double[]){0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}); m["Mt_lep_met_c"]   = {Mt_lep_met, r};
-
-	// these also do not work:
-	//m["leading_lep_pt"] = {leading_lep_pt, range_linear(40, 0, 200)};
-	////m["Mt_lep_met_c"]   = {Mt_lep_met, range_custom({0,16,32,44,54,64,74,81,88,95,104,116,132,160,250})};
-	//m["Mt_lep_met_c"]   = {Mt_lep_met, range_custom_base({0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}, 14)};
-	//m["Mt_lep_met_f"]   = {Mt_lep_met, range_linear(20, 0, 250)};
-
-	r = {25, true,  0, 200};   m["met_f2"] = {NT_distr_met, r};
-	r = {30, true,  0, 300};   m["met_f"]  = {NT_distr_met, r};
+	r = {20, true,  0, 250};   m["Mt_lep_met_f"]   = {NT_distr_Mt_lep_met,     r};
+	r = {25, true,  0, 200};   m["met_f2"]         = {NT_distr_met, r};
+	r = {30, true,  0, 300};   m["met_f"]          = {NT_distr_met, r};
 	static double bins_met_c[] = {0,20,40,60,80,100,120,140,200,500}; r = {(sizeof(bins_met_c) / sizeof(bins_met_c[0]))-1, false,  -1, -1, bins_met_c};   m["met_c"]  = {NT_distr_met, r};
 
 	return m;
@@ -882,8 +872,8 @@ NT_genproc(dy_tautau , 1)
 NT_genproc(wjets_tauh , 2)
 NT_genproc(wjets_taul , 1)
 
-NT_genproc(stop_el    , 20)
-NT_genproc(stop_mu    , 10)
+NT_genproc(stop_eltau    , 20)
+NT_genproc(stop_mutau    , 10)
 NT_genproc(stop_lj    ,  2)
 NT_genproc(stop_elmu  ,  1)
 
@@ -931,8 +921,8 @@ vector<TString>  _elmu_dy_procs = {};
 vector<TString>  _mumu_dy_procs = {};
 vector<TString>  _elel_dy_procs = {};
 
-vector<TString> _eltau_stop_procs = {"stop_el", "stop_lj"};
-vector<TString> _mutau_stop_procs = {"stop_mu", "stop_lj"};
+vector<TString> _eltau_stop_procs = {"stop_eltau", "stop_lj"};
+vector<TString> _mutau_stop_procs = {"stop_mutau", "stop_lj"};
 vector<TString>  _elmu_stop_procs = {"stop_elmu"};
 vector<TString>  _mumu_stop_procs = {};
 vector<TString>  _elel_stop_procs = {};
@@ -1023,8 +1013,8 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 	m["stop"] = {
 		.catchall_name = "stop_other",
 		.all={
-			{"stop_el"   , NT_genproc_stop_el},
-			{"stop_mu"   , NT_genproc_stop_mu},
+			{"stop_eltau"   , NT_genproc_stop_eltau},
+			{"stop_mutau"   , NT_genproc_stop_mutau},
 			{"stop_lj"   , NT_genproc_stop_lj},
 			{"stop_elmu" , NT_genproc_stop_elmu},
 			},
@@ -1443,7 +1433,7 @@ argv++;
 
 if (argc < 7)
 	{
-	std::cout << "Usage:" << " 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
+	std::cout << "Usage:" << " 0|1<simulate_data> 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
 	exit(0);
 	}
 
@@ -1453,6 +1443,14 @@ gROOT->Reset();
 
 // set to normalize per gen lumi number of events
 //bool normalise_per_weight = <user input>;
+
+// a special weird feature:
+// produce an output as if it were data
+// with NOMINAL systematic
+// and  data    proc name
+// histograms are filled with 1
+bool simulate_data       = Int_t(atoi(*argv++)) == 1; argc--;
+
 bool save_in_old_order   = Int_t(atoi(*argv++)) == 1; argc--;
 bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
 Float_t lumi(atof(*argv++)); argc--;
@@ -1902,6 +1900,28 @@ if (save_in_old_order)
 			if (isMC)
 				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, procname_catchall);
 			recorded_histo.histo->Write();
+
+			// data simulation if requested
+			if (simulate_data && syst_name == "NOMINAL")
+				{
+				output_file->cd();
+				TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
+				chanpath->cd();
+				TDirectory* procpath = chanpath->Get("data") ? (TDirectory*) chanpath->Get("data") :  (TDirectory*) chanpath->mkdir("data");
+				procpath->cd();
+				TDirectory* systpatch = procpath->Get("NOMINAL") ? (TDirectory*) procpath->Get("NOMINAL") :  (TDirectory*) procpath->mkdir("NOMINAL");
+				systpatch->cd();
+
+				TString data_name = chan.name + "_data_NOMINAL_" + recorded_histo.main_name;
+				if (output_file->Get(chan.name + "/data/NOMINAL/" + data_name)) continue;
+				TH1D* data_histo = (TH1D*) recorded_histo.histo->Clone();
+				data_histo->SetDirectory(systpatch);
+				data_histo->SetName(data_name);
+				data_histo->Reset();
+				data_histo->Fill(1);
+				data_histo->Write();
+				}
+
 			}
 		}
 	}
@@ -1952,6 +1972,27 @@ else
 			if (isMC)
 				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, procname_catchall);
 			recorded_histo.histo->Write();
+
+			// data simulation if requested
+			if (simulate_data && syst_name == "NOMINAL")
+				{
+				dir_syst->cd();
+
+				TDirectory* chanpath = dir_syst->Get(chan.name) ? (TDirectory*) dir_syst->Get(chan.name) :  (TDirectory*) dir_syst->mkdir(chan.name);
+				chanpath->cd();
+				TDirectory* procpath = chanpath->Get("data") ? (TDirectory*) chanpath->Get("data") :  (TDirectory*) chanpath->mkdir("data");
+				procpath->cd();
+
+				TString data_name = TString("NOMINAL_") + chan.name + "_data_" + recorded_histo.main_name;
+				if (procpath->Get(data_name)) continue;
+				TH1D* data_histo = (TH1D*) recorded_histo.histo->Clone();
+				data_histo->SetDirectory(procpath);
+				data_histo->SetName(data_name);
+				data_histo->Reset();
+				data_histo->Fill(1);
+				data_histo->Write();
+				}
+
 			}
 		}
 	}
