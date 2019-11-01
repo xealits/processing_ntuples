@@ -981,6 +981,12 @@ NT_genproc(tt_ltaul      , 2)
 NT_genproc(tt_taueltaumu , 1)
 //NT_genproc(tt_other      , 0) // no "tt_other"! it is a catchall process, they are handled automatically
 
+// temporary fix for lj events in elmu final state
+bool NT_genproc_tt_elmu_lj()
+	{
+	return NT_gen_proc_id == 3 || NT_gen_proc_id == 0 || (NT_gen_proc_id > 20 && NT_gen_proc_id < 30);
+	}
+
 NT_genproc(dy_tautau , 1)
 
 NT_genproc(wjets_tauh , 2)
@@ -1069,7 +1075,8 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"tt_ljz"        , NT_genproc_tt_ljz        },
 			{"tt_taultauh"   , NT_genproc_tt_taultauh   },
 			{"tt_taulj"      , NT_genproc_tt_taulj      },
-			{"tt_elmu"       , NT_genproc_tt_elmu       },
+			//{"tt_elmu"       , NT_genproc_tt_elmu       },
+			{"tt_elmu"       , NT_genproc_tt_elmu_lj       }, // FIXME: remove this when the problem with lj events is fixed!
 			{"tt_ltaul"      , NT_genproc_tt_ltaul      },
 			{"tt_taueltaumu" , NT_genproc_tt_taueltaumu },
 			//{"tt_other"      , NT_genproc_tt_other      },
