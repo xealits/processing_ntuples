@@ -1,13 +1,24 @@
 histograms_to_fit: stage2_dir=lstore_outdirs/
-histograms_to_fit: nt=94v3/
-histograms_to_fit: proc=processing1/
+histograms_to_fit: nt=94v3
+histograms_to_fit: proc=processing1
+histograms_to_fit: hists=mc_2
 histograms_to_fit: distr_out=jobsums/distrs/
 histograms_to_fit: simulate_data_output=0
+histograms_to_fit: n_proc=6
+histograms_to_fit: lumi=41300
 histograms_to_fit:
-	for dtag in `ls ${stage2_dir}/${nt}/${proc}`; do \
-	   mkdir -p ${distr_out}/${nt}/${proc}/ ; \
-	   time sumup_loop ${simulate_data_output} 1 0 41300 std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
-	done
+	mkdir -p ${distr_out}/${nt}/${proc}/${hists}/
+	#for dtag in `ls ${stage2_dir}/${nt}/${proc}/`; do \
+	#   mkdir -p ${distr_out}/${nt}/${proc}/ ; \
+	#   time sumup_loop ${simulate_data_output} 1 0 ${lumi} std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
+	#done
+	# same with xargs
+	ls ${stage2_dir}/${nt}/${proc}/ | xargs -P ${n_proc} -I DTAG sh -c "time sumup_loop ${simulate_data_output} 1 0 ${lumi} std mu_sel,tt_elmu std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
+	#hadd ${distr_out}/distrs_${nt}_${proc}_mc_1.root ${distr_out}/${nt}/${proc}/*root
+	hadd ${distr_out}/distrs_${nt}_${proc}_${hists}.root  ${distr_out}/${nt}/${proc}/${hists}/*root
+
+examples_systematic_normalizations:
+	python syst_rates.py gstore_outdirs/94v3/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/Ntupler_94v3_MC2017legacy_Fall17_TTTo2L2Nu*/*/*/*root
 
 qwatch: n=10
 qwatch:

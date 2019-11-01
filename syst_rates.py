@@ -11,8 +11,13 @@ parser = argparse.ArgumentParser(
     #epilog = "Example:\n$ python job_submit.py ttbarleps80_eventSelection jobing/my_runAnalysis_cfg_NEWSUBMIT.templ.py bin/ttbar-leptons-80X/analysis/dsets_testing_noHLT_TTbar.json test/tests/outdir_test_v11_ttbar_v8.40/"
     )
 
-parser.add_argument('filename', type=str, help='the filename')
 parser.add_argument("--debug",  action='store_true', help="DEBUG level of logging")
+
+parser.add_argument('input_files', nargs='+', help="""the files to sum up, passed by shell,
+as:
+
+/gstore/t3cms/store/user/otoldaie/v19/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/Ntupler_v19_MC2016_Summer16_TTJets_powheg/180226_022336/0000/MC2016_Summer16_TTJets_powheg_*.root""")
+
 
 args = parser.parse_args()
 
@@ -30,9 +35,6 @@ from ROOT import TLegend
 #from ROOT import THStack
 
 logging.info("done")
-
-infile = TFile(args.filename)
-syst_histo = infile.Get("systematic_weights")
 
 # syst names
 syst_names = {
@@ -126,6 +128,17 @@ syst_names = {
 "PDFCT14n55"    :  85,
 "PDFCT14n56"    :  86,
 }
+
+syst_histo = None
+
+for filename in args.input_files:
+    infile = TFile(filename)
+    if syst_histo:
+        syst_histo.Add(infile.Get("ntupler/systematic_weights"))
+    else:
+        _temp_h = infile.Get("ntupler/systematic_weights")
+        syst_histo = _temp_h.Clone()
+        syst_histo.SetDirectory(0)
 
 def sys(name):
     return syst_histo.GetBinContent(1 + syst_names[name])

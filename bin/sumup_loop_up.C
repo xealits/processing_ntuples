@@ -172,12 +172,12 @@ NT_sysweight(PUDown, NT_event_weight*NT_event_weight_PUDown  )
 NT_sysweight(bSFUp, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFUp   / NT_event_weight_bSF : 0.))
 NT_sysweight(bSFDown, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFDown / NT_event_weight_bSF : 0.))
 NT_sysweight(LEPelIDUp, NT_event_weight*NT_event_weight_LEPelIDUp   )
-NT_sysweight(LEPelIDDown, NT_event_weight*NT_event_weight_LEPelIDDown )
-NT_sysweight(LEPelTRGUp, NT_event_weight*NT_event_weight_LEPelTRGUp  )
+NT_sysweight(LEPelIDDown,  NT_event_weight*NT_event_weight_LEPelIDDown )
+NT_sysweight(LEPelTRGUp,   NT_event_weight*NT_event_weight_LEPelTRGUp  )
 NT_sysweight(LEPelTRGDown, NT_event_weight*NT_event_weight_LEPelTRGDown)
-NT_sysweight(LEPmuIDUp, NT_event_weight*NT_event_weight_LEPmuIDUp   )
-NT_sysweight(LEPmuIDDown, NT_event_weight*NT_event_weight_LEPmuIDDown )
-NT_sysweight(LEPmuTRGUp, NT_event_weight*NT_event_weight_LEPmuTRGUp  )
+NT_sysweight(LEPmuIDUp,    NT_event_weight*NT_event_weight_LEPmuIDUp   )
+NT_sysweight(LEPmuIDDown,  NT_event_weight*NT_event_weight_LEPmuIDDown )
+NT_sysweight(LEPmuTRGUp,   NT_event_weight*NT_event_weight_LEPmuTRGUp  )
 NT_sysweight(LEPmuTRGDown, NT_event_weight*NT_event_weight_LEPmuTRGDown)
 
 // TT_OBJ
@@ -1350,7 +1350,7 @@ map<TString, double> create_known_normalization_per_syst()
 
 	// TODO: review these, must the NOMINAL normalization be applied to all the others?
 
-	// old corrections!
+	// 2016 corrections
 	m["NOMINAL" ] = 1. / 1.01388; // NOMINAL PU factor
 	m["PUUp"    ] = 1. / 0.994846;
 	m["PUDown"  ] = 1. / 1.03657;
@@ -1427,6 +1427,93 @@ map<TString, double> create_known_normalization_per_syst()
 	m["PDFCT14n8Up"	] = 0.992782;
 	m["PDFCT14n9Up"	] = 1.008439;
 
+	// 2017 from TTTo2L
+	m["MU_PU"]     =         0.692955;
+	m["MU_PUUp"]   =         0.757326;
+	m["MU_PUDown"] =         0.637007;
+	m["El_PU"]     =         0.579763;
+	m["El_PUUp"]   =         0.627530;
+	m["El_PUDown"] =         0.542434;
+	// TODO: the same issue with PU, I need to normalize to nominal PU everywhere?
+	// for now let's just normalize systematics
+	// I use only muon channels now, so:
+	m["NOMINAL" ] = 1./0.692955; // NOMINAL PU factor
+	m["PUUp"]     = 1./0.757326;
+	m["PUDown"]   = 1./0.637007;
+
+	m["TOPPT"] = 1. /             1.000352;
+	m["FragUp"] = 1. /             0.912333;
+	m["FragDown"] = 1. /             1.067350;
+	m["SemilepBRUp"] = 1. /             1.014130;
+	m["SemilepBRDown"] = 1. /             1.047939;
+	m["PetersonUp"] = 1. /             0.963072;
+
+	m["MrUp"] = 1. /             0.897033;
+	m["MrDown"] = 1. /             1.116338;
+	m["MfUp"] = 1. /             0.979744;
+	m["MfDown"] = 1. /             1.026878;
+	m["MfrUp"] = 1. /             0.874539;
+	m["MfrDown"] = 1. /             1.140431;
+
+	m["AlphaSDown"] = 1. /            73.388846;
+	m["AlphaSUp"] = 1. /            73.434533;
+	m["PDFCT14n1"] = 1. /             0.842441;
+	m["PDFCT14n10"] = 1. /             1.019382;
+	m["PDFCT14n11"] = 1. /             1.017693;
+	m["PDFCT14n12"] = 1. /             1.018400;
+	m["PDFCT14n13"] = 1. /             1.021125;
+	m["PDFCT14n14"] = 1. /             1.019251;
+	m["PDFCT14n15"] = 1. /             1.017953;
+	m["PDFCT14n16"] = 1. /             1.019955;
+	m["PDFCT14n17"] = 1. /             1.017888;
+	m["PDFCT14n18"] = 1. /             1.020231;
+	m["PDFCT14n19"] = 1. /             1.016634;
+	m["PDFCT14n2"] = 1. /             0.867848;
+	m["PDFCT14n20"] = 1. /             1.017093;
+	m["PDFCT14n21"] = 1. /             1.019368;
+	m["PDFCT14n22"] = 1. /             1.019468;
+	m["PDFCT14n23"] = 1. /             1.019067;
+	m["PDFCT14n24"] = 1. /             1.016827;
+	m["PDFCT14n25"] = 1. /             1.019057;
+	m["PDFCT14n26"] = 1. /             1.018442;
+	m["PDFCT14n27"] = 1. /             1.019834;
+	m["PDFCT14n28"] = 1. /             1.018420;
+	m["PDFCT14n29"] = 1. /             1.018189;
+	m["PDFCT14n3"] = 1. /             0.894395;
+	m["PDFCT14n30"] = 1. /             1.018549;
+	m["PDFCT14n31"] = 1. /             1.018317;
+	m["PDFCT14n32"] = 1. /             1.017693;
+	m["PDFCT14n33"] = 1. /             1.017466;
+	m["PDFCT14n34"] = 1. /             1.018964;
+	m["PDFCT14n35"] = 1. /             1.018410;
+	m["PDFCT14n36"] = 1. /             1.019069;
+	m["PDFCT14n37"] = 1. /             1.016709;
+	m["PDFCT14n38"] = 1. /             1.016373;
+	m["PDFCT14n39"] = 1. /             1.022541;
+	m["PDFCT14n4"] = 1. /             0.918370;
+	m["PDFCT14n40"] = 1. /             1.020639;
+	m["PDFCT14n41"] = 1. /             1.018076;
+	m["PDFCT14n42"] = 1. /             1.019376;
+	m["PDFCT14n43"] = 1. /             1.018341;
+	m["PDFCT14n44"] = 1. /             1.019453;
+	m["PDFCT14n45"] = 1. /             1.018983;
+	m["PDFCT14n46"] = 1. /             1.019039;
+	m["PDFCT14n47"] = 1. /             1.018464;
+	m["PDFCT14n48"] = 1. /             1.018923;
+	m["PDFCT14n49"] = 1. /             1.018704;
+	m["PDFCT14n5"] = 1. /             0.958628;
+	m["PDFCT14n50"] = 1. /             1.018930;
+	m["PDFCT14n51"] = 1. /             1.017098;
+	m["PDFCT14n52"] = 1. /             1.017097;
+	m["PDFCT14n53"] = 1. /             1.018855;
+	m["PDFCT14n54"] = 1. /             1.019012;
+	m["PDFCT14n55"] = 1. /             1.019831;
+	m["PDFCT14n56"] = 1. /             1.018409;
+	m["PDFCT14n6"] = 1. /             0.986781;
+	m["PDFCT14n7"] = 1. /             1.024974;
+	m["PDFCT14n8"] = 1. /             1.053645;
+	m["PDFCT14n9"] = 1. /             1.018451;
+
 	return m;
 	}
 
@@ -1497,9 +1584,8 @@ void normalise_final(TH1D* histo, double cross_section, double scale, const TStr
 	/* per-syst/proc/chan systematic corrections
 	*/
 
-	double per_syst_factor = known_normalization_per_syst.find(name_syst) == known_normalization_per_syst.end() ?
-		known_normalization_per_syst["NOMINAL"] :
-		known_normalization_per_syst[name_syst];
+	double per_syst_factor = (name_syst == "NOMINAL" || known_normalization_per_syst.find(name_syst) == known_normalization_per_syst.end()) ?  known_normalization_per_syst["NOMINAL"] :
+		(name_syst == "PUUp" || name_syst == "PUDown" ? known_normalization_per_syst[name_syst] : known_normalization_per_syst["NOMINAL"] * known_normalization_per_syst[name_syst]);
 
 	double per_proc_factor = known_normalization_per_proc.find(name_proc) == known_normalization_per_proc.end() ?
 		1. :
