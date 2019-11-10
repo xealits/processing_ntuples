@@ -555,6 +555,21 @@ double NT_distr_leading_lep_pt(ObjSystematics sys)
 	return NT_event_leptons[0].pt();
 	}
 
+double NT_distr_lj_var(ObjSystematics sys)
+	{
+	return NT_event_jets_lj_var;
+	}
+
+double NT_distr_lj_var_w_mass(ObjSystematics sys)
+	{
+	return NT_event_jets_lj_w_mass;
+	}
+
+double NT_distr_lj_var_t_mass(ObjSystematics sys)
+	{
+	return NT_event_jets_lj_t_mass;
+	}
+
 double NT_distr_Mt_lep_met(ObjSystematics sys)
 	{
 
@@ -616,6 +631,10 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	// despicable!
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
 	r = {40, true,  0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
+
+	static double bins_lj_var[] = {0,15,30,45,60,90,120,170,220,270,400};   r = {(sizeof(bins_lj_var) / sizeof(bins_lj_var[0]))-1, false,-1,  -1, bins_lj_var};   m["lj_var"] = {NT_distr_lj_var, r};
+	static double bins_lj_var_w_mass[] = {10,40,65,80,95,120,150,200};      r = {(sizeof(bins_lj_var_w_mass) / sizeof(bins_lj_var_w_mass[0]))-1, false,-1,  -1, bins_lj_var_w_mass};   m["lj_var_w_mass"] = {NT_distr_lj_var_w_mass, r};
+	static double bins_lj_var_t_mass[] = {20,100,130,160,180,200,300,400};  r = {(sizeof(bins_lj_var_t_mass) / sizeof(bins_lj_var_t_mass[0]))-1, false,-1,  -1, bins_lj_var_t_mass};   m["lj_var_t_mass"] = {NT_distr_lj_var_t_mass, r};
 
 	//r = {14, false,-1,  -1, .custom_bins=(double[]){0,16,32,44,54,64,74,81,88,95,104,116,132,160,250}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
 	//r = {2, false,-1,  -1, .custom_bins=(double[]){{0},{16},{32}}}; m["Mt_lep_met_c"]   = {Mt_lep_met,     r};
