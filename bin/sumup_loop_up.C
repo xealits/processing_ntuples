@@ -1059,6 +1059,7 @@ bool NT_genproc_ ##procname(void)          \
 	}
 
 NT_genproc_range(tt_mutau, 30, 33)
+NT_genproc_range(tt_leptau, 30, 43)
 
 NT_genproc_range(tt_lj, 20, 30)
 
@@ -1076,8 +1077,9 @@ typedef struct {
 } _S_proc_ID_defs;
 
 // standard per-channel processes
-vector<TString> _eltau_tt_procs = {"tt_eltau", "tt_taulj", "tt_lj"};
-vector<TString> _mutau_tt_procs = {"tt_mutau", "tt_taulj", "tt_lj"};
+vector<TString> _eltau_tt_procs  = {"tt_eltau", "tt_taulj", "tt_lj"};
+vector<TString> _mutau_tt_procs  = {"tt_mutau", "tt_taulj", "tt_lj"};
+vector<TString> _leptau_tt_procs = {"tt_leptau", "tt_taulj", "tt_lj"};
 vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
 //vector<TString> _mumu_tt_procs  = {"tt_inclusive"};
 //vector<TString> _elel_tt_procs  = {"tt_inclusive"};
@@ -1135,6 +1137,7 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 		.groups={
 			{"tt_eltau" , NT_genproc_tt_eltau},
 			{"tt_mutau" , NT_genproc_tt_mutau},
+			{"tt_leptau" , NT_genproc_tt_leptau},
 			{"tt_lj"    , NT_genproc_tt_lj},
 			{"tt_inclusive" , NT_genproc_inclusive},
 			},
@@ -1144,6 +1147,9 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _eltau_tt_procs},
 			{"mu_sel",    _mutau_tt_procs},
 			{"mu_sel_ss", _mutau_tt_procs},
+
+			{"lep_sel",    _leptau_tt_procs},
+			{"lep_sel_ss", _leptau_tt_procs},
 
 			{"tt_elmu",       _elmu_tt_procs},
 			{"tt_elmu_tight", _elmu_tt_procs},
@@ -1315,34 +1321,40 @@ map<TString, S_dtag_info> create_known_dtags_info()
 	//map<const char*, S_dtag_info> m;
 	map<TString, S_dtag_info> m;
 
-	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            , 
-		.usual_gen_lumi= 23102470.188817, 
+	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            ,
+		.usual_gen_lumi= 23102470.188817,
 		.std_procs = known_procs_info["wjets"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          , 
-		.usual_gen_lumi= 18928303.971956, 
+	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          ,
+		.usual_gen_lumi= 18928303.971956,
 		.std_procs = known_procs_info["dy"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           , 
-		.usual_gen_lumi=  5099879.048270, 
+	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           ,
+		.usual_gen_lumi=  5099879.048270,
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           , 
-		.usual_gen_lumi=  2349775.859249, 
+	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           ,
+		.usual_gen_lumi=  2349775.859249,
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              , 
-		.usual_gen_lumi= 29213134.729453, 
+	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              ,
+		.usual_gen_lumi= 29213134.729453,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
-	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br , 
-		.usual_gen_lumi= 21966343.919990, 
+	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br ,
+		.usual_gen_lumi= 21966343.919990,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
-	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           , 
-		.usual_gen_lumi=  2923730.883332, 
+	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           ,
+		.usual_gen_lumi=  2923730.883332,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
+
+	m["MC2016_Summer16_TTJets_powheg"                      ] = {.cross_section=   831.76           ,
+		.usual_gen_lumi=  1.,
+		.std_procs = known_procs_info["tt"],
+		.std_systs = {SYSTS_TT}};
+
 	// I probably need some defaults for not found dtags
 
 	return m;
