@@ -768,6 +768,34 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 	return relevant_selection_stage == 18 || relevant_selection_stage == 16;
 	}
 
+// union os mu_sel and el_sel
+bool NT_channel_lep_sel(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	else relevant_selection_stage = NT_selection_stage;
+	return relevant_selection_stage == 9 || relevant_selection_stage == 7 || relevant_selection_stage == 19 || relevant_selection_stage == 17;
+	}
+
+bool NT_channel_lep_sel_ss(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	else relevant_selection_stage = NT_selection_stage;
+	return relevant_selection_stage == 8 || relevant_selection_stage == 6 || relevant_selection_stage == 18 || relevant_selection_stage == 16;
+	}
 
 
 bool NT_channel_tt_elmu(ObjSystematics sys)
@@ -914,6 +942,9 @@ map<TString, _F_channel_def> create_known_channel_definitions()
 	_quick_set_chandef(m, el_sel_ss);
 	_quick_set_chandef(m, mu_sel);
 	_quick_set_chandef(m, mu_sel_ss);
+
+	_quick_set_chandef(m, lep_sel);
+	_quick_set_chandef(m, lep_sel_ss);
 
 	_quick_set_chandef(m, tt_elmu);
 	_quick_set_chandef(m, tt_elmu_tight);
