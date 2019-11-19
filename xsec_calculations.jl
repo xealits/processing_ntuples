@@ -101,6 +101,7 @@ xsec_el_meas = el_sig * 831.76 * acc_el
 xsec_mu_meas = mu_sig * 831.76 * acc_mu
 xsec_bt_meas = bt_sig * 831.76 * acc_bt
 
+println("correct fiducial uncertainties!")
 println(xsec_el_meas, " ", xsec_el_meas .* [el_stat el_sys 0.025])
 println(xsec_mu_meas, " ", xsec_mu_meas .* [mu_stat mu_sys 0.025])
 println(xsec_bt_meas, " ", xsec_bt_meas .* [bt_stat bt_sys 0.025])

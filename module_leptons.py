@@ -164,6 +164,126 @@ h_weight_mu_trg_bcdef_eta = TH1D("weight_mu_trg_bcdef_eta", "", 50, 0, 3)
 #
 #h_weight_mu_idd_bcdef_nbins = TH2D("weight_mu_idd_bcdef_nbins", "", 100, 0, muon_effs_id_BCDEF_histo.GetSize(), 100, 0, muon_effs_id_BCDEF_histo.GetSize())
 
+'''
+reco*ID*ISO*Trigger
+-- some can be missing
+histos can be 1D or 2D, or with vtx
+-- the inputs are pt, eta and vtx, there can be only 3 topologies of the call
+
+the access is TFile/TDir/THisto
+
+there can be several Run epochs, which must be taken in arithmetical average
+
+the histo might or might not have the oveerflows for the leptons ourside the range of the bins
+
+trigger must be separate, because we do not always trigger on all leptons
+
+I need to
+open histos,
+not prepare range-handling for now!
+calculate weights for each correction according to the particular prescription
+multiply them,
+average epochs
+
+-- let's make a couple helpers and implement the rest in a function with loop etc
+'''
+
+class GeneralLeptonSF_21:
+    def __init__(self, histo_path_pt_eta=None, histo_path_vtx=None, invert_call=False, protect_range=True):
+        '''
+        the format is filename/path/to/histo
+        '''
+
+        self.file_pt_eta = None
+        self.file_vtx    = None
+        self.histo_pt_eta = None
+        self.histo_vtx    = None
+        self.histo_pt_eta_range = None
+        self.histo_vtx_range    = None
+        self.invert_call = invert_call
+
+        if histo_path_pt_eta:
+            filename_pt_eta, path_pt_eta = histo_path_pt_eta
+            self.file_pt_eta  = TFile(filename_pt_eta)
+            self.histo_pt_eta = self.file_pt_eta.Get(path_pt_eta)
+
+            if protect_range:
+                self.histo_pt_eta_range = (self.histo_pt_eta.GetXaxis().GetXmin(). self.histo_pt_eta.GetXaxis().GetXmax()),
+                    (self.histo_pt_eta.GetYaxis().GetXmin(). self.histo_pt_eta.GetYaxis().GetXmax())
+
+        if histo_path_vtx:
+            filename_vtx = histo_path_vtx.split('/')[0]
+            path_vtx     = '/'.join(histo_path_vtx.split('/')[1:])
+            self.file_vtx  = TFile(filename_vtx)
+            self.histo_vtx = self.file_vtx.Get(path_vtx)
+
+            if protect_range:
+                self.histo_vtx_range = self.histo_vtx.GetXaxis().GetXmin(). self.histo_vtx.GetXaxis().GetXmax()
+
+    def __call__(self, pt_or_eta, eta_or_pt, vtx=None):
+        '''(pt_or_eta, eta_or_pt, vtx=None)
+
+        return weight, weight_uncertainty
+        '''
+
+        weight_pt_eta     = 1.
+        weight_pt_eta_unc = 0.
+        if self.histo_pt_eta:
+            x, y = (eta_or_pt, pt_or_eta) if self.invert_call else (pt_or_eta, eta_or_pt)
+
+            if self.histo_pt_eta_range is not None:
+                (x_min, x_max), (y_min, y_max) = self.histo_pt_eta_range
+                if x < x_min: x = x_min+0.0001
+                if x > x_max: x = x_max-0.0001
+                if y < y_min: y = y_min+0.0001
+                if y > y_max: y = y_max-0.0001
+
+            weight_pt_eta_bin = self.histo_pt_eta.FindBin(x, y)
+            weight_pt_eta     = self.histo_pt_eta.GetBinContent(weight_pt_eta_bin)
+            weight_pt_eta_unc = self.histo_pt_eta.GetBinError(weight_pt_eta_bin)
+
+        if vtx is None:
+            return weight_pt_eta, weight_pt_eta_unc
+
+        if self.histo_vtx_range is not None:
+            vtx_min, vtx_max = self.histo_vtx_range
+            if vtx < vtx_min: vtx = vtx_min+0.0001
+            if vtx > vtx_max: vtx = vtx_max-0.0001
+
+        if self.histo_vtx:
+            weight_vtx_bin = self.histo_vtx.FindBin(vtx)
+            weight_vtx     = self.histo_vtx.GetBinContent(weight_vtx_bin)
+            weight_vtx_unc = self.histo_vtx.GetBinError(weight_vtx_bin)
+
+        return weight_pt_eta * weight_vtx, sqrt(weight_pt_eta_unc**2 + weight_vtx_unc**2)
+
+'''
+muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ID_syst_preliminary.root
+muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ISO_syst_preliminary.root
+muon-effs/Run2017-Nov17_Re-Reco_Trigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root
+'''
+
+lepton_muon_SF_2017_v1_ID  = GeneralLeptonSF_21(('muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ID_syst_preliminary.root',  'NUM_TightID_DEN_genTracks_pt_abseta'))
+lepton_muon_SF_2017_v1_ISO = GeneralLeptonSF_21(('muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ISO_syst_preliminary.root', 'NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta'))
+lepton_muon_SF_2017_v1_Trg = GeneralLeptonSF_21(('muon-effs/Run2017-Nov17_Re-Reco_Trigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root',  'IsoMu27_PtEtaBins/pt_abseta_ratio'))
+
+def lepton_muon_SF_2017_v1(pt, eta):
+    '''
+    the standardized output format, with the epochs are accounted for
+
+    old format:
+    return bcdef_weight_trk * bcdef_weight_trk_vtx_gen, trk_gen_unc_bcdef, bcdef_weight_trk_vtx, (bcdef_weight_id, bcdef_weight_id_unc), (bcdef_weight_iso, bcdef_weight_iso_unc)
+
+    return (trk, unc), (id, unc), (iso, unc)
+    '''
+
+    abseta = abs(eta)
+    return (1., 0.), lepton_muon_SF_2017_v1_ID(pt, abseta), lepton_muon_SF_2017_v1_ISO(pt, abseta)
+
+def lepton_muon_SF_2017_v1_trigger(pt, eta):
+    abseta = abs(eta)
+    return lepton_muon_SF_2017_v1_Trg(pt, abseta)
+
 def lepton_muon_SF(eta, pt, vtx, vtx_gen): #SingleMuon_data_bcdef_fraction, SingleMuon_data_gh_fraction):
     abs_eta = abs(eta)
     #weight *= 0.98; // average mu trig SF
