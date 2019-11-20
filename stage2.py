@@ -1958,7 +1958,6 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
     'event_weight_bSF_JESDown' :  'f',
     'event_weight_toppt' :  'f',
     'event_weight_LEPall' :  'f',
-    'event_weight_LEP_PU' :  'f',
 
     'event_weight_LEPmuID'      :  'f',
     'event_weight_LEPmuID_Up'   :  'f',
@@ -1973,23 +1972,6 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
     'event_weight_LEPelTRG_Up'   :  'f',
     'event_weight_LEPelTRG_Down' :  'f',
 
-    'event_weight_LEPmuBID' :  'f',
-    'event_weight_LEPmuBTRG' :  'f',
-    'event_weight_LEPmuHID' :  'f',
-    'event_weight_LEPmuHTRG' :  'f',
-    'event_weight_LEPmu0ID' :  'f',
-    'event_weight_LEPmu0TRG' :  'f',
-    'event_weight_LEPmu0TRGUp' :  'f',
-    'event_weight_LEPmuTRGctrlUp' :  'f',
-    'event_weight_LEPmuTRGctrlDown' :  'f',
-    'event_weight_LEPmuIDUp' :  'f',
-    'event_weight_LEPmuIDDown' :  'f',
-    'event_weight_LEPmuTRGUp' :  'f',
-    'event_weight_LEPmuTRGDown' :  'f',
-    'event_weight_LEPelIDUp' :  'f',
-    'event_weight_LEPelIDDown' :  'f',
-    'event_weight_LEPelTRGUp' :  'f',
-    'event_weight_LEPelTRGDown' :  'f',
     'event_weight_PUUp' :  'f',
     'event_weight_PUDown' :  'f',
     'event_weight_PUUp_el' :  'f',
@@ -3039,6 +3021,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
             # new leptonic weights
             # they account for any set of leptons in the event
             # and single-lepton triggers
+            weight_lepall = 1. # DONE
 
             # separate lep SF weights for control and flexibility
             weight_lep_MU_id    = 1.
@@ -4649,31 +4632,13 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
             # leptons and pu with systematics
             # weight_lep and others do not contain PU weight now!
-            # TODO: remove this, I keep the name to be compatible with old stage2 output for now
-            event_weight_LEP_PU[0]     = weight_lep if weight_lep > 0.0001 else 0.
-
-            max_weight_lep = 2*weight_lep
-            event_weight_LEPmuIDUp[0]    = (weight_lep_muIDUp    / weight_lep if weight_lep_muIDUp    < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_muIDUp    > 0.0001 else 0.
-            event_weight_LEPmuIDDown[0]  = (weight_lep_muIDDown  / weight_lep if weight_lep_muIDDown  < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_muIDDown  > 0.0001 else 0.
-            event_weight_LEPmuTRGUp[0]   = (weight_lep_muTRGUp   / weight_lep if weight_lep_muTRGUp   < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_muTRGUp   > 0.0001 else 0.
-            event_weight_LEPmuTRGDown[0] = (weight_lep_muTRGDown / weight_lep if weight_lep_muTRGDown < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_muTRGDown > 0.0001 else 0.
-            event_weight_LEPelIDUp[0]    = (weight_lep_elIDUp    / weight_lep if weight_lep_elIDUp    < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_elIDUp    > 0.0001 else 0.
-            event_weight_LEPelIDDown[0]  = (weight_lep_elIDDown  / weight_lep if weight_lep_elIDDown  < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_elIDDown  > 0.0001 else 0.
-            event_weight_LEPelTRGUp[0]   = (weight_lep_elTRGUp   / weight_lep if weight_lep_elTRGUp   < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_elTRGUp   > 0.0001 else 0.
-            event_weight_LEPelTRGDown[0] = (weight_lep_elTRGDown / weight_lep if weight_lep_elTRGDown < max_weight_lep else max_weight_lep) if weight_lep > 0.0001 and weight_lep_elTRGDown > 0.0001 else 0.
 
             #event_weight_PUUp[0]    = (weight_lep_PUUp / weight_lep) if weight_lep > 0.0001 else 0.
             #event_weight_PUDown[0]  = (weight_lep_PUDown / weight_lep) if weight_lep > 0.0001 else 0.
-
-            event_weight_PUUp[0]    = (weight_pu_up / weight_pu) if weight_pu > 0.0001 else 0.
-            event_weight_PUDown[0]  = (weight_pu_dn / weight_pu) if weight_pu > 0.0001 else 0.
+            event_weight_PUUp[0]    = weight_pu_up
+            event_weight_PUDown[0]  = weight_pu_dn
 
             # control and reconstruction of full weight
-
-            event_weight_LEPmuBID[0]    = weight_lep_B_MU_id  if weight_lep_B_MU_id  > 0.0001 else 0.
-            event_weight_LEPmuBTRG[0]   = weight_lep_B_MU_trg if weight_lep_B_MU_trg > 0.0001 else 0.
-            event_weight_LEPmuHID[0]    = weight_lep_H_MU_id  if weight_lep_H_MU_id  > 0.0001 else 0.
-            event_weight_LEPmuHTRG[0]   = weight_lep_H_MU_trg if weight_lep_H_MU_trg > 0.0001 else 0.
 
             event_weight_LEPmuID[0]      = weight_lep_MU_id
             event_weight_LEPmuID_Up[0]   = weight_lep_MU_id_Up
@@ -4688,12 +4653,6 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
             event_weight_LEPelTRG[0]      = weight_lep_EL_trg
             event_weight_LEPelTRG_Up[0]   = weight_lep_EL_trg_Up
             event_weight_LEPelTRG_Down[0] = weight_lep_EL_trg_Down
-
-            #event_weight_LEPmu0ID[0]     = weight_lepMU0_id  if weight_lepMU0_id  > 0.0001 else 0.
-            #event_weight_LEPmu0TRG[0]    = weight_lepMU0_trg if weight_lepMU0_trg > 0.0001 else 0.
-            #event_weight_LEPmu0TRGUp[0]  = weight_lepMU0_trg_Up if weight_lepMU0_trg_Up > 0.0001 else 0.
-            #event_weight_LEPmuTRGctrlUp[0]   = weight_lepMU_trg_Up   if weight_lepMU_trg_Up  > 0.0001 else 0.
-            #event_weight_LEPmuTRGctrlDown[0] = weight_lepMU_trg_Down if weight_lepMU_trg_Down  > 0.0001 else 0.
 
             event_weight_PUUp_el[0]    = weight_pu_el_up
             event_weight_PUDown_el[0]  = weight_pu_el_dn
@@ -4941,21 +4900,13 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
             #mu_sfs = lepton_muon_SF(ev.lep_p4[0].eta(), ev.lep_p4[0].pt())
             #mu_trg_sf = lepton_muon_trigger_SF(ev.lep_p4[0].eta(), ev.lep_p4[0].pt())
 
-            control_hs['weight_mu_trk_bcdef']        .Fill(mu_sfs_b[0])
-            control_hs['weight_mu_trk_bcdef_vtx_gen'].Fill(mu_sfs_b[1])
-            control_hs['weight_mu_trk_bcdef_vtx']    .Fill(mu_sfs_b[2])
-            control_hs['weight_mu_id_bcdef']         .Fill(mu_sfs_b[3][0])
-            control_hs['weight_mu_iso_bcdef']        .Fill(mu_sfs_b[4][0])
-            control_hs['weight_mu_trg_bcdef'].Fill(mu_trg_sf_b)
-            control_hs['weight_mu_all_bcdef'].Fill(mu_trg_sf_b * mu_sfs_b[0] * mu_sfs_b[1] * mu_sfs_b[3][0] * mu_sfs_b[4][0])
-
-            control_hs['weight_mu_trk_gh']        .Fill(mu_sfs_h[0])
-            control_hs['weight_mu_trk_gh_vtx_gen'].Fill(mu_sfs_h[1])
-            control_hs['weight_mu_trk_gh_vtx']    .Fill(mu_sfs_h[2])
-            control_hs['weight_mu_id_gh']         .Fill(mu_sfs_h[3][0])
-            control_hs['weight_mu_iso_gh']        .Fill(mu_sfs_h[4][0])
-            control_hs['weight_mu_trg_gh'] .Fill(mu_trg_sf_h)
-            control_hs['weight_mu_all_gh'] .Fill(mu_trg_sf_h * mu_sfs_h[0] * mu_sfs_h[1] * mu_sfs_h[3][0] * mu_sfs_h[4][0])
+            #control_hs['weight_mu_trk_gh']        .Fill(mu_sfs_h[0])
+            #control_hs['weight_mu_trk_gh_vtx_gen'].Fill(mu_sfs_h[1])
+            #control_hs['weight_mu_trk_gh_vtx']    .Fill(mu_sfs_h[2])
+            #control_hs['weight_mu_id_gh']         .Fill(mu_sfs_h[3][0])
+            #control_hs['weight_mu_iso_gh']        .Fill(mu_sfs_h[4][0])
+            #control_hs['weight_mu_trg_gh'] .Fill(mu_trg_sf_h)
+            #control_hs['weight_mu_all_gh'] .Fill(mu_trg_sf_h * mu_sfs_h[0] * mu_sfs_h[1] * mu_sfs_h[3][0] * mu_sfs_h[4][0])
 
             control_hs['weight_mu_bSF']     .Fill(weight_bSF)
             #control_hs['weight_mu_bSF_up']  .Fill(weight_bSF_up)
@@ -4964,11 +4915,6 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
           elif pass_el: # or pass_elel or pass_elmu_el:
             #el_sfs = lepton_electron_SF(abs(ev.lep_p4[0].eta()), ev.lep_p4[0].pt())
             #el_trg_sf = lepton_electron_trigger_SF(abs(ev.lep_p4[0].eta()), ev.lep_p4[0].pt())
-
-            control_hs['weight_el_trk'].Fill(el_sfs_reco[0])
-            control_hs['weight_el_idd'].Fill(el_sfs_id[0])
-            control_hs['weight_el_trg'].Fill(el_trg_sf)
-            control_hs['weight_el_all'].Fill(el_trg_sf * el_sfs_reco[0] * el_sfs_id[0])
 
             control_hs['weight_el_bSF']     .Fill(weight_bSF)
             #control_hs['weight_el_bSF_up']  .Fill(weight_bSF_up)

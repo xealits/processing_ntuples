@@ -208,8 +208,8 @@ class GeneralLeptonSF_21:
             self.histo_pt_eta = self.file_pt_eta.Get(path_pt_eta)
 
             if protect_range:
-                self.histo_pt_eta_range = (self.histo_pt_eta.GetXaxis().GetXmin(). self.histo_pt_eta.GetXaxis().GetXmax()),
-                    (self.histo_pt_eta.GetYaxis().GetXmin(). self.histo_pt_eta.GetYaxis().GetXmax())
+                self.histo_pt_eta_range = (self.histo_pt_eta.GetXaxis().GetXmin(), self.histo_pt_eta.GetXaxis().GetXmax()), \
+                    (self.histo_pt_eta.GetYaxis().GetXmin(), self.histo_pt_eta.GetYaxis().GetXmax())
 
         if histo_path_vtx:
             filename_vtx = histo_path_vtx.split('/')[0]
@@ -218,7 +218,7 @@ class GeneralLeptonSF_21:
             self.histo_vtx = self.file_vtx.Get(path_vtx)
 
             if protect_range:
-                self.histo_vtx_range = self.histo_vtx.GetXaxis().GetXmin(). self.histo_vtx.GetXaxis().GetXmax()
+                self.histo_vtx_range = self.histo_vtx.GetXaxis().GetXmin(), self.histo_vtx.GetXaxis().GetXmax()
 
     def __call__(self, pt_or_eta, eta_or_pt, vtx=None):
         '''(pt_or_eta, eta_or_pt, vtx=None)
