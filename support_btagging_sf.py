@@ -65,9 +65,11 @@ logging.info("loading b-tagging SF callibration")
 #bCalib_filename = environ['CMSSW_BASE'] + '/src/UserCode/NtuplerAnalyzer/data/weights/CSVv2_Moriond17_B_H.csv'
 bCalib_filename = environ['CMSSW_BASE'] + '/src/UserCode/proc/common_info/b-tagging/CSVv2_Moriond17_B_H.csv'
 #gSystem.ExpandPathName(bCalib_filename)
+bCalib_filename = environ['CMSSW_BASE'] + '/src/UserCode/proc/common_info/b-tagging/2017_DeepCSV_94XSF_V4_B_F.csv'
 
 logging.info("btag SFs from " + bCalib_filename)
-btagCalib = ROOT.BTagCalibration("CSVv2", bCalib_filename)
+#btagCalib = ROOT.BTagCalibration("CSVv2", bCalib_filename)
+btagCalib = ROOT.BTagCalibration("DeepCSV", bCalib_filename)
 #BTagCalibration* btagCalib; // ("CSVv2", string(std::getenv("CMSSW_BASE"))+"/src/UserCode/ttbar-leptons-80X/data/weights/CSVv2_Moriond17_B_H.csv");
 
 logging.info("loading Reader")
