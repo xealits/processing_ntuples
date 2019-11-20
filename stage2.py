@@ -576,7 +576,7 @@ def calc_pu_per_runs(pu_ele, pu_gld, ele_B = 19128.209 / (19128.209 + 12210.15),
 
 
 
-from module_leptons import lepton_muon_SF, lepton_muon_trigger_SF, lepton_muon_SF_2017_v1, lepton_muon_SF_2017_v1_trigger, lepton_electron_SF, lepton_electron_trigger_SF, dilepton_or_sfs, dilepton_and_sfs
+from module_leptons import lepton_muon_SF, lepton_muon_trigger_SF, lepton_electron_SF_2017_v1, lepton_electron_SF_2017_v1_trigger, lepton_muon_SF_2017_v1, lepton_muon_SF_2017_v1_trigger, lepton_electron_SF, lepton_electron_trigger_SF, dilepton_or_sfs, dilepton_and_sfs
 
 if with_bSF:
     import support_btagging_sf
@@ -2695,6 +2695,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
                 else:
                     gen_proc_id[0] = genproc_stop_other
 
+            '''
             # LEPTON SFs
             # (and PU SFs averaged together)
             # now they are separate again
@@ -3033,11 +3034,89 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
                 weight_lep_EL_trg = el_trg_sf
                 weight_lep_EL_id  = el_reco * el_id
+            '''
 
+            # new leptonic weights
+            # they account for any set of leptons in the event
+            # and single-lepton triggers
+
+            # separate lep SF weights for control and flexibility
+            weight_lep_MU_id    = 1.
+            weight_lep_EL_id    = 1.
+
+            weight_lep_MU_id_Up    = 1.
+            weight_lep_MU_id_Down  = 1.
+            weight_lep_EL_id_Up    = 1.
+            weight_lep_EL_id_Down  = 1.
+
+            weight_lep_MU_trg      = 1.
+            weight_lep_MU_trg_Up   = 1.
+            weight_lep_MU_trg_Down = 1.
+
+            weight_lep_EL_trg      = 1.
+            weight_lep_EL_trg_Up   = 1.
+            weight_lep_EL_trg_Down = 1.
+
+            weight_trigs_EL = []
+            weight_trigs_MU = []
+
+            for pdgID, lep_p4 in zip(ev.lep_id, ev.lep_p4):
+                if abs(pdgID) == 13:
+                    (w_reco, w_reco_unc), (w_id, w_id_unc), (w_iso, w_iso_unc) = lepton_muon_SF_2017_v1(lep_p4.eta(), lep_p4.pt())
+                    trg, trg_unc = lepton_muon_SF_2017_v1_trigger(lep_p4.eta(), lep_p4.pt())
+
+                    # ID is and "AND" of all leptons
+                    weight_lep_MU_id      *= w_reco * w_id * w_iso
+                    weight_lep_MU_id_Up   *= (w_reco + w_reco_unc) * (w_id + w_id_unc) * (w_iso + w_iso_unc)
+                    weight_lep_MU_id_Down *= (w_reco - w_reco_unc) * (w_id - w_id_unc) * (w_iso - w_iso_unc)
+
+                    weight_trigs_MU.append((trg, trg_unc))
+                else:
+                    (w_reco, w_reco_unc), (w_id, w_id_unc), (w_iso, w_iso_unc) = lepton_electron_SF_2017_v1(lep_p4.eta(), lep_p4.pt())
+                    trg, trg_unc = lepton_electron_SF_2017_v1_trigger(lep_p4.eta(), lep_p4.pt())
+
+                    # ID is and "AND" of all leptons
+                    weight_lep_EL_id      *= w_reco * w_id * w_iso
+                    weight_lep_EL_id_Up   *= (w_reco + w_reco_unc) * (w_id + w_id_unc) * (w_iso + w_iso_unc)
+                    weight_lep_EL_id_Down *= (w_reco - w_reco_unc) * (w_id - w_id_unc) * (w_iso - w_iso_unc)
+
+                    weight_trigs_EL.append((trg, trg_unc))
+
+            # single-lepton trigger is an OR over available leptons
+            # let's not implement a general OR now
+            if   len(weight_trigs_MU) == 1:
+                weight_lep_MU_trg      = weight_trigs_MU[0][0]
+                weight_lep_MU_trg_Up   = weight_trigs_MU[0][0] + weight_trigs_MU[0][1]
+                weight_lep_MU_trg_Down = weight_trigs_MU[0][0] - weight_trigs_MU[0][1]
+
+            elif len(weight_trigs_MU) == 2:
+                w_trg, w_trg_unc = dilepton_or_sfs(weight_trigs_MU[0][0], weight_trigs_MU[0][1], weight_trigs_MU[1][0], weight_trigs_MU[1][1])
+                weight_lep_MU_trg      = w_trg
+                weight_lep_MU_trg_Up   = w_trg + w_trg_unc
+                weight_lep_MU_trg_Down = w_trg - w_trg_unc
+
+            elif len(weight_trigs_MU) >  2:
+                raise ValueError("too many muons in an event, >2")
+
+            if   len(weight_trigs_EL) == 1:
+                weight_lep_EL_trg      = weight_trigs_EL[0][0]
+                weight_lep_EL_trg_Up   = weight_trigs_EL[0][0] + weight_trigs_EL[0][1]
+                weight_lep_EL_trg_Down = weight_trigs_EL[0][0] - weight_trigs_EL[0][1]
+
+            elif len(weight_trigs_EL) == 2:
+                w_trg, w_trg_unc = dilepton_or_sfs(weight_trigs_EL[0][0], weight_trigs_EL[0][1], weight_trigs_EL[1][0], weight_trigs_EL[1][1])
+                weight_lep_EL_trg      = w_trg
+                weight_lep_EL_trg_Up   = w_trg + w_trg_unc
+                weight_lep_EL_trg_Down = w_trg - w_trg_unc
+
+            elif len(weight_trigs_EL) >  2:
+                raise ValueError("too many electrons in an event, >2")
+
+
+            ##weight_init *= weight_lep if weight_lep > 0.0001 else 0.
+            ## lep_pu does not include PU now!
             #weight_init *= weight_lep if weight_lep > 0.0001 else 0.
-            # lep_pu does not include PU now!
-            weight_init *= weight_lep if weight_lep > 0.0001 else 0.
-            weight_init *= weight_pu  if weight_pu  > 0.0001 else 0.
+            #weight_init *= weight_pu  if weight_pu  > 0.0001 else 0.
 
         control_counters.Fill(52)
 
@@ -3943,11 +4022,10 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         #nominal systematics
         # jet pts, tau pts, b weight (=1 for data), pu weight (=1 for data)
 
-        syst_weights_nominal = [weight_init, 1., 1.]
-        syst_weights = {} # {'NOMINAL': syst_weights_nominal}
-        syst_objects = {'NOMINAL': [jets_nom, taus_main, taus_candidates, proc_met]}
+        #syst_weights_nominal = [weight_init, 1., 1.]
+        #syst_objects = {'NOMINAL': [jets_nom, taus_main, taus_candidates, proc_met]}
         #print syst_objects.keys()
-        #print syst_weights.keys()
+        jets, sel_taus, sel_tau_candidates = jets_nom, taus_main, taus_candidates
 
         # SYSTEMATIC LOOP, RECORD
         # for each systematic
@@ -3958,7 +4036,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         control_counters.Fill(53)
 
         #for sys_i, (sys_name, (jets, taus, proc_met)) in enumerate(syst_objects.items()):
-        sys_i, (sys_name, (jets, sel_taus, sel_tau_candidates, proc_met)) = 0, syst_objects.items()[0]
+        #sys_name, (jets, sel_taus, sel_tau_candidates, proc_met) = syst_objects.items()[0]
         #control_counters.Fill(4 + sys_i)
         '''
         1) for each variation of objects check if which channels pass
@@ -3975,11 +4053,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         #sys_weight_min = weight * weight_bSF_min * weight_PU * weight_top_pt
         # pass reco selections
 
-        # all the channel selections follow
-        passed_channels = []
-
-        if sys_i == 0:
-            control_counters.Fill(100)
+        control_counters.Fill(100)
 
         if pass_mu:
             control_counters.Fill(101)
@@ -4259,7 +4333,6 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
         # objects
         #selection_objects = leps, jets, taus.medium
-        #for chan_i, (chan, apply_bSF, sel_leps, sel_jets, sel_taus) in enumerate((ch for ch in passed_channels if ch[0] in selected_channels)):
 
         '''
         leptons = ROOT.LorentzVectorS()
@@ -4544,7 +4617,9 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
         # nominal systematics
         # weight init includes basic MC weights (amcatnlo -1, Z, recoil) and averaged per epoch PU and LEP
-        weight_init, weight_top_pt_NOM, weight_th = syst_weights_nominal
+        #syst_weights_nominal = [weight_init, 1., 1.]
+        #weight_init = PU * lep
+        weight_init, weight_top_pt_NOM, weight_th = weight_init, 1., 1.
         nom_sys_weight            = weight_init * weight_th * weight_top_pt_NOM
         nom_sys_weight_without_PU = weight_init * weight_th * weight_top_pt_NOM / weight_pu # for PU tests
 

@@ -263,9 +263,9 @@ muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ISO_syst_preliminary.root
 muon-effs/Run2017-Nov17_Re-Reco_Trigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root
 '''
 
-lepton_muon_SF_2017_v1_ID  = GeneralLeptonSF_21(('muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ID_syst_preliminary.root',  'NUM_TightID_DEN_genTracks_pt_abseta'))
-lepton_muon_SF_2017_v1_ISO = GeneralLeptonSF_21(('muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ISO_syst_preliminary.root', 'NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta'))
-lepton_muon_SF_2017_v1_Trg = GeneralLeptonSF_21(('muon-effs/Run2017-Nov17_Re-Reco_Trigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root',  'IsoMu27_PtEtaBins/pt_abseta_ratio'))
+lepton_muon_SF_2017_v1_ID  = GeneralLeptonSF_21(('common_info/muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ID_syst_preliminary.root',  'NUM_TightID_DEN_genTracks_pt_abseta'))
+lepton_muon_SF_2017_v1_ISO = GeneralLeptonSF_21(('common_info/muon-effs/Run2017-Nov17_Re-Reco_RunBCDEF_SF_ISO_syst_preliminary.root', 'NUM_TightRelIso_DEN_TightIDandIPCut_pt_abseta'))
+lepton_muon_SF_2017_v1_Trg = GeneralLeptonSF_21(('common_info/muon-effs/Run2017-Nov17_Re-Reco_Trigger_EfficienciesAndSF_RunBtoF_Nov17Nov2017.root',  'IsoMu27_PtEtaBins/pt_abseta_ratio'))
 
 def lepton_muon_SF_2017_v1(pt, eta):
     '''
@@ -283,6 +283,27 @@ def lepton_muon_SF_2017_v1(pt, eta):
 def lepton_muon_SF_2017_v1_trigger(pt, eta):
     abseta = abs(eta)
     return lepton_muon_SF_2017_v1_Trg(pt, abseta)
+
+
+lepton_electron_SF_2017_v1_RECO = GeneralLeptonSF_21(('common_info/electron-effs/2017_Fall17-94X-V1_egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root', 'EGamma_SF2D'))
+lepton_electron_SF_2017_v1_ID   = GeneralLeptonSF_21(('common_info/electron-effs/2017_Fall17-94X-V1_egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root', 'EGamma_SF2D'))
+
+lepton_electron_SF_2017_v1_Trg  = GeneralLeptonSF_21(('common_info/electron-effs//2016_03Feb_TriggerSF_Run2016All_v1.root', 'Ele27_WPTight_Gsf'))
+
+def lepton_electron_SF_2017_v1(pt, eta):
+    '''
+    the standardized output format, with the epochs are accounted for
+
+    return (trk, unc), (id, unc), (iso, unc)
+    '''
+
+    return lepton_electron_SF_2017_v1_RECO(pt, eta), lepton_electron_SF_2017_v1_ID(pt, eta), (1., 0.)
+
+def lepton_electron_SF_2017_v1_trigger(pt, eta):
+    return lepton_electron_SF_2017_v1_Trg(pt, eta)
+
+
+
 
 def lepton_muon_SF(eta, pt, vtx, vtx_gen): #SingleMuon_data_bcdef_fraction, SingleMuon_data_gh_fraction):
     abs_eta = abs(eta)
