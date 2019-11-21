@@ -352,10 +352,25 @@ stage2_vars = {
 'event_candidate_taus' : 'LorentzVectorS',
 'event_candidate_taus_ids' : 'IntVector',
 'event_taus' : 'LorentzVectorS',
+
+'event_taus_SF_VLoose'      : 'DoubleVector',
+'event_taus_SF_VLoose_Up'   : 'DoubleVector',
+'event_taus_SF_VLoose_Down' : 'DoubleVector',
+
+'event_taus_SF_Medium'      : 'DoubleVector',
+'event_taus_SF_Medium_Up'   : 'DoubleVector',
+'event_taus_SF_Medium_Down' : 'DoubleVector',
+
+'event_taus_SF_Tight'       : 'DoubleVector',
+'event_taus_SF_Tight_Up'    : 'DoubleVector',
+'event_taus_SF_Tight_Down'  : 'DoubleVector',
+
 'event_taus_ids' : 'IntVector',
+'event_taus_dms' : 'IntVector',
 'event_taus_IDlev' : 'IntVector',
 'event_taus_TES_up' : 'DoubleVector',
 'event_taus_TES_down' : 'DoubleVector',
+
 'event_taus_genmatch' : 'IntVector',
 'event_taus_pat_sv_sign' : 'DoubleVector',
 'event_taus_pat_sv_leng' : 'DoubleVector',

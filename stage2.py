@@ -577,7 +577,7 @@ def calc_pu_per_runs(pu_ele, pu_gld, ele_B = 19128.209 / (19128.209 + 12210.15),
 
 from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool, TauESTool
 
-testool = TauTESTool('2017ReReco')
+testool = TauESTool('2017ReReco')
 
 tauSFTool_VLoose = TauIDSFTool('2017ReReco', 'MVAoldDM2017v2', 'VLoose')
 tauSFTool_Medium = TauIDSFTool('2017ReReco', 'MVAoldDM2017v2', 'Medium')
