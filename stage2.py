@@ -575,6 +575,14 @@ def calc_pu_per_runs(pu_ele, pu_gld, ele_B = 19128.209 / (19128.209 + 12210.15),
 
 
 
+from TauPOG.TauIDSFs.TauIDSFTool import TauIDSFTool, TauESTool
+
+testool = TauTESTool('2017ReReco')
+
+tauSFTool_VLoose = TauIDSFTool('2017ReReco', 'MVAoldDM2017v2', 'VLoose')
+tauSFTool_Medium = TauIDSFTool('2017ReReco', 'MVAoldDM2017v2', 'Medium')
+tauSFTool_Tight  = TauIDSFTool('2017ReReco', 'MVAoldDM2017v2', 'Tight')
+
 
 from module_leptons import lepton_muon_SF, lepton_muon_trigger_SF, lepton_electron_SF_2017_v1, lepton_electron_SF_2017_v1_trigger, lepton_muon_SF_2017_v1, lepton_muon_SF_2017_v1_trigger, lepton_electron_SF, lepton_electron_trigger_SF, dilepton_or_sfs, dilepton_and_sfs
 
@@ -2029,16 +2037,33 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
     'event_leptons_alliso_reliso' : 'DoubleVector',
     'event_leptons_alliso_p4' : 'LorentzVectorS',
     'event_leptons_alliso_pdgId' : 'IntVector',
+
     'event_taus_alliso_p4' : 'LorentzVectorS',
     'event_taus_alliso_pdgId' : 'IntVector',
     'event_taus_alliso_IDlev' : 'IntVector',
     'event_candidate_taus' : 'LorentzVectorS',
     'event_candidate_taus_ids' : 'IntVector',
+
+    'event_taus_SF_VLoose'      : 'DoubleVector',
+    'event_taus_SF_VLoose_Up'   : 'DoubleVector',
+    'event_taus_SF_VLoose_Down' : 'DoubleVector',
+
+    'event_taus_SF_Medium'      : 'DoubleVector',
+    'event_taus_SF_Medium_Up'   : 'DoubleVector',
+    'event_taus_SF_Medium_Down' : 'DoubleVector',
+
+    'event_taus_SF_Tight'       : 'DoubleVector',
+    'event_taus_SF_Tight_Up'    : 'DoubleVector',
+    'event_taus_SF_Tight_Down'  : 'DoubleVector',
+
     'event_taus' : 'LorentzVectorS',
+    'event_taus_dms' : 'IntVector',
     'event_taus_ids' : 'IntVector',
     'event_taus_IDlev' : 'IntVector',
+
     'event_taus_TES_up' : 'DoubleVector',
     'event_taus_TES_down' : 'DoubleVector',
+
     'event_taus_genmatch' : 'IntVector',
     'event_taus_pat_sv_sign' : 'DoubleVector',
     'event_taus_pat_sv_leng' : 'DoubleVector',
@@ -4476,12 +4501,41 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         # taus_nom.medium.append((p4, TES_factor, tau_pdgID, i, jetmatched))
         for tau in sel_taus:
             tau_index = tau[3]
-            TES_nom, TES_up, TES_down = tau[1]
-            event_taus          .push_back(tau[0] * TES_nom)
+
+            # old TES
+            #TES_nom, TES_up, TES_down = tau[1]
+
+            # new TES
+            dm = ev.tau_decayMode[tau_index]
+            event_taus_dms.push_back(dm)
+
+            TES_nom  = testool.getTES(dm)
+            TES_up   = testool.getTES(dm, unc='Up')
+            TES_down = testool.getTES(dm, unc='Down')
+
+            p4 = tau[0] * TES_nom
+            event_taus          .push_back(p4)
             event_taus_TES_up   .push_back(TES_up / TES_nom)
             event_taus_TES_down .push_back(TES_down / TES_nom)
+
             event_taus_ids.push_back(tau[2])
             event_taus_IDlev.push_back(tau[4])
+
+            # save tau ID SFs
+            pt = p4.pt()
+            sf_down, sf, sf_up = tauSFTool_VLoose .getSFvsPT(pt, unc='All')
+            event_taus_SF_VLoose      .push_back(sf)
+            event_taus_SF_VLoose_Up   .push_back(sf_up)
+            event_taus_SF_VLoose_Down .push_back(sf_down)
+            sf_down, sf, sf_up = tauSFTool_Medium .getSFvsPT(pt, unc='All')
+            event_taus_SF_Medium      .push_back(sf)
+            event_taus_SF_Medium_Up   .push_back(sf_up)
+            event_taus_SF_Medium_Down .push_back(sf_down)
+            sf_down, sf, sf_up = tauSFTool_Tight  .getSFvsPT(pt, unc='All')
+            event_taus_SF_Tight      .push_back(sf)
+            event_taus_SF_Tight_Up   .push_back(sf_up)
+            event_taus_SF_Tight_Down .push_back(sf_down)
+
             if isMC:
                 event_taus_genmatch.push_back(ev.tau_matching_gen[tau_index])
 
