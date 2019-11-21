@@ -4,6 +4,29 @@ from math import sqrt
 
 #logging = Logging.getLogger("common")
 
+if __name__ == '__main__':
+    # parse commandline arguments first
+
+    parser = argparse.ArgumentParser(
+        formatter_class = argparse.RawDescriptionHelpFormatter,
+        description = "tests of lepton SFs",
+        epilog = """Example:\npython module_leptons.py electron_trig_sf.root gstore_outdirs/v19/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/Ntupler_v19_MC2016_Summer16_TTJets_powheg/180226_022336/0000/MC2016_Summer16_TTJets_powheg_*.root"""
+        )
+
+    parser.add_argument("output_file", type=str, default="output.root", help="filename for output")
+    parser.add_argument("--test-sfs",  action='store_true', help="just print ele trig SF for typical values")
+    parser.add_argument("--debug",  action='store_true', help="DEBUG level of logging")
+    parser.add_argument('input_files', nargs='+', help="""the files to sum up, passed by shell, as:
+    /gstore/t3cms/store/user/otoldaie/v19/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/Ntupler_v19_MC2016_Summer16_TTJets_powheg/180226_022336/0000/MC2016_Summer16_TTJets_powheg_*.root""")
+
+
+    args = parser.parse_args()
+
+    if args.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
 logging.info('importing ROOT')
 import ROOT
 from ROOT import TFile, TTree, TH1D, TH2D, TMath, gSystem
@@ -654,26 +677,7 @@ if __name__ == '__main__':
     from os.path import isfile, basename
     from sys import exit
 
-    parser = argparse.ArgumentParser(
-        formatter_class = argparse.RawDescriptionHelpFormatter,
-        description = "tests of lepton SFs",
-        epilog = """Example:\npython module_leptons.py electron_trig_sf.root gstore_outdirs/v19/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/Ntupler_v19_MC2016_Summer16_TTJets_powheg/180226_022336/0000/MC2016_Summer16_TTJets_powheg_*.root"""
-        )
-
-    parser.add_argument("output_file", type=str, default="output.root", help="filename for output")
-    parser.add_argument("--test-sfs",  action='store_true', help="just print ele trig SF for typical values")
-    parser.add_argument("--debug",  action='store_true', help="DEBUG level of logging")
-    parser.add_argument('input_files', nargs='+', help="""the files to sum up, passed by shell, as:
-    /gstore/t3cms/store/user/otoldaie/v19/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/Ntupler_v19_MC2016_Summer16_TTJets_powheg/180226_022336/0000/MC2016_Summer16_TTJets_powheg_*.root""")
-
-
-    args = parser.parse_args()
-
-    if args.debug:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.INFO)
-
+    # args are parsed before the import of ROOT
     if args.test_sfs:
         # test
         test_points  = [(-2.5, 89.), (-2.4, 89.), (-2.1, 89.), (-1.1, 89.), (-0.1, 89.), (0.1, 89.), (1.1, 89.), (2.1, 89.), (2.4, 89.), (2.5, 89.)]
@@ -684,56 +688,6 @@ if __name__ == '__main__':
                            ('lepton_muon_SF_2017_v1_trigger', lepton_muon_SF_2017_v1_trigger)]:
           for eta, pt in test_points:
             print ("%50s" % name), pt, eta, func(pt, eta)
-
-        '''
-        print "ele trg SF histo X max", electron_effs_trg_all_histo_max_x
-        print "ele trg SF histo X min", electron_effs_trg_all_histo_min_x
-        print "ele trg SF histo Y max", electron_effs_trg_all_histo_max_y
-
-        ele_kino_points_pt_trend = [(2.1, 30.1), (2.1, 31.1), (2.1, 32.1), (2.1, 35.1), (2.1, 40.1), (2.1, 61.1), (2.1, 100.1)]
-        ele_kino_points_pt_lower = [(-2.1, 25.1), (2.4, 15.1), (-2.5, 25.1)]
-        ele_kino_points_pt_other = [(-2.1, 30.1), (2.4, 31.1), (2.5, 32.1), (-2.5, 35.1), (3.1, 40.1), (-3.1, 61.1)]
-        kino_points = ele_kino_points_pt_trend + ele_kino_points_pt_lower + ele_kino_points_pt_other
-
-        ele_kino_points_pt_low   = [(-2.5, 30.1), (-2.4, 30.1), (-2.1, 30.1), (-1.1, 30.1), (-0.1, 30.1), (0.1, 30.1), (1.1, 30.1), (2.1, 30.1), (2.4, 30.1), (2.5, 30.1)]
-
-        ele_kino_points_pt_high  = [(-2.5, 89.), (-2.4, 89.), (-2.1, 89.), (-1.1, 89.), (-0.1, 89.), (0.1, 89.), (1.1, 89.), (2.1, 89.), (2.4, 89.), (2.5, 89.)]
-
-        print "electron ID"
-        for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]) + sorted(ele_kino_points_pt_high):
-            el_sfs_reco, el_sfs_id = lepton_electron_SF(eta, pt)
-            print "%5.1f" % eta, "%5.1f" % pt, "%8.3f" % el_sfs_reco[0], '+-', "%4.3f" % el_sfs_reco[1], "%8.3f" % el_sfs_id[0], '+-', "%4.3f" % el_sfs_id[1]
-
-        print "electron ID reverted input"
-        for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]) + sorted(ele_kino_points_pt_high):
-            el_sfs_reco, el_sfs_id = lepton_electron_SF(pt, eta)
-            print "%5.1f" % eta, "%5.1f" % pt, "%8.3f" % el_sfs_reco[0], '+-', "%4.3f" % el_sfs_reco[1], "%8.3f" % el_sfs_id[0], '+-', "%4.3f" % el_sfs_id[1]
-
-        print "electron trigger"
-        for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]):
-            print eta, pt, lepton_electron_trigger_SF(eta, pt)
-
-        print "muon tracking vtx 10"
-        for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]):
-            mu_sfs_b, mu_sfs_h = lepton_muon_SF(eta, pt, 10, 10)
-            mu_b_trk, mu_b_trk_u = mu_sfs_b[0:2]
-            mu_h_trk, mu_h_trk_u = mu_sfs_h[0:2]
-
-            print eta, pt, mu_b_trk, '+-', mu_b_trk_u, mu_h_trk, '+-', mu_h_trk_u
-
-        print "muon ID"
-        for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]):
-            mu_sfs_b, mu_sfs_h = lepton_muon_SF(eta, pt, 1, 1)
-            mu_b_trk, mu_b_trk_u = mu_sfs_b[0:2]
-            mu_h_trk, mu_h_trk_u = mu_sfs_h[0:2]
-
-            print eta, pt, mu_sfs_b[3][0], '+-', mu_sfs_b[3][1], mu_sfs_h[3][0], '+-', mu_sfs_h[3][1], mu_sfs_b[4][0], '+-', mu_sfs_b[4][1], mu_sfs_h[4][0], '+-', mu_sfs_h[4][1]
-
-        print "muon trigger"
-        for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]):
-            (mu_trg_sf_b, trg_b_unc), (mu_trg_sf_h, trg_h_unc) = lepton_muon_trigger_SF(eta, pt)
-            print eta, pt, mu_trg_sf_b, '+-', trg_b_unc, mu_trg_sf_h, '+-', trg_h_unc
-        '''
 
         exit(0)
 
