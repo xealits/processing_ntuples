@@ -3045,8 +3045,8 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
             for pdgID, lep_p4 in zip(ev.lep_id, ev.lep_p4):
                 if abs(pdgID) == 13:
-                    (w_reco, w_reco_unc), (w_id, w_id_unc), (w_iso, w_iso_unc) = lepton_muon_SF_2017_v1(lep_p4.eta(), lep_p4.pt())
-                    trg, trg_unc = lepton_muon_SF_2017_v1_trigger(lep_p4.eta(), lep_p4.pt())
+                    (w_reco, w_reco_unc), (w_id, w_id_unc), (w_iso, w_iso_unc) = lepton_muon_SF_2017_v1(lep_p4.pt(), lep_p4.eta())
+                    trg, trg_unc = lepton_muon_SF_2017_v1_trigger(lep_p4.pt(), lep_p4.eta())
 
                     # ID is and "AND" of all leptons
                     weight_lep_MU_id      *= w_reco * w_id * w_iso
@@ -3055,8 +3055,8 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
                     weight_trigs_MU.append((trg, trg_unc))
                 else:
-                    (w_reco, w_reco_unc), (w_id, w_id_unc), (w_iso, w_iso_unc) = lepton_electron_SF_2017_v1(lep_p4.eta(), lep_p4.pt())
-                    trg, trg_unc = lepton_electron_SF_2017_v1_trigger(lep_p4.eta(), lep_p4.pt())
+                    (w_reco, w_reco_unc), (w_id, w_id_unc), (w_iso, w_iso_unc) = lepton_electron_SF_2017_v1(lep_p4.pt(),lep_p4.eta())
+                    trg, trg_unc = lepton_electron_SF_2017_v1_trigger(lep_p4.pt(), lep_p4.eta())
 
                     # ID is and "AND" of all leptons
                     weight_lep_EL_id      *= w_reco * w_id * w_iso

@@ -208,8 +208,9 @@ class GeneralLeptonSF_21:
             self.histo_pt_eta = self.file_pt_eta.Get(path_pt_eta)
 
             if protect_range:
-                self.histo_pt_eta_range = (self.histo_pt_eta.GetXaxis().GetXmin(), self.histo_pt_eta.GetXaxis().GetXmax()), \
-                    (self.histo_pt_eta.GetYaxis().GetXmin(), self.histo_pt_eta.GetYaxis().GetXmax())
+                # min, max
+                self.histo_pt_eta_range = (self.histo_pt_eta.GetXaxis().GetXmin()+0.001, self.histo_pt_eta.GetXaxis().GetXmax()-0.001), \
+                    (self.histo_pt_eta.GetYaxis().GetXmin()+0.001, self.histo_pt_eta.GetYaxis().GetXmax()-0.001)
 
         if histo_path_vtx:
             filename_vtx = histo_path_vtx.split('/')[0]
@@ -218,7 +219,7 @@ class GeneralLeptonSF_21:
             self.histo_vtx = self.file_vtx.Get(path_vtx)
 
             if protect_range:
-                self.histo_vtx_range = self.histo_vtx.GetXaxis().GetXmin(), self.histo_vtx.GetXaxis().GetXmax()
+                self.histo_vtx_range = self.histo_vtx.GetXaxis().GetXmin()+0.001, self.histo_vtx.GetXaxis().GetXmax()-0.001
 
     def __call__(self, pt_or_eta, eta_or_pt, vtx=None):
         '''(pt_or_eta, eta_or_pt, vtx=None)
@@ -233,10 +234,10 @@ class GeneralLeptonSF_21:
 
             if self.histo_pt_eta_range is not None:
                 (x_min, x_max), (y_min, y_max) = self.histo_pt_eta_range
-                if x < x_min: x = x_min+0.0001
-                if x > x_max: x = x_max-0.0001
-                if y < y_min: y = y_min+0.0001
-                if y > y_max: y = y_max-0.0001
+                if x < x_min: x = x_min
+                if x > x_max: x = x_max
+                if y < y_min: y = y_min
+                if y > y_max: y = y_max
 
             weight_pt_eta_bin = self.histo_pt_eta.FindBin(x, y)
             weight_pt_eta     = self.histo_pt_eta.GetBinContent(weight_pt_eta_bin)
@@ -247,8 +248,8 @@ class GeneralLeptonSF_21:
 
         if self.histo_vtx_range is not None:
             vtx_min, vtx_max = self.histo_vtx_range
-            if vtx < vtx_min: vtx = vtx_min+0.0001
-            if vtx > vtx_max: vtx = vtx_max-0.0001
+            if vtx < vtx_min: vtx = vtx_min
+            if vtx > vtx_max: vtx = vtx_max
 
         if self.histo_vtx:
             weight_vtx_bin = self.histo_vtx.FindBin(vtx)
@@ -285,8 +286,8 @@ def lepton_muon_SF_2017_v1_trigger(pt, eta):
     return lepton_muon_SF_2017_v1_Trg(pt, abseta)
 
 
-lepton_electron_SF_2017_v1_RECO = GeneralLeptonSF_21(('common_info/electron-effs/2017_Fall17-94X-V1_egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root', 'EGamma_SF2D'))
-lepton_electron_SF_2017_v1_ID   = GeneralLeptonSF_21(('common_info/electron-effs/2017_Fall17-94X-V1_egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root', 'EGamma_SF2D'))
+lepton_electron_SF_2017_v1_RECO = GeneralLeptonSF_21(('common_info/electron-effs/2017_Fall17-94X-V1_egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root', 'EGamma_SF2D'), invert_call=True)
+lepton_electron_SF_2017_v1_ID   = GeneralLeptonSF_21(('common_info/electron-effs/2017_Fall17-94X-V1_egammaEffi.txt_EGM2D_runBCDEF_passingTight94X.root', 'EGamma_SF2D'), invert_call=True)
 
 lepton_electron_SF_2017_v1_Trg  = GeneralLeptonSF_21(('common_info/electron-effs//2016_03Feb_TriggerSF_Run2016All_v1.root', 'Ele27_WPTight_Gsf'))
 
@@ -301,6 +302,7 @@ def lepton_electron_SF_2017_v1(pt, eta):
 
 def lepton_electron_SF_2017_v1_trigger(pt, eta):
     return lepton_electron_SF_2017_v1_Trg(pt, eta)
+
 
 
 
@@ -673,6 +675,17 @@ if __name__ == '__main__':
         logging.basicConfig(level=logging.INFO)
 
     if args.test_sfs:
+        # test
+        test_points  = [(-2.5, 89.), (-2.4, 89.), (-2.1, 89.), (-1.1, 89.), (-0.1, 89.), (0.1, 89.), (1.1, 89.), (2.1, 89.), (2.4, 89.), (2.5, 89.)]
+        test_points += [(1.0, 10), (1.0, 20), (1.0, 24), (1.0, 26), (1.0, 28), (1.0, 30), (1.0, 50), (1.0, 80), (1.0, 150)]
+        for name, func in [('lepton_electron_SF_2017_v1',         lepton_electron_SF_2017_v1),
+                           ('lepton_electron_SF_2017_v1_trigger', lepton_electron_SF_2017_v1_trigger),
+                           ('lepton_muon_SF_2017_v1',         lepton_muon_SF_2017_v1),
+                           ('lepton_muon_SF_2017_v1_trigger', lepton_muon_SF_2017_v1_trigger)]:
+          for eta, pt in test_points:
+            print ("%50s" % name), pt, eta, func(pt, eta)
+
+        '''
         print "ele trg SF histo X max", electron_effs_trg_all_histo_max_x
         print "ele trg SF histo X min", electron_effs_trg_all_histo_min_x
         print "ele trg SF histo Y max", electron_effs_trg_all_histo_max_y
@@ -720,6 +733,7 @@ if __name__ == '__main__':
         for eta, pt in sorted(kino_points) + sorted(ele_kino_points_pt_low, key=lambda el: el[1]):
             (mu_trg_sf_b, trg_b_unc), (mu_trg_sf_h, trg_h_unc) = lepton_muon_trigger_SF(eta, pt)
             print eta, pt, mu_trg_sf_b, '+-', trg_b_unc, mu_trg_sf_h, '+-', trg_h_unc
+        '''
 
         exit(0)
 
