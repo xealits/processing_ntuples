@@ -168,6 +168,27 @@ double NT_sysweight_NOMINAL_HLT_LEP()
 		return  NT_event_weight_LEPelTRG * common;
 	}
 
+double NT_sysweight_NOMINAL_HLT_EL_MedTau()
+	{
+	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG * NT_event_taus_SF_Medium[0];
+	}
+
+double NT_sysweight_NOMINAL_HLT_MU_MedTau()
+	{
+	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG * NT_event_taus_SF_Medium[0];
+	}
+
+double NT_sysweight_NOMINAL_HLT_LEP_MedTau()
+	{
+	double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID * NT_event_taus_SF_Medium[0];
+	if (abs(NT_event_leptons_ids[0]) == 13)
+		return  NT_event_weight_LEPmuTRG * common;
+	else
+		return  NT_event_weight_LEPelTRG * common;
+	}
+
+// systematic uncertainties from the nominal weight
+
 double NT_sysweight_NOMINAL()
 	{
 	return 1.;
@@ -197,6 +218,11 @@ NT_sysweight(LEPmuIDUp,    NT_event_weight_LEPmuID_Up    / NT_event_weight_LEPmu
 NT_sysweight(LEPmuIDDown,  NT_event_weight_LEPmuID_Down  / NT_event_weight_LEPmuID)
 NT_sysweight(LEPmuTRGUp,   NT_event_weight_LEPmuTRG_Up   / NT_event_weight_LEPmuTRG)
 NT_sysweight(LEPmuTRGDown, NT_event_weight_LEPmuTRG_Down / NT_event_weight_LEPmuTRG)
+
+// Tau systematics
+
+NT_sysweight(TAUIDUp,    NT_event_taus_SF_Medium_Up[0]    / NT_event_taus_SF_Medium[0])
+NT_sysweight(TAUIDDown,  NT_event_taus_SF_Medium_Down[0]  / NT_event_taus_SF_Medium[0])
 
 // TT_OBJ
 NT_sysweight(TOPPTUp   , NT_event_weight_toppt    )
@@ -368,11 +394,14 @@ map<TString, _S_systematic_definition> create_known_systematics()
 	_quick_set_wgtsys(LEPmuTRGUp);
 	_quick_set_wgtsys(LEPmuTRGDown);
 
-	_quick_set_wgtsys(PUUp);
-	_quick_set_wgtsys(PUUp);
+	_quick_set_wgtsys(TAUIDUp);
+	_quick_set_wgtsys(TAUIDDown);
 
-	_quick_set_wgtsys(TOPPTDown);
+	_quick_set_wgtsys(PUUp);
+	_quick_set_wgtsys(PUDown);
+
 	_quick_set_wgtsys(TOPPTUp);
+	_quick_set_wgtsys(TOPPTDown);
 	_quick_set_wgtsys(FragUp);
 	_quick_set_wgtsys(FragDown);
 	_quick_set_wgtsys(SemilepBRUp);
@@ -825,7 +854,7 @@ bool NT_channel_tt_elmu(ObjSystematics sys)
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
 	else relevant_selection_stage = NT_selection_stage_em;
-	return relevant_selection_stage > 200 || relevant_selection_stage < 210;
+	return relevant_selection_stage > 210 || relevant_selection_stage < 220;
 	}
 
 bool NT_channel_tt_elmu_tight(ObjSystematics sys)
@@ -837,7 +866,7 @@ bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
 	else relevant_selection_stage = NT_selection_stage_em;
-	return relevant_selection_stage == 205;
+	return relevant_selection_stage == 215;
 	}
 
 
@@ -853,7 +882,7 @@ bool NT_channel_dy_mutau(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 102 || relevant_selection_stage == 103;
+	return relevant_selection_stage == 104 || relevant_selection_stage == 105;
 	}
 
 bool NT_channel_dy_eltau(ObjSystematics sys)
@@ -867,7 +896,7 @@ bool NT_channel_dy_eltau(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 112 || relevant_selection_stage == 113;
+	return relevant_selection_stage == 114 || relevant_selection_stage == 115;
 	}
 
 bool NT_channel_dy_mutau_ss(ObjSystematics sys)
@@ -881,7 +910,7 @@ bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 202 || relevant_selection_stage == 203;
+	return relevant_selection_stage == 103 || relevant_selection_stage == 102;
 	}
 
 bool NT_channel_dy_eltau_ss(ObjSystematics sys)
@@ -895,9 +924,34 @@ bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 212 || relevant_selection_stage == 213;
+	return relevant_selection_stage == 112 || relevant_selection_stage == 113;
 	}
 
+
+
+bool NT_channel_dy_elmu(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_elmu;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JESDown;
+	else relevant_selection_stage = NT_selection_stage_dy_elmu;
+	return relevant_selection_stage == 105;
+	}
+
+bool NT_channel_dy_elmu_ss(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_elmu;
+	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JERUp  ;
+	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JERDown;
+	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JESUp  ;
+	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JESDown;
+	else relevant_selection_stage = NT_selection_stage_dy_elmu;
+	return relevant_selection_stage == 103;
+	}
 
 
 bool NT_channel_dy_mumu(ObjSystematics sys)
@@ -959,20 +1013,23 @@ map<TString, _S_chan_def> create_known_channel_definitions()
 	map<TString, _S_chan_def> m;
 
 	//m["el_sel"] = channel_el_sel;
-	_quick_set_chandef(m, el_sel   , NT_sysweight_NOMINAL_HLT_EL);
-	_quick_set_chandef(m, el_sel_ss, NT_sysweight_NOMINAL_HLT_EL);
-	_quick_set_chandef(m, mu_sel   , NT_sysweight_NOMINAL_HLT_MU);
-	_quick_set_chandef(m, mu_sel_ss, NT_sysweight_NOMINAL_HLT_MU);
+	_quick_set_chandef(m, el_sel   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, el_sel_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, mu_sel   , NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, mu_sel_ss, NT_sysweight_NOMINAL_HLT_MU_MedTau);
 
-	_quick_set_chandef(m, lep_sel      , NT_sysweight_NOMINAL_HLT_LEP);
-	_quick_set_chandef(m, lep_sel_ss   , NT_sysweight_NOMINAL_HLT_LEP);
+	_quick_set_chandef(m, lep_sel      , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
+	_quick_set_chandef(m, lep_sel_ss   , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
 	_quick_set_chandef(m, tt_elmu      , NT_sysweight_NOMINAL_HLT_MU);
 	_quick_set_chandef(m, tt_elmu_tight, NT_sysweight_NOMINAL_HLT_MU);
 
-	_quick_set_chandef(m, dy_mutau   , NT_sysweight_NOMINAL_HLT_EL);
-	_quick_set_chandef(m, dy_eltau   , NT_sysweight_NOMINAL_HLT_EL);
-	_quick_set_chandef(m, dy_mutau_ss, NT_sysweight_NOMINAL_HLT_EL);
-	_quick_set_chandef(m, dy_eltau_ss, NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_elmu    , NT_sysweight_NOMINAL_HLT_MU);
+	_quick_set_chandef(m, dy_elmu_ss , NT_sysweight_NOMINAL_HLT_MU);
+
+	_quick_set_chandef(m, dy_mutau   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, dy_eltau   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, dy_mutau_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, dy_eltau_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
 	_quick_set_chandef(m, dy_mumu    , NT_sysweight_NOMINAL_HLT_EL);
 	_quick_set_chandef(m, dy_elel    , NT_sysweight_NOMINAL_HLT_EL);
 
@@ -1107,11 +1164,8 @@ vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
 vector<TString> _mumu_tt_procs  = {};
 vector<TString> _elel_tt_procs  = {};
 
-vector<TString> _eltau_dy_procs = {"dy_tautau"};
-vector<TString> _mutau_dy_procs = {"dy_tautau", };
-vector<TString>  _elmu_dy_procs = {};
-vector<TString>  _mumu_dy_procs = {};
-vector<TString>  _elel_dy_procs = {};
+vector<TString> _leptau_dy_procs = {"dy_tautau"};
+vector<TString>  _incl_dy_procs = {};
 
 vector<TString> _eltau_stop_procs = {"stop_eltau", "stop_lj"};
 vector<TString> _mutau_stop_procs = {"stop_mutau", "stop_lj"};
@@ -1173,6 +1227,9 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 
 			{"tt_elmu",       _elmu_tt_procs},
 			{"tt_elmu_tight", _elmu_tt_procs},
+			{"dy_elmu",       _elmu_tt_procs},
+			{"dy_elmu_ss",    _elmu_tt_procs},
+
 			{"dy_mutau",      _mutau_tt_procs},
 			{"dy_mutau_ss",   _mutau_tt_procs},
 			{"dy_eltau",      _eltau_tt_procs},
@@ -1192,18 +1249,20 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 		.groups={},
 
 		.channel_standard = {
-			{"el_sel",    _eltau_dy_procs},
-			{"el_sel_ss", _eltau_dy_procs},
-			{"mu_sel",    _mutau_dy_procs},
-			{"mu_sel_ss", _mutau_dy_procs},
-			{"tt_elmu",        _elmu_dy_procs},
-			{"tt_elmu_tight",  _elmu_dy_procs},
-			{"dy_mutau",      _mutau_dy_procs},
-			{"dy_mutau_ss",   _mutau_dy_procs},
-			{"dy_eltau",      _eltau_dy_procs},
-			{"dy_eltau_ss",   _eltau_dy_procs},
-			{"dy_mumu",        _mumu_dy_procs},
-			{"dy_elel",        _mumu_dy_procs},
+			{"el_sel",    _leptau_dy_procs},
+			{"el_sel_ss", _leptau_dy_procs},
+			{"mu_sel",    _leptau_dy_procs},
+			{"mu_sel_ss", _leptau_dy_procs},
+			{"tt_elmu",       _incl_dy_procs},
+			{"tt_elmu_tight", _incl_dy_procs},
+			{"dy_mutau",      _leptau_dy_procs},
+			{"dy_mutau_ss",   _leptau_dy_procs},
+			{"dy_eltau",      _leptau_dy_procs},
+			{"dy_eltau_ss",   _leptau_dy_procs},
+			{"dy_mumu",       _incl_dy_procs},
+			{"dy_elel",       _incl_dy_procs},
+			{"dy_elmu",       _leptau_dy_procs},
+			{"dy_elmu_ss",    _leptau_dy_procs},
 			}
 		};
 
@@ -1231,6 +1290,8 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"dy_eltau_ss",   _eltau_stop_procs},
 			{"dy_mumu",        _mumu_stop_procs},
 			{"dy_elel",        _mumu_stop_procs},
+			{"dy_elmu",       _elmu_stop_procs},
+			{"dy_elmu_ss",    _elmu_stop_procs},
 			}
 		};
 
@@ -1256,6 +1317,8 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"dy_eltau_ss",   _eltau_wjets_procs},
 			{"dy_mumu",        _mumu_wjets_procs},
 			{"dy_elel",        _mumu_wjets_procs},
+			{"dy_elmu",       _elmu_wjets_procs},
+			{"dy_elmu_ss",    _elmu_wjets_procs},
 			}
 		};
 
@@ -1287,23 +1350,24 @@ map<TString, _S_proc_ID_defs> known_procs_info = create_known_procs_info();
 // standard systematics
 
 #define SYSTS_OBJECTS  "JERDown", "JERUp"  , "JESDown", "JESUp"  , "TESDown", "TESUp"
-#define SYSTS_COMMON   "PUUp"   , "PUDown" , "bSFUp"  , "bSFDown", "LEPelIDUp"   , "LEPelIDDown" , "LEPelTRGUp"  , "LEPelTRGDown", "LEPmuIDUp"   , "LEPmuIDDown" , "LEPmuTRGUp"  , "LEPmuTRGDown"
+#define SYSTS_COMMON   "TAUIDUp", "TAUIDDown", "PUUp", "PUDown", "bSFUp", "bSFDown", "LEPelIDUp", "LEPelIDDown", "LEPelTRGUp", "LEPelTRGDown", "LEPmuIDUp", "LEPmuIDDown", "LEPmuTRGUp", "LEPmuTRGDown"
 #define SYSTS_TT_OBJ   "TOPPTDown"     , "TOPPTUp"       , "FragUp"        , "FragDown"      , "SemilepBRUp"   , "SemilepBRDown" , "PetersonUp"    , "PetersonDown"
 #define SYSTS_TT_HARD  "MrUp"     , "MrDown"  , "MfUp"    , "MfDown"  , "MfrUp"   , "MfrDown"
 #define SYSTS_TT_ALPHA "AlphaSUp" , "AlphaSDown"
-#define SYSTS_TT_PDF1  "PDFCT14n1Up"     , "PDFCT14n2Up"     , "PDFCT14n3Up"     , "PDFCT14n4Up"     , "PDFCT14n5Up"     , "PDFCT14n6Up"     , "PDFCT14n7Up"     , "PDFCT14n8Up"     , "PDFCT14n9Up"     , "PDFCT14n10Up"
-#define SYSTS_TT_PDF10 "PDFCT14n11Up"    , "PDFCT14n12Up"    , "PDFCT14n13Up"    , "PDFCT14n14Up"    , "PDFCT14n15Up"    , "PDFCT14n16Up"    , "PDFCT14n17Up"    , "PDFCT14n18Up"    , "PDFCT14n19Up"    , "PDFCT14n20Up"
-#define SYSTS_TT_PDF20 "PDFCT14n21Up"    , "PDFCT14n22Up"    , "PDFCT14n23Up"    , "PDFCT14n24Up"    , "PDFCT14n25Up"    , "PDFCT14n26Up"    , "PDFCT14n27Up"    , "PDFCT14n28Up"    , "PDFCT14n29Up"    , "PDFCT14n30Up"
-#define SYSTS_TT_PDF30 "PDFCT14n31Up"    , "PDFCT14n32Up"    , "PDFCT14n33Up"    , "PDFCT14n34Up"    , "PDFCT14n35Up"    , "PDFCT14n36Up"    , "PDFCT14n37Up"    , "PDFCT14n38Up"    , "PDFCT14n39Up"    , "PDFCT14n40Up"
-#define SYSTS_TT_PDF40 "PDFCT14n41Up"    , "PDFCT14n42Up"    , "PDFCT14n43Up"    , "PDFCT14n44Up"    , "PDFCT14n45Up"    , "PDFCT14n46Up"    , "PDFCT14n47Up"    , "PDFCT14n48Up"    , "PDFCT14n49Up"    , "PDFCT14n50Up"
-#define SYSTS_TT_PDF50 "PDFCT14n51Up"    , "PDFCT14n52Up"    , "PDFCT14n53Up"    , "PDFCT14n54Up"    , "PDFCT14n55Up"    , "PDFCT14n56Up"
 
-#define SYSTS_TT_PDFDown1  "PDFCT14n1Down"     , "PDFCT14n2Down"     , "PDFCT14n3Down"     , "PDFCT14n4Down"     , "PDFCT14n5Down"     , "PDFCT14n6Down"     , "PDFCT14n7Down"     , "PDFCT14n8Down"     , "PDFCT14n9Down"     , "PDFCT14n10Down"
-#define SYSTS_TT_PDFDown10 "PDFCT14n11Down"    , "PDFCT14n12Down"    , "PDFCT14n13Down"    , "PDFCT14n14Down"    , "PDFCT14n15Down"    , "PDFCT14n16Down"    , "PDFCT14n17Down"    , "PDFCT14n18Down"    , "PDFCT14n19Down"    , "PDFCT14n20Down"
-#define SYSTS_TT_PDFDown20 "PDFCT14n21Down"    , "PDFCT14n22Down"    , "PDFCT14n23Down"    , "PDFCT14n24Down"    , "PDFCT14n25Down"    , "PDFCT14n26Down"    , "PDFCT14n27Down"    , "PDFCT14n28Down"    , "PDFCT14n29Down"    , "PDFCT14n30Down"
-#define SYSTS_TT_PDFDown30 "PDFCT14n31Down"    , "PDFCT14n32Down"    , "PDFCT14n33Down"    , "PDFCT14n34Down"    , "PDFCT14n35Down"    , "PDFCT14n36Down"    , "PDFCT14n37Down"    , "PDFCT14n38Down"    , "PDFCT14n39Down"    , "PDFCT14n40Down"
-#define SYSTS_TT_PDFDown40 "PDFCT14n41Down"    , "PDFCT14n42Down"    , "PDFCT14n43Down"    , "PDFCT14n44Down"    , "PDFCT14n45Down"    , "PDFCT14n46Down"    , "PDFCT14n47Down"    , "PDFCT14n48Down"    , "PDFCT14n49Down"    , "PDFCT14n50Down"
-#define SYSTS_TT_PDFDown50 "PDFCT14n51Down"    , "PDFCT14n52Down"    , "PDFCT14n53Down"    , "PDFCT14n54Down"    , "PDFCT14n55Down"    , "PDFCT14n56Down"
+#define SYSTS_TT_PDF1  "PDFCT14n1Up" , "PDFCT14n2Up" , "PDFCT14n3Up" , "PDFCT14n4Up" , "PDFCT14n5Up" , "PDFCT14n6Up" , "PDFCT14n7Up" , "PDFCT14n8Up" , "PDFCT14n9Up" , "PDFCT14n10Up"
+#define SYSTS_TT_PDF10 "PDFCT14n11Up", "PDFCT14n12Up", "PDFCT14n13Up", "PDFCT14n14Up", "PDFCT14n15Up", "PDFCT14n16Up", "PDFCT14n17Up", "PDFCT14n18Up", "PDFCT14n19Up", "PDFCT14n20Up"
+#define SYSTS_TT_PDF20 "PDFCT14n21Up", "PDFCT14n22Up", "PDFCT14n23Up", "PDFCT14n24Up", "PDFCT14n25Up", "PDFCT14n26Up", "PDFCT14n27Up", "PDFCT14n28Up", "PDFCT14n29Up", "PDFCT14n30Up"
+#define SYSTS_TT_PDF30 "PDFCT14n31Up", "PDFCT14n32Up", "PDFCT14n33Up", "PDFCT14n34Up", "PDFCT14n35Up", "PDFCT14n36Up", "PDFCT14n37Up", "PDFCT14n38Up", "PDFCT14n39Up", "PDFCT14n40Up"
+#define SYSTS_TT_PDF40 "PDFCT14n41Up", "PDFCT14n42Up", "PDFCT14n43Up", "PDFCT14n44Up", "PDFCT14n45Up", "PDFCT14n46Up", "PDFCT14n47Up", "PDFCT14n48Up", "PDFCT14n49Up", "PDFCT14n50Up"
+#define SYSTS_TT_PDF50 "PDFCT14n51Up", "PDFCT14n52Up", "PDFCT14n53Up", "PDFCT14n54Up", "PDFCT14n55Up", "PDFCT14n56Up"
+
+#define SYSTS_TT_PDFDown1  "PDFCT14n1Down" , "PDFCT14n2Down" , "PDFCT14n3Down" , "PDFCT14n4Down" , "PDFCT14n5Down" , "PDFCT14n6Down" , "PDFCT14n7Down" , "PDFCT14n8Down" , "PDFCT14n9Down" , "PDFCT14n10Down"
+#define SYSTS_TT_PDFDown10 "PDFCT14n11Down", "PDFCT14n12Down", "PDFCT14n13Down", "PDFCT14n14Down", "PDFCT14n15Down", "PDFCT14n16Down", "PDFCT14n17Down", "PDFCT14n18Down", "PDFCT14n19Down", "PDFCT14n20Down"
+#define SYSTS_TT_PDFDown20 "PDFCT14n21Down", "PDFCT14n22Down", "PDFCT14n23Down", "PDFCT14n24Down", "PDFCT14n25Down", "PDFCT14n26Down", "PDFCT14n27Down", "PDFCT14n28Down", "PDFCT14n29Down", "PDFCT14n30Down"
+#define SYSTS_TT_PDFDown30 "PDFCT14n31Down", "PDFCT14n32Down", "PDFCT14n33Down", "PDFCT14n34Down", "PDFCT14n35Down", "PDFCT14n36Down", "PDFCT14n37Down", "PDFCT14n38Down", "PDFCT14n39Down", "PDFCT14n40Down"
+#define SYSTS_TT_PDFDown40 "PDFCT14n41Down", "PDFCT14n42Down", "PDFCT14n43Down", "PDFCT14n44Down", "PDFCT14n45Down", "PDFCT14n46Down", "PDFCT14n47Down", "PDFCT14n48Down", "PDFCT14n49Down", "PDFCT14n50Down"
+#define SYSTS_TT_PDFDown50 "PDFCT14n51Down", "PDFCT14n52Down", "PDFCT14n53Down", "PDFCT14n54Down", "PDFCT14n55Down", "PDFCT14n56Down"
 
 
 #define SYSTS_TT_PDF       SYSTS_TT_PDF1, SYSTS_TT_PDF10, SYSTS_TT_PDF20, SYSTS_TT_PDF30, SYSTS_TT_PDF40, SYSTS_TT_PDF50
@@ -1644,6 +1708,8 @@ map<TString, double> create_known_normalization_per_chan()
 map<TString, double> known_normalization_per_chan = create_known_normalization_per_chan();
 
 
+/* it was used for tau ID uncertainty, which is implemented per-channel now
+TODO: remove if this system is absolutely not needed
 double rogue_mixed_corrections(const TString& name_syst, const TString& name_chan, const TString& name_proc)
 	{
 	double correction = 1.;
@@ -1660,6 +1726,7 @@ double rogue_mixed_corrections(const TString& name_syst, const TString& name_cha
 
 	return correction;
 	}
+*/
 
 
 void normalise_final(TH1D* histo, double cross_section, double scale, const TString& name_syst, const TString& name_chan, const TString& name_proc)
@@ -1684,9 +1751,9 @@ void normalise_final(TH1D* histo, double cross_section, double scale, const TStr
 		1. :
 		known_normalization_per_chan[name_chan];
 
-	double rogue_mixed_correction = rogue_mixed_corrections(name_syst, name_chan, name_proc);
+	//double rogue_mixed_correction = rogue_mixed_corrections(name_syst, name_chan, name_proc);
 
-	histo->Scale(scale * per_syst_factor * per_proc_factor * per_chan_factor * rogue_mixed_correction);
+	histo->Scale(scale * per_syst_factor * per_proc_factor * per_chan_factor /* * rogue_mixed_correction*/);
 	}
 /* --------------------------------------------------------------- */
 
@@ -1820,7 +1887,7 @@ vector<T_syst_chan_proc_histos> distrs_to_record;
 
 
 // final state channels
-vector<TString> requested_channels_all = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_mumu", "dy_elel"};
+vector<TString> requested_channels_all = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_elmu", "dy_elmu_ss", "dy_mumu", "dy_elel"};
 if (requested_channels[0] == "all")
 	requested_channels = requested_channels_all;
 
