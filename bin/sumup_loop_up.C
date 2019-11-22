@@ -51,6 +51,8 @@ with a separate function to connect an input TTree to that namespace etc.
 #include "TNtuple.h"
 #include <Math/VectorUtil.h>
 
+#include "TMath.h" // Cos
+
 #include <map>
 #include <string>
 #include <vector>
@@ -602,6 +604,14 @@ double NT_distr_leading_lep_pt(ObjSystematics sys)
 	return NT_event_leptons[0].pt();
 	}
 
+double NT_distr_sum_cos(ObjSystematics sys)
+	{
+	double cos_lep_met = TMath::Cos((NT_event_leptons[0] - NT_event_met).Phi());
+	double cos_tau_met = TMath::Cos((NT_event_taus[0]    - NT_event_met).Phi());
+	return cos_lep_met + cos_tau_met;
+	}
+
+
 double NT_distr_lj_var(ObjSystematics sys)
 	{
 	return NT_event_jets_lj_var;
@@ -678,6 +688,7 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	// despicable!
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
 	r = {40, true,  0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
+	r = {40, true, -2., 2.};                                                     m["sum_cos"]        = {NT_distr_sum_cos, r};
 
 	static double bins_lj_var[] = {0,15,30,45,60,90,120,170,220,270,400};   r = {(sizeof(bins_lj_var) / sizeof(bins_lj_var[0]))-1, false,-1,  -1, bins_lj_var};   m["lj_var"] = {NT_distr_lj_var, r};
 	static double bins_lj_var_w_mass[] = {10,40,65,80,95,120,150,200};      r = {(sizeof(bins_lj_var_w_mass) / sizeof(bins_lj_var_w_mass[0]))-1, false,-1,  -1, bins_lj_var_w_mass};   m["lj_var_w_mass"] = {NT_distr_lj_var_w_mass, r};
