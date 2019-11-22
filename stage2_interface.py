@@ -228,17 +228,19 @@ stage2_vars = {
 'selection_stage_dy_JESUp'   : 'i',
 'selection_stage_dy_JESDown' : 'i',
 
+'selection_stage_dy_elmu'         : 'i',
+'selection_stage_dy_elmu_JERUp'   : 'i',
+'selection_stage_dy_elmu_JERDown' : 'i',
+'selection_stage_dy_elmu_JESUp'   : 'i',
+'selection_stage_dy_elmu_JESDown' : 'i',
+
 'selection_stage_dy_mumu'         : 'i',
-'selection_stage_dy_mumu_TESUp'   : 'i',
-'selection_stage_dy_mumu_TESDown' : 'i',
 'selection_stage_dy_mumu_JERUp'   : 'i',
 'selection_stage_dy_mumu_JERDown' : 'i',
 'selection_stage_dy_mumu_JESUp'   : 'i',
 'selection_stage_dy_mumu_JESDown' : 'i',
 
 'selection_stage_em'         : 'i',
-'selection_stage_em_TESUp'   : 'i',
-'selection_stage_em_TESDown' : 'i',
 'selection_stage_em_JERUp'   : 'i',
 'selection_stage_em_JERDown' : 'i',
 'selection_stage_em_JESUp'   : 'i',
