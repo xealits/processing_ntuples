@@ -223,8 +223,8 @@ NT_sysweight(LEPmuTRGDown, NT_event_weight_LEPmuTRG_Down / NT_event_weight_LEPmu
 
 // Tau systematics
 
-NT_sysweight(TAUIDUp,    NT_event_taus_SF_Medium_Up[0]    / NT_event_taus_SF_Medium[0])
-NT_sysweight(TAUIDDown,  NT_event_taus_SF_Medium_Down[0]  / NT_event_taus_SF_Medium[0])
+NT_sysweight(TAUIDUp,   NT_event_taus_SF_Medium_Up   .size()>0 ? NT_event_taus_SF_Medium_Up[0]    / NT_event_taus_SF_Medium[0] : 1.)
+NT_sysweight(TAUIDDown, NT_event_taus_SF_Medium_Down .size()>0 ? NT_event_taus_SF_Medium_Down[0]  / NT_event_taus_SF_Medium[0] : 1.)
 
 // TT_OBJ
 NT_sysweight(TOPPTUp   , NT_event_weight_toppt    )
@@ -1416,19 +1416,19 @@ map<TString, S_dtag_info> create_known_dtags_info()
 	//map<const char*, S_dtag_info> m;
 	map<TString, S_dtag_info> m;
 
-	m["MC2017legacy_Fall17_WJets_madgraph_v2"              ] = {.cross_section= 52940.                            ,
+	m["MC2017legacy_Fall17_WJets_madgraph"              ] = {.cross_section= 52940.                            ,
 		.usual_gen_lumi= 23102470.188817,
 		.std_procs = known_procs_info["wjets"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" ] = {.cross_section=  6225.42                          ,
+	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph" ] = {.cross_section=  6225.42                          ,
 		.usual_gen_lumi= 18928303.971956,
 		.std_procs = known_procs_info["dy"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1"       ] = {.cross_section=    35.6                           ,
+	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg"       ] = {.cross_section=    35.6                           ,
 		.usual_gen_lumi=  5099879.048270,
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
-	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1"    ] = {.cross_section=    35.6                           ,
+	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg"    ] = {.cross_section=    35.6                           ,
 		.usual_gen_lumi=  2349775.859249,
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
@@ -1436,7 +1436,7 @@ map<TString, S_dtag_info> create_known_dtags_info()
 		.usual_gen_lumi= 29213134.729453,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
-	m["MC2017legacy_Fall17_TTToSemiLeptonic_v2"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br ,
+	m["MC2017legacy_Fall17_TTToSemiLeptonic"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br ,
 		.usual_gen_lumi= 21966343.919990,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
