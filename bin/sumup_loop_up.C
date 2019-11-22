@@ -137,6 +137,7 @@ enum ObjSys sets the calculations of distrs and channels,
 weight function defines the corrected event weight.
  */
 
+
 enum ObjSystematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights and object corrections */,
 /* object-related systematics */
  JERUp   /**< jet energy resolution Up corrections are applied to jets. */,
@@ -147,14 +148,29 @@ enum ObjSystematics {NOMINAL /**< NOMINAL sysytematic corrections, event weights
  TESDown /**< tau energy scale Down corrections are applied to taus */
 };
 
-/** \brief systematic function calculates event weight in the given systematic correction
 
-This should scale all right to any number of systematics, including all PDF systematics.
- */
+double NT_sysweight_NOMINAL_HLT_EL()
+	{
+	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG;
+	}
+
+double NT_sysweight_NOMINAL_HLT_MU()
+	{
+	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG;
+	}
+
+double NT_sysweight_NOMINAL_HLT_LEP()
+	{
+	double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID;
+	if (abs(NT_event_leptons_ids[0]) == 13)
+		return  NT_event_weight_LEPmuTRG * common;
+	else
+		return  NT_event_weight_LEPelTRG * common;
+	}
 
 double NT_sysweight_NOMINAL()
 	{
-	return NT_event_weight;
+	return 1.;
 	}
 
 typedef double (*_F_sysweight)();
@@ -167,158 +183,160 @@ double NT_sysweight_ ##sysname(void)          \
 	}
 
 // COMMON systematics
-NT_sysweight(PUUp, NT_event_weight*NT_event_weight_PUUp    )
-NT_sysweight(PUDown, NT_event_weight*NT_event_weight_PUDown  )
-NT_sysweight(bSFUp, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFUp   / NT_event_weight_bSF : 0.))
-NT_sysweight(bSFDown, (NT_event_weight_bSF > 0.? NT_event_weight*NT_event_weight_bSFDown / NT_event_weight_bSF : 0.))
-NT_sysweight(LEPelIDUp, NT_event_weight*NT_event_weight_LEPelIDUp   )
-NT_sysweight(LEPelIDDown,  NT_event_weight*NT_event_weight_LEPelIDDown )
-NT_sysweight(LEPelTRGUp,   NT_event_weight*NT_event_weight_LEPelTRGUp  )
-NT_sysweight(LEPelTRGDown, NT_event_weight*NT_event_weight_LEPelTRGDown)
-NT_sysweight(LEPmuIDUp,    NT_event_weight*NT_event_weight_LEPmuIDUp   )
-NT_sysweight(LEPmuIDDown,  NT_event_weight*NT_event_weight_LEPmuIDDown )
-NT_sysweight(LEPmuTRGUp,   NT_event_weight*NT_event_weight_LEPmuTRGUp  )
-NT_sysweight(LEPmuTRGDown, NT_event_weight*NT_event_weight_LEPmuTRGDown)
+NT_sysweight(PUUp,   NT_event_weight_PUUp   / NT_event_weight_PU )
+NT_sysweight(PUDown, NT_event_weight_PUDown / NT_event_weight_PU )
+
+NT_sysweight(bSFUp,    (NT_event_weight_bSF > 0.? NT_event_weight_bSFUp   / NT_event_weight_bSF : 0.))
+NT_sysweight(bSFDown,  (NT_event_weight_bSF > 0.? NT_event_weight_bSFDown / NT_event_weight_bSF : 0.))
+
+NT_sysweight(LEPelIDUp,    NT_event_weight_LEPelID_Up    / NT_event_weight_LEPelID)
+NT_sysweight(LEPelIDDown,  NT_event_weight_LEPelID_Down  / NT_event_weight_LEPelID)
+NT_sysweight(LEPelTRGUp,   NT_event_weight_LEPelTRG_Up   / NT_event_weight_LEPelTRG)
+NT_sysweight(LEPelTRGDown, NT_event_weight_LEPelTRG_Down / NT_event_weight_LEPelTRG)
+NT_sysweight(LEPmuIDUp,    NT_event_weight_LEPmuID_Up    / NT_event_weight_LEPmuID)
+NT_sysweight(LEPmuIDDown,  NT_event_weight_LEPmuID_Down  / NT_event_weight_LEPmuID)
+NT_sysweight(LEPmuTRGUp,   NT_event_weight_LEPmuTRG_Up   / NT_event_weight_LEPmuTRG)
+NT_sysweight(LEPmuTRGDown, NT_event_weight_LEPmuTRG_Down / NT_event_weight_LEPmuTRG)
 
 // TT_OBJ
-NT_sysweight(TOPPTUp   , NT_event_weight*NT_event_weight_toppt    )
-NT_sysweight(TOPPTDown , NT_event_weight    )
+NT_sysweight(TOPPTUp   , NT_event_weight_toppt    )
+NT_sysweight(TOPPTDown , 1.    )
 
-NT_sysweight(FragUp        , NT_event_weight*NT_event_weight_FragUp        )
-NT_sysweight(FragDown      , NT_event_weight*NT_event_weight_FragDown      )
-NT_sysweight(SemilepBRUp   , NT_event_weight*NT_event_weight_SemilepBRUp   )
-NT_sysweight(SemilepBRDown , NT_event_weight*NT_event_weight_SemilepBRDown )
-NT_sysweight(PetersonUp    , NT_event_weight*NT_event_weight_PetersonUp    )
-NT_sysweight(PetersonDown  , NT_event_weight                               )
+NT_sysweight(FragUp        , NT_event_weight_FragUp        )
+NT_sysweight(FragDown      , NT_event_weight_FragDown      )
+NT_sysweight(SemilepBRUp   , NT_event_weight_SemilepBRUp   )
+NT_sysweight(SemilepBRDown , NT_event_weight_SemilepBRDown )
+NT_sysweight(PetersonUp    , NT_event_weight_PetersonUp    )
+NT_sysweight(PetersonDown  , 1.                               )
 
 // TT_HARD
-NT_sysweight(MrUp     , NT_event_weight*NT_event_weight_me_f_rUp )
-NT_sysweight(MrDown   , NT_event_weight*NT_event_weight_me_f_rDn )
-NT_sysweight(MfUp     , NT_event_weight*NT_event_weight_me_fUp_r )
-NT_sysweight(MfDown   , NT_event_weight*NT_event_weight_me_fDn_r )
-NT_sysweight(MfrUp    , NT_event_weight*NT_event_weight_me_frUp  ) 
-NT_sysweight(MfrDown  , NT_event_weight*NT_event_weight_me_frDn  ) 
+NT_sysweight(MrUp     , NT_event_weight_me_f_rUp )
+NT_sysweight(MrDown   , NT_event_weight_me_f_rDn )
+NT_sysweight(MfUp     , NT_event_weight_me_fUp_r )
+NT_sysweight(MfDown   , NT_event_weight_me_fDn_r )
+NT_sysweight(MfrUp    , NT_event_weight_me_frUp  ) 
+NT_sysweight(MfrDown  , NT_event_weight_me_frDn  ) 
 
 // TT_ALPHA
-NT_sysweight(AlphaSUp     , NT_event_weight*NT_event_weight_AlphaS_up )
-NT_sysweight(AlphaSDown   , NT_event_weight*NT_event_weight_AlphaS_dn )
+NT_sysweight(AlphaSUp     , NT_event_weight_AlphaS_up )
+NT_sysweight(AlphaSDown   , NT_event_weight_AlphaS_dn )
 
 // TT_PDF all of them
 // maybe a better approach would be to add an index into systematics
 
-NT_sysweight(PDFCT14n1Up     , NT_event_weight*NT_event_weight_pdf[0] )
-NT_sysweight(PDFCT14n2Up     , NT_event_weight*NT_event_weight_pdf[1] )
-NT_sysweight(PDFCT14n3Up     , NT_event_weight*NT_event_weight_pdf[2] )
-NT_sysweight(PDFCT14n4Up     , NT_event_weight*NT_event_weight_pdf[3] )
-NT_sysweight(PDFCT14n5Up     , NT_event_weight*NT_event_weight_pdf[4] )
-NT_sysweight(PDFCT14n6Up     , NT_event_weight*NT_event_weight_pdf[5] )
-NT_sysweight(PDFCT14n7Up     , NT_event_weight*NT_event_weight_pdf[6] )
-NT_sysweight(PDFCT14n8Up     , NT_event_weight*NT_event_weight_pdf[7] )
-NT_sysweight(PDFCT14n9Up     , NT_event_weight*NT_event_weight_pdf[8] )
-NT_sysweight(PDFCT14n10Up    , NT_event_weight*NT_event_weight_pdf[9] )
-NT_sysweight(PDFCT14n11Up    , NT_event_weight*NT_event_weight_pdf[10])
-NT_sysweight(PDFCT14n12Up    , NT_event_weight*NT_event_weight_pdf[11])
-NT_sysweight(PDFCT14n13Up    , NT_event_weight*NT_event_weight_pdf[12])
-NT_sysweight(PDFCT14n14Up    , NT_event_weight*NT_event_weight_pdf[13])
-NT_sysweight(PDFCT14n15Up    , NT_event_weight*NT_event_weight_pdf[14])
-NT_sysweight(PDFCT14n16Up    , NT_event_weight*NT_event_weight_pdf[15])
-NT_sysweight(PDFCT14n17Up    , NT_event_weight*NT_event_weight_pdf[16])
-NT_sysweight(PDFCT14n18Up    , NT_event_weight*NT_event_weight_pdf[17])
-NT_sysweight(PDFCT14n19Up    , NT_event_weight*NT_event_weight_pdf[18])
-NT_sysweight(PDFCT14n20Up    , NT_event_weight*NT_event_weight_pdf[19])
-NT_sysweight(PDFCT14n21Up    , NT_event_weight*NT_event_weight_pdf[20])
-NT_sysweight(PDFCT14n22Up    , NT_event_weight*NT_event_weight_pdf[21])
-NT_sysweight(PDFCT14n23Up    , NT_event_weight*NT_event_weight_pdf[22])
-NT_sysweight(PDFCT14n24Up    , NT_event_weight*NT_event_weight_pdf[23])
-NT_sysweight(PDFCT14n25Up    , NT_event_weight*NT_event_weight_pdf[24])
-NT_sysweight(PDFCT14n26Up    , NT_event_weight*NT_event_weight_pdf[25])
-NT_sysweight(PDFCT14n27Up    , NT_event_weight*NT_event_weight_pdf[26])
-NT_sysweight(PDFCT14n28Up    , NT_event_weight*NT_event_weight_pdf[27])
-NT_sysweight(PDFCT14n29Up    , NT_event_weight*NT_event_weight_pdf[28])
-NT_sysweight(PDFCT14n30Up    , NT_event_weight*NT_event_weight_pdf[29])
-NT_sysweight(PDFCT14n31Up    , NT_event_weight*NT_event_weight_pdf[30])
-NT_sysweight(PDFCT14n32Up    , NT_event_weight*NT_event_weight_pdf[31])
-NT_sysweight(PDFCT14n33Up    , NT_event_weight*NT_event_weight_pdf[32])
-NT_sysweight(PDFCT14n34Up    , NT_event_weight*NT_event_weight_pdf[33])
-NT_sysweight(PDFCT14n35Up    , NT_event_weight*NT_event_weight_pdf[34])
-NT_sysweight(PDFCT14n36Up    , NT_event_weight*NT_event_weight_pdf[35])
-NT_sysweight(PDFCT14n37Up    , NT_event_weight*NT_event_weight_pdf[36])
-NT_sysweight(PDFCT14n38Up    , NT_event_weight*NT_event_weight_pdf[37])
-NT_sysweight(PDFCT14n39Up    , NT_event_weight*NT_event_weight_pdf[38])
-NT_sysweight(PDFCT14n40Up    , NT_event_weight*NT_event_weight_pdf[39])
-NT_sysweight(PDFCT14n41Up    , NT_event_weight*NT_event_weight_pdf[40])
-NT_sysweight(PDFCT14n42Up    , NT_event_weight*NT_event_weight_pdf[41])
-NT_sysweight(PDFCT14n43Up    , NT_event_weight*NT_event_weight_pdf[42])
-NT_sysweight(PDFCT14n44Up    , NT_event_weight*NT_event_weight_pdf[43])
-NT_sysweight(PDFCT14n45Up    , NT_event_weight*NT_event_weight_pdf[44])
-NT_sysweight(PDFCT14n46Up    , NT_event_weight*NT_event_weight_pdf[45])
-NT_sysweight(PDFCT14n47Up    , NT_event_weight*NT_event_weight_pdf[46])
-NT_sysweight(PDFCT14n48Up    , NT_event_weight*NT_event_weight_pdf[47])
-NT_sysweight(PDFCT14n49Up    , NT_event_weight*NT_event_weight_pdf[48])
-NT_sysweight(PDFCT14n50Up    , NT_event_weight*NT_event_weight_pdf[49])
-NT_sysweight(PDFCT14n51Up    , NT_event_weight*NT_event_weight_pdf[50])
-NT_sysweight(PDFCT14n52Up    , NT_event_weight*NT_event_weight_pdf[51])
-NT_sysweight(PDFCT14n53Up    , NT_event_weight*NT_event_weight_pdf[52])
-NT_sysweight(PDFCT14n54Up    , NT_event_weight*NT_event_weight_pdf[53])
-NT_sysweight(PDFCT14n55Up    , NT_event_weight*NT_event_weight_pdf[54])
-NT_sysweight(PDFCT14n56Up    , NT_event_weight*NT_event_weight_pdf[55])
+NT_sysweight(PDFCT14n1Up     , NT_event_weight_pdf[0] )
+NT_sysweight(PDFCT14n2Up     , NT_event_weight_pdf[1] )
+NT_sysweight(PDFCT14n3Up     , NT_event_weight_pdf[2] )
+NT_sysweight(PDFCT14n4Up     , NT_event_weight_pdf[3] )
+NT_sysweight(PDFCT14n5Up     , NT_event_weight_pdf[4] )
+NT_sysweight(PDFCT14n6Up     , NT_event_weight_pdf[5] )
+NT_sysweight(PDFCT14n7Up     , NT_event_weight_pdf[6] )
+NT_sysweight(PDFCT14n8Up     , NT_event_weight_pdf[7] )
+NT_sysweight(PDFCT14n9Up     , NT_event_weight_pdf[8] )
+NT_sysweight(PDFCT14n10Up    , NT_event_weight_pdf[9] )
+NT_sysweight(PDFCT14n11Up    , NT_event_weight_pdf[10])
+NT_sysweight(PDFCT14n12Up    , NT_event_weight_pdf[11])
+NT_sysweight(PDFCT14n13Up    , NT_event_weight_pdf[12])
+NT_sysweight(PDFCT14n14Up    , NT_event_weight_pdf[13])
+NT_sysweight(PDFCT14n15Up    , NT_event_weight_pdf[14])
+NT_sysweight(PDFCT14n16Up    , NT_event_weight_pdf[15])
+NT_sysweight(PDFCT14n17Up    , NT_event_weight_pdf[16])
+NT_sysweight(PDFCT14n18Up    , NT_event_weight_pdf[17])
+NT_sysweight(PDFCT14n19Up    , NT_event_weight_pdf[18])
+NT_sysweight(PDFCT14n20Up    , NT_event_weight_pdf[19])
+NT_sysweight(PDFCT14n21Up    , NT_event_weight_pdf[20])
+NT_sysweight(PDFCT14n22Up    , NT_event_weight_pdf[21])
+NT_sysweight(PDFCT14n23Up    , NT_event_weight_pdf[22])
+NT_sysweight(PDFCT14n24Up    , NT_event_weight_pdf[23])
+NT_sysweight(PDFCT14n25Up    , NT_event_weight_pdf[24])
+NT_sysweight(PDFCT14n26Up    , NT_event_weight_pdf[25])
+NT_sysweight(PDFCT14n27Up    , NT_event_weight_pdf[26])
+NT_sysweight(PDFCT14n28Up    , NT_event_weight_pdf[27])
+NT_sysweight(PDFCT14n29Up    , NT_event_weight_pdf[28])
+NT_sysweight(PDFCT14n30Up    , NT_event_weight_pdf[29])
+NT_sysweight(PDFCT14n31Up    , NT_event_weight_pdf[30])
+NT_sysweight(PDFCT14n32Up    , NT_event_weight_pdf[31])
+NT_sysweight(PDFCT14n33Up    , NT_event_weight_pdf[32])
+NT_sysweight(PDFCT14n34Up    , NT_event_weight_pdf[33])
+NT_sysweight(PDFCT14n35Up    , NT_event_weight_pdf[34])
+NT_sysweight(PDFCT14n36Up    , NT_event_weight_pdf[35])
+NT_sysweight(PDFCT14n37Up    , NT_event_weight_pdf[36])
+NT_sysweight(PDFCT14n38Up    , NT_event_weight_pdf[37])
+NT_sysweight(PDFCT14n39Up    , NT_event_weight_pdf[38])
+NT_sysweight(PDFCT14n40Up    , NT_event_weight_pdf[39])
+NT_sysweight(PDFCT14n41Up    , NT_event_weight_pdf[40])
+NT_sysweight(PDFCT14n42Up    , NT_event_weight_pdf[41])
+NT_sysweight(PDFCT14n43Up    , NT_event_weight_pdf[42])
+NT_sysweight(PDFCT14n44Up    , NT_event_weight_pdf[43])
+NT_sysweight(PDFCT14n45Up    , NT_event_weight_pdf[44])
+NT_sysweight(PDFCT14n46Up    , NT_event_weight_pdf[45])
+NT_sysweight(PDFCT14n47Up    , NT_event_weight_pdf[46])
+NT_sysweight(PDFCT14n48Up    , NT_event_weight_pdf[47])
+NT_sysweight(PDFCT14n49Up    , NT_event_weight_pdf[48])
+NT_sysweight(PDFCT14n50Up    , NT_event_weight_pdf[49])
+NT_sysweight(PDFCT14n51Up    , NT_event_weight_pdf[50])
+NT_sysweight(PDFCT14n52Up    , NT_event_weight_pdf[51])
+NT_sysweight(PDFCT14n53Up    , NT_event_weight_pdf[52])
+NT_sysweight(PDFCT14n54Up    , NT_event_weight_pdf[53])
+NT_sysweight(PDFCT14n55Up    , NT_event_weight_pdf[54])
+NT_sysweight(PDFCT14n56Up    , NT_event_weight_pdf[55])
 
-NT_sysweight(PDFCT14n1Down     , NT_event_weight)
-NT_sysweight(PDFCT14n2Down     , NT_event_weight)
-NT_sysweight(PDFCT14n3Down     , NT_event_weight)
-NT_sysweight(PDFCT14n4Down     , NT_event_weight)
-NT_sysweight(PDFCT14n5Down     , NT_event_weight)
-NT_sysweight(PDFCT14n6Down     , NT_event_weight)
-NT_sysweight(PDFCT14n7Down     , NT_event_weight)
-NT_sysweight(PDFCT14n8Down     , NT_event_weight)
-NT_sysweight(PDFCT14n9Down     , NT_event_weight)
-NT_sysweight(PDFCT14n10Down    , NT_event_weight)
-NT_sysweight(PDFCT14n11Down    , NT_event_weight)
-NT_sysweight(PDFCT14n12Down    , NT_event_weight)
-NT_sysweight(PDFCT14n13Down    , NT_event_weight)
-NT_sysweight(PDFCT14n14Down    , NT_event_weight)
-NT_sysweight(PDFCT14n15Down    , NT_event_weight)
-NT_sysweight(PDFCT14n16Down    , NT_event_weight)
-NT_sysweight(PDFCT14n17Down    , NT_event_weight)
-NT_sysweight(PDFCT14n18Down    , NT_event_weight)
-NT_sysweight(PDFCT14n19Down    , NT_event_weight)
-NT_sysweight(PDFCT14n20Down    , NT_event_weight)
-NT_sysweight(PDFCT14n21Down    , NT_event_weight)
-NT_sysweight(PDFCT14n22Down    , NT_event_weight)
-NT_sysweight(PDFCT14n23Down    , NT_event_weight)
-NT_sysweight(PDFCT14n24Down    , NT_event_weight)
-NT_sysweight(PDFCT14n25Down    , NT_event_weight)
-NT_sysweight(PDFCT14n26Down    , NT_event_weight)
-NT_sysweight(PDFCT14n27Down    , NT_event_weight)
-NT_sysweight(PDFCT14n28Down    , NT_event_weight)
-NT_sysweight(PDFCT14n29Down    , NT_event_weight)
-NT_sysweight(PDFCT14n30Down    , NT_event_weight)
-NT_sysweight(PDFCT14n31Down    , NT_event_weight)
-NT_sysweight(PDFCT14n32Down    , NT_event_weight)
-NT_sysweight(PDFCT14n33Down    , NT_event_weight)
-NT_sysweight(PDFCT14n34Down    , NT_event_weight)
-NT_sysweight(PDFCT14n35Down    , NT_event_weight)
-NT_sysweight(PDFCT14n36Down    , NT_event_weight)
-NT_sysweight(PDFCT14n37Down    , NT_event_weight)
-NT_sysweight(PDFCT14n38Down    , NT_event_weight)
-NT_sysweight(PDFCT14n39Down    , NT_event_weight)
-NT_sysweight(PDFCT14n40Down    , NT_event_weight)
-NT_sysweight(PDFCT14n41Down    , NT_event_weight)
-NT_sysweight(PDFCT14n42Down    , NT_event_weight)
-NT_sysweight(PDFCT14n43Down    , NT_event_weight)
-NT_sysweight(PDFCT14n44Down    , NT_event_weight)
-NT_sysweight(PDFCT14n45Down    , NT_event_weight)
-NT_sysweight(PDFCT14n46Down    , NT_event_weight)
-NT_sysweight(PDFCT14n47Down    , NT_event_weight)
-NT_sysweight(PDFCT14n48Down    , NT_event_weight)
-NT_sysweight(PDFCT14n49Down    , NT_event_weight)
-NT_sysweight(PDFCT14n50Down    , NT_event_weight)
-NT_sysweight(PDFCT14n51Down    , NT_event_weight)
-NT_sysweight(PDFCT14n52Down    , NT_event_weight)
-NT_sysweight(PDFCT14n53Down    , NT_event_weight)
-NT_sysweight(PDFCT14n54Down    , NT_event_weight)
-NT_sysweight(PDFCT14n55Down    , NT_event_weight)
-NT_sysweight(PDFCT14n56Down    , NT_event_weight)
+NT_sysweight(PDFCT14n1Down     , 1.)
+NT_sysweight(PDFCT14n2Down     , 1.)
+NT_sysweight(PDFCT14n3Down     , 1.)
+NT_sysweight(PDFCT14n4Down     , 1.)
+NT_sysweight(PDFCT14n5Down     , 1.)
+NT_sysweight(PDFCT14n6Down     , 1.)
+NT_sysweight(PDFCT14n7Down     , 1.)
+NT_sysweight(PDFCT14n8Down     , 1.)
+NT_sysweight(PDFCT14n9Down     , 1.)
+NT_sysweight(PDFCT14n10Down    , 1.)
+NT_sysweight(PDFCT14n11Down    , 1.)
+NT_sysweight(PDFCT14n12Down    , 1.)
+NT_sysweight(PDFCT14n13Down    , 1.)
+NT_sysweight(PDFCT14n14Down    , 1.)
+NT_sysweight(PDFCT14n15Down    , 1.)
+NT_sysweight(PDFCT14n16Down    , 1.)
+NT_sysweight(PDFCT14n17Down    , 1.)
+NT_sysweight(PDFCT14n18Down    , 1.)
+NT_sysweight(PDFCT14n19Down    , 1.)
+NT_sysweight(PDFCT14n20Down    , 1.)
+NT_sysweight(PDFCT14n21Down    , 1.)
+NT_sysweight(PDFCT14n22Down    , 1.)
+NT_sysweight(PDFCT14n23Down    , 1.)
+NT_sysweight(PDFCT14n24Down    , 1.)
+NT_sysweight(PDFCT14n25Down    , 1.)
+NT_sysweight(PDFCT14n26Down    , 1.)
+NT_sysweight(PDFCT14n27Down    , 1.)
+NT_sysweight(PDFCT14n28Down    , 1.)
+NT_sysweight(PDFCT14n29Down    , 1.)
+NT_sysweight(PDFCT14n30Down    , 1.)
+NT_sysweight(PDFCT14n31Down    , 1.)
+NT_sysweight(PDFCT14n32Down    , 1.)
+NT_sysweight(PDFCT14n33Down    , 1.)
+NT_sysweight(PDFCT14n34Down    , 1.)
+NT_sysweight(PDFCT14n35Down    , 1.)
+NT_sysweight(PDFCT14n36Down    , 1.)
+NT_sysweight(PDFCT14n37Down    , 1.)
+NT_sysweight(PDFCT14n38Down    , 1.)
+NT_sysweight(PDFCT14n39Down    , 1.)
+NT_sysweight(PDFCT14n40Down    , 1.)
+NT_sysweight(PDFCT14n41Down    , 1.)
+NT_sysweight(PDFCT14n42Down    , 1.)
+NT_sysweight(PDFCT14n43Down    , 1.)
+NT_sysweight(PDFCT14n44Down    , 1.)
+NT_sysweight(PDFCT14n45Down    , 1.)
+NT_sysweight(PDFCT14n46Down    , 1.)
+NT_sysweight(PDFCT14n47Down    , 1.)
+NT_sysweight(PDFCT14n48Down    , 1.)
+NT_sysweight(PDFCT14n49Down    , 1.)
+NT_sysweight(PDFCT14n50Down    , 1.)
+NT_sysweight(PDFCT14n51Down    , 1.)
+NT_sysweight(PDFCT14n52Down    , 1.)
+NT_sysweight(PDFCT14n53Down    , 1.)
+NT_sysweight(PDFCT14n54Down    , 1.)
+NT_sysweight(PDFCT14n55Down    , 1.)
+NT_sysweight(PDFCT14n56Down    , 1.)
 
 
 
@@ -806,8 +824,6 @@ bool NT_channel_tt_elmu(ObjSystematics sys)
 	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_em_JERDown;
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_em_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_em_TESDown;
 	else relevant_selection_stage = NT_selection_stage_em;
 	return relevant_selection_stage > 200 || relevant_selection_stage < 210;
 	}
@@ -820,8 +836,6 @@ bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_em_JERDown;
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_em_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_em_TESDown;
 	else relevant_selection_stage = NT_selection_stage_em;
 	return relevant_selection_stage == 205;
 	}
@@ -894,8 +908,6 @@ bool NT_channel_dy_mumu(ObjSystematics sys)
 	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JERDown;
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy_mumu;
 	return relevant_selection_stage == 102 || relevant_selection_stage == 103 || relevant_selection_stage == 105;
 	}
@@ -908,8 +920,6 @@ bool NT_channel_dy_elel(ObjSystematics sys)
 	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JERDown;
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy_mumu;
 	return relevant_selection_stage == 112 || relevant_selection_stage == 113 || relevant_selection_stage == 115;
 	}
@@ -924,37 +934,47 @@ that is calculated in the name space of the input `TTree` branches.
 It takes the `ObjSystematics` identifier as input,
 and returns `bool` whether event passes this channel selection or not.
  */
-typedef bool (*_F_channel_def)(ObjSystematics);
+typedef bool (*_F_channel_sel)(ObjSystematics);
 
 
-#define _quick_set_chandef(m, chan_name) m[#chan_name] = NT_channel_ ## chan_name
+/** \brief The full channel definition: the bool function and the nominal event weight.
+
+ */
+
+typedef struct {
+	_F_channel_sel chan_sel;        /**< \brief the event selection function */
+	_F_sysweight   chan_sel_weight; /**< \brief the nominal event weight */
+} _S_chan_def;
+
+#define _quick_set_chandef(m, chan_name, sel_weight_func) m[#chan_name] = {NT_channel_ ## chan_name, sel_weight_func}
 
 /** \brief The initialization function for the `bool` functions of the known distributions.
 
-\return map<const char*, _F_channel_def>
+\return map<const char*, _F_channel_sel>
  */
 
-map<TString, _F_channel_def> create_known_channel_definitions()
+map<TString, _S_chan_def> create_known_channel_definitions()
 {
-	map<TString, bool (*)(ObjSystematics)> m;
+	//map<TString, _F_channel_sel> m;
+	map<TString, _S_chan_def> m;
+
 	//m["el_sel"] = channel_el_sel;
-	_quick_set_chandef(m, el_sel);
-	_quick_set_chandef(m, el_sel_ss);
-	_quick_set_chandef(m, mu_sel);
-	_quick_set_chandef(m, mu_sel_ss);
+	_quick_set_chandef(m, el_sel   , NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, el_sel_ss, NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, mu_sel   , NT_sysweight_NOMINAL_HLT_MU);
+	_quick_set_chandef(m, mu_sel_ss, NT_sysweight_NOMINAL_HLT_MU);
 
-	_quick_set_chandef(m, lep_sel);
-	_quick_set_chandef(m, lep_sel_ss);
+	_quick_set_chandef(m, lep_sel      , NT_sysweight_NOMINAL_HLT_LEP);
+	_quick_set_chandef(m, lep_sel_ss   , NT_sysweight_NOMINAL_HLT_LEP);
+	_quick_set_chandef(m, tt_elmu      , NT_sysweight_NOMINAL_HLT_MU);
+	_quick_set_chandef(m, tt_elmu_tight, NT_sysweight_NOMINAL_HLT_MU);
 
-	_quick_set_chandef(m, tt_elmu);
-	_quick_set_chandef(m, tt_elmu_tight);
-
-	_quick_set_chandef(m, dy_mutau);
-	_quick_set_chandef(m, dy_eltau);
-	_quick_set_chandef(m, dy_mutau_ss);
-	_quick_set_chandef(m, dy_eltau_ss);
-	_quick_set_chandef(m, dy_mumu);
-	_quick_set_chandef(m, dy_elel);
+	_quick_set_chandef(m, dy_mutau   , NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_eltau   , NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_mutau_ss, NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_eltau_ss, NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_mumu    , NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_elel    , NT_sysweight_NOMINAL_HLT_EL);
 
 	return m;
 }
@@ -962,7 +982,7 @@ map<TString, _F_channel_def> create_known_channel_definitions()
 
 /** \brief The known channels.
  */
-map<TString, _F_channel_def> known_defs_channels = create_known_channel_definitions();
+map<TString, _S_chan_def> known_defs_channels = create_known_channel_definitions();
 
 
 /* --------------------------------------------------------------- */
@@ -1388,7 +1408,7 @@ typedef struct{
 
 typedef struct{
 	TString name;                 /**< \brief keep the name of this process to assign final per-channel normalization */
-	_F_channel_def chan_def;      /**< \brief `bool` function defining whether an event passes the channel selection */
+	_S_chan_def chan_def;         /**< \brief channel definition: `bool` function selecting events, and the nominal event weight funciton */
 	vector<T_proc_histos> procs;  /**< \brief the channels with distributions to record */
 	vector<TH1D_histo> catchall_proc_histos;  /**< \brief the channels with distributions to record in the catchall process */
 } T_chan_proc_histos;
@@ -1868,6 +1888,7 @@ map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.std_
 // some info for profiling
 int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
 
+// --------------------------------- SETUP RECORD HISTOS for output
 for (const auto& systname: requested_systematics)
 	{
 	// find the definition of this channel
@@ -1945,6 +1966,7 @@ for (const auto& systname: requested_systematics)
 
 cerr_expr(n_systs_made << " " << n_chans_made << " " << n_procs_made << " " << n_distrs_made);
 
+// --------------------------------- EVENT LOOP
 // process input files
 for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	{
@@ -2001,13 +2023,13 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 
 		//Stopif(ievt > 10, break, "reached 10 events, exiting");
 
-		// set the object systematic
-		ObjSystematics systematic = NOMINAL;
-
+		// loop over systematics
 		for (int si=0; si<distrs_to_record.size(); si++)
 			{
 			ObjSystematics obj_systematic = distrs_to_record[si].syst_def.obj_sys_id;
-			double event_weight       = distrs_to_record[si].syst_def.weight_func();
+
+			// the factor to the NOMINAL_base weight
+			double event_weight_factor    = distrs_to_record[si].syst_def.weight_func();
 
 			// record distributions in all final states where the event passes
 			vector<T_chan_proc_histos>& channels = distrs_to_record[si].chans;
@@ -2016,7 +2038,12 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 				T_chan_proc_histos& chan = channels[ci];
 
 				// check if event passes the channel selection
-				if (!chan.chan_def(obj_systematic)) continue;
+				if (!chan.chan_def.chan_sel(obj_systematic)) continue;
+
+				// calculate the NOMINAL_base event weight for the channel
+				double event_weight = chan.chan_def.chan_sel_weight();
+				// and multiply by the systematic factor
+				event_weight *= event_weight_factor;
 
 				// assign the gen process
 				// loop over procs check if this event passes
@@ -2110,6 +2137,8 @@ for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
 		}
 	}
 */
+
+// --------------------------------- OUTPUT
 
 if (save_in_old_order)
   {

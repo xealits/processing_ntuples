@@ -314,7 +314,7 @@ def passes_dy_elmu_selection_stages(passed_triggers, leps, N_jets, taus, proc_me
 
     # muon and OS tau and no b
     pass_dy_objects_elmu = (pass_elmu or pass_elmu_el) and len(leps[0]) == 2
-    os_leptons = leps[4][0] * leps[4][1] < 0
+    os_leptons = pass_dy_objects_elmu and leps[4][0] * leps[4][1] < 0
     no_b_jets  = N_jets[0] == 0
 
     #pass_dy_mass = False
