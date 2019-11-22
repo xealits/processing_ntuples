@@ -606,8 +606,8 @@ double NT_distr_leading_lep_pt(ObjSystematics sys)
 
 double NT_distr_sum_cos(ObjSystematics sys)
 	{
-	double cos_lep_met = TMath::Cos((NT_event_leptons[0] - NT_event_met).Phi());
-	double cos_tau_met = TMath::Cos((NT_event_taus[0]    - NT_event_met).Phi());
+	double cos_lep_met = TMath::Cos(NT_event_leptons[0].Phi() - NT_event_met.Phi());
+	double cos_tau_met = TMath::Cos(NT_event_taus[0]   .Phi() - NT_event_met.Phi());
 	return cos_lep_met + cos_tau_met;
 	}
 
