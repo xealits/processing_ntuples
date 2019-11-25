@@ -5021,8 +5021,8 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
 
 #def main(input_dir, dtag, outdir, range_min, range_max):
-def main(input_filename, fout_name, outdir, channels_to_select, lumi_bcdef=19714., lumi_gh=16146.):
-    '''main(input_filename, outdir, range_min, range_max, lumi_bcdef=19252.03, lumi_gh=16290.02)
+def main(input_filename, fout_name, channels_to_select, lumi_bcdef=19714., lumi_gh=16146.):
+    '''main(input_filename, range_min, range_max, lumi_bcdef=19252.03, lumi_gh=16290.02)
 
     lumi defaults are from _full_ golden json for muon
     -- the bad lumis don't reduce it that much, should not affect the ratio too much
@@ -5048,7 +5048,8 @@ def main(input_filename, fout_name, outdir, channels_to_select, lumi_bcdef=19714
         return None
     """
 
-    logger_file = outdir + '/logs/' + fout_name.split('.root')[0] + '.log'
+    outdir = '/'.join(fout_name.split('/')[:-1])
+    logger_file = outdir + '/logs/' + fout_name.split('/')[-1].split('.root')[0] + '.log'
 
     # this dir should be made at spawning the threads
     if not os.path.exists(outdir + '/logs/'):
@@ -5089,7 +5090,7 @@ def main(input_filename, fout_name, outdir, channels_to_select, lumi_bcdef=19714
 
     logger.write("N entries = %s\n" % tree.GetEntries())
 
-    fout = TFile(outdir + '/' + fout_name, "RECREATE")
+    fout = TFile(fout_name, "RECREATE")
     ttree_out = TTree( 'ttree_out', 'tree with stage2 selection' ) # INPUT NOW
     ttree_out.SetDirectory(fout)
 

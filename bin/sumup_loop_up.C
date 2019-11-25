@@ -1841,6 +1841,10 @@ vector<TString> requested_distrs      = parse_coma_list(*argv++); argc--;
 
 const char* output_filename = *argv++; argc--;
 
+bool do_not_overwrite = true;
+if  (do_not_overwrite)
+	Stopif(access(output_filename, F_OK) != -1, exit(0);, "the output file exists %s", output_filename);
+
 
 cerr_expr(do_WNJets_stitching << " " << output_filename);
 /* --------------------- */
@@ -2161,6 +2165,9 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 
 		// end of event loop
 		}
+
+	// close the input file
+	input_file->Close();
 	}
 
 // if there is still no weight counter when it was requested

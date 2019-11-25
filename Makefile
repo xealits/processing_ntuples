@@ -49,6 +49,11 @@ condor_failed_output: condor_failed_jobs
 	grep '^python' `cat condor_failed_jobs` > condor_failed_output
 	sed -i -e 's,^.*\(lstore_outdirs[^ ]*/\).*/\([^/]*.root\),\1/\2,' condor_failed_output
 
+condor_jobs_full_resubmit: condor_failed_output condor_failed_jobs_submit
+	rm `cat condor_failed_output`
+	rm output/job* error/job* log/job*
+	source condor_failed_jobs_submit
+
 clear_gstore_failed: nt=v37
 clear_gstore_failed:
 	for f in `find gstore_outdirs/${nt}/ -name failed -type d | sed 's,gstore_outdirs/,,'`; do \

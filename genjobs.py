@@ -389,9 +389,9 @@ if args.acceptance_study:
     # time python signal_acceptance.py out_signal_accept_v34.root gstore_outdirs/v34/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/Ntupler_v34_MC2016_Summer16_TTJets_powheg/180717_001103/0000/MC2016_Summer16_TTJets_powheg_90.root
 
 elif args.submit == 'online':
-    job_template = "python channel_distrs_full_loop.py " + add_options + " -l logss " + args.processing_dir + "/{vntupler}/{vproc}/{dtag}/ {chans} -i {job_file}   || true"
+    job_template = "python channel_distrs_full_loop.py " + add_options + " -l logss " + args.processing_dir + "/{vntupler}/{vproc}/{dtag}/{output_filename} {chans} -i {job_file}   || true"
 elif args.submit == 'queue':
-    job_template = "python channel_distrs_full_loop.py " + add_options + " -l logss " + args.processing_dir + "/{vntupler}/{vproc}/{dtag}/ {chans} -i {job_file}"
+    job_template = "python channel_distrs_full_loop.py " + add_options + " -l logss " + args.processing_dir + "/{vntupler}/{vproc}/{dtag}/{output_filename} {chans} -i {job_file}"
 else:
     raise ValueError('unknown type of jobs submition "%s"' % args.submit)
 
@@ -439,7 +439,8 @@ for dtag in requested_dtags:
     logging.debug("%d .root files" % len(rootfiles))
 
     for job_file in rootfiles:
-        job_commands.append(job_template.format(vntupler=args.vNtupler, vproc=args.vProc, dtag=dtag, job_file=job_file, chans=args.chan_def))
+        output_filename = job_file.split('/')[-1]
+        job_commands.append(job_template.format(vntupler=args.vNtupler, vproc=args.vProc, dtag=dtag, job_file=job_file, output_filename=output_filename, chans=args.chan_def))
 
 logging.info("made %d job commands" % len(job_commands))
 

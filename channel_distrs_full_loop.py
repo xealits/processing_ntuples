@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     #parser.add_argument("input_file", help="file with results from job")
     #parser.add_argument("dtag",      help="basically it's the filename with the TTree from jobs")
-    parser.add_argument("outdir",    help="where to store the output")
+    parser.add_argument("output_filename",    help="where to store the output outdir/filename.root")
     parser.add_argument("channels",  help="channels of the selection")
     parser.add_argument("-l", "--log-file",  type=str, default='', help="if given the log of the process will go to this file under outdir/log/<log_file>")
     #parser.add_argument("-s", "--range-min", type=int, default=0,    help="number of event to start processing from")
@@ -46,15 +46,16 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    outdir = '/'.join(args.output_filename.split('/')[:-1])
     # configure log and common file for threads
     try:
-        os.makedirs(args.outdir + '/logs/')
+        os.makedirs(outdir + '/logs/')
         
     except OSError as e:
         print e.errno, e.strerror
 
     if args.log_file:
-        logger_file = args.outdir + '/logs/' + args.log_file.split('/')[-1].split('.root')[0] + '.log'
+        logger_file = outdir + '/logs/' + args.log_file.split('/')[-1].split('.root')[0] + '.log'
         hdlr = logging.FileHandler(logger_file)
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         hdlr.setFormatter(formatter)
@@ -78,10 +79,11 @@ if __name__ == '__main__':
         #tree = input_tfile.Get('ntupler/reduced_ttree')
         #if not range_max: range_max = tree.GetEntries()
 
-        fout_name = input_filename.split('/')[-1].split('.root')[0] + ".root" # no ranges anymore
+        #fout_name = input_filename.split('/')[-1].split('.root')[0] + ".root" # no ranges anymore
+        fout_name = args.output_filename
 
-        if isfile(args.outdir + '/' + fout_name) and not args.overwrite:
-            print "output file exists: %s" % (args.outdir + '/' + fout_name)
+        if isfile(fout_name) and not args.overwrite:
+            print "output file exists: %s" % (fout_name)
             continue
 
         if args.old_loop:
@@ -143,11 +145,11 @@ if __name__ == '__main__':
                 print 'no_prop_lepjets_uncluster', stage2.PROP_LEPJET_UNCLUSTER
 
         if args.thread:
-            t = threading.Thread(target=main, args=(input_filename, fout_name, args.outdir, args.channels))
+            t = threading.Thread(target=main, args=(input_filename, fout_name, args.channels))
             t.start()
             log_common.info('started thread on %s' % input_filename)
         else:
             log_common.info('running on %s' % input_filename)
-            main(input_filename, fout_name, args.outdir, args.channels)
+            main(input_filename, fout_name, args.channels)
 
 
