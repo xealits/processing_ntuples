@@ -824,6 +824,18 @@ bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6;
 	}
 
+bool NT_channel_mu_sel_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_mu_sel(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+
+bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_mu_sel_ss(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+
 bool NT_channel_el_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
@@ -850,6 +862,18 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
 	else relevant_selection_stage = NT_selection_stage;
 	return relevant_selection_stage == 18 || relevant_selection_stage == 16;
+	}
+
+bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_el_sel(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+
+bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_el_sel_ss(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
 	}
 
 // union os mu_sel and el_sel
@@ -879,6 +903,18 @@ bool NT_channel_lep_sel_ss(ObjSystematics sys)
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
 	else relevant_selection_stage = NT_selection_stage;
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6 || relevant_selection_stage == 18 || relevant_selection_stage == 16;
+	}
+
+bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_lep_sel(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+
+bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_lep_sel_ss(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
 	}
 
 
@@ -962,6 +998,28 @@ bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
 	return relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222;
+	}
+
+bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_dy_mutau(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_dy_mutau_ss(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+
+bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_dy_eltau(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
+	}
+bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
+	{
+	bool sel = NT_channel_dy_eltau_ss(sys);
+	return sel && NT_event_taus_sv_sign[0] > 3.;
 	}
 
 
@@ -1054,19 +1112,32 @@ map<TString, _S_chan_def> create_known_channel_definitions()
 	_quick_set_chandef(m, el_sel_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
 	_quick_set_chandef(m, mu_sel   , NT_sysweight_NOMINAL_HLT_MU_MedTau);
 	_quick_set_chandef(m, mu_sel_ss, NT_sysweight_NOMINAL_HLT_MU_MedTau);
-
 	_quick_set_chandef(m, lep_sel      , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
 	_quick_set_chandef(m, lep_sel_ss   , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
+
+	_quick_set_chandef(m, el_sel_tauSV3   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, el_sel_ss_tauSV3, NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, mu_sel_tauSV3   , NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, mu_sel_ss_tauSV3, NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, lep_sel_tauSV3      , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
+	_quick_set_chandef(m, lep_sel_ss_tauSV3   , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
+
 	_quick_set_chandef(m, tt_elmu      , NT_sysweight_NOMINAL_HLT_MU);
 	_quick_set_chandef(m, tt_elmu_tight, NT_sysweight_NOMINAL_HLT_MU);
 
 	_quick_set_chandef(m, dy_elmu    , NT_sysweight_NOMINAL_HLT_MU);
 	_quick_set_chandef(m, dy_elmu_ss , NT_sysweight_NOMINAL_HLT_MU);
 
-	_quick_set_chandef(m, dy_mutau   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, dy_mutau   , NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, dy_mutau_ss, NT_sysweight_NOMINAL_HLT_MU_MedTau);
 	_quick_set_chandef(m, dy_eltau   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
-	_quick_set_chandef(m, dy_mutau_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
 	_quick_set_chandef(m, dy_eltau_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
+
+	_quick_set_chandef(m, dy_mutau_tauSV3   , NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, dy_mutau_ss_tauSV3, NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, dy_eltau_tauSV3   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, dy_eltau_ss_tauSV3, NT_sysweight_NOMINAL_HLT_EL_MedTau);
+
 	_quick_set_chandef(m, dy_mumu    , NT_sysweight_NOMINAL_HLT_EL);
 	_quick_set_chandef(m, dy_elel    , NT_sysweight_NOMINAL_HLT_EL);
 
