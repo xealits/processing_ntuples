@@ -223,8 +223,8 @@ NT_sysweight(LEPmuTRGDown, NT_event_weight_LEPmuTRG_Down / NT_event_weight_LEPmu
 
 // Tau systematics
 
-NT_sysweight(TAUIDUp,   NT_event_taus_SF_Medium_Up   .size()>0 ? NT_event_taus_SF_Medium_Up[0]    / NT_event_taus_SF_Medium[0] : 1.)
-NT_sysweight(TAUIDDown, NT_event_taus_SF_Medium_Down .size()>0 ? NT_event_taus_SF_Medium_Down[0]  / NT_event_taus_SF_Medium[0] : 1.)
+NT_sysweight(TAUIDUp,   (NT_event_taus_SF_Medium_Up   .size()>0 && NT_event_taus_SF_Medium[0] > 0.001) ? NT_event_taus_SF_Medium_Up[0]    / NT_event_taus_SF_Medium[0] : 1.)
+NT_sysweight(TAUIDDown, (NT_event_taus_SF_Medium_Down .size()>0 && NT_event_taus_SF_Medium[0] > 0.001) ? NT_event_taus_SF_Medium_Down[0]  / NT_event_taus_SF_Medium[0] : 1.)
 
 // TT_OBJ
 NT_sysweight(TOPPTUp   , NT_event_weight_toppt    )
@@ -894,7 +894,7 @@ bool NT_channel_dy_mutau(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 104 || relevant_selection_stage == 105;
+	return relevant_selection_stage == 135 || relevant_selection_stage == 134 || relevant_selection_stage == 125 || relevant_selection_stage == 124;
 	}
 
 bool NT_channel_dy_eltau(ObjSystematics sys)
@@ -908,7 +908,7 @@ bool NT_channel_dy_eltau(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 114 || relevant_selection_stage == 115;
+	return relevant_selection_stage == 235 || relevant_selection_stage == 234 || relevant_selection_stage == 225 || relevant_selection_stage == 224;
 	}
 
 bool NT_channel_dy_mutau_ss(ObjSystematics sys)
@@ -922,7 +922,7 @@ bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 103 || relevant_selection_stage == 102;
+	return relevant_selection_stage == 133 || relevant_selection_stage == 132 || relevant_selection_stage == 123 || relevant_selection_stage == 122;
 	}
 
 bool NT_channel_dy_eltau_ss(ObjSystematics sys)
@@ -936,7 +936,7 @@ bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 112 || relevant_selection_stage == 113;
+	return relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222;
 	}
 
 

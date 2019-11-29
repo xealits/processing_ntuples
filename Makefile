@@ -3,13 +3,14 @@ histograms_to_fit: nt=94v3
 histograms_to_fit: proc=processing1
 histograms_to_fit: hists=mc_2
 histograms_to_fit: distr_out=jobsums/distrs/
-histograms_to_fit: simulate_data_output=0
+histograms_to_fit: simulate_data_output=1
 histograms_to_fit: n_proc=6
 histograms_to_fit: lumi=41300
 histograms_to_fit: systematics=std
 histograms_to_fit: channels=mu_sel,tt_elmu
 histograms_to_fit: processes=std
 histograms_to_fit: distrs=Mt_lep_met_c,leading_lep_pt
+histograms_to_fit: dtags_grep=.*
 histograms_to_fit:
 	mkdir -p ${distr_out}/${nt}/${proc}/${hists}/
 	#for dtag in `ls ${stage2_dir}/${nt}/${proc}/`; do \
@@ -17,7 +18,7 @@ histograms_to_fit:
 	#   time sumup_loop ${simulate_data_output} 1 0 ${lumi} std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
 	#done
 	# same with xargs
-	ls ${stage2_dir}/${nt}/${proc}/ | xargs -P ${n_proc} -I DTAG sh -c "time sumup_loop ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
+	ls ${stage2_dir}/${nt}/${proc}/ | grep "${dtags_grep}" | xargs -P ${n_proc} -I DTAG sh -c "time sumup_loop ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
 	#hadd ${distr_out}/distrs_${nt}_${proc}_mc_1.root ${distr_out}/${nt}/${proc}/*root
 	hadd ${distr_out}/distrs_${nt}_${proc}_${hists}.root  ${distr_out}/${nt}/${proc}/${hists}/*root
 
@@ -53,6 +54,20 @@ condor_jobs_full_resubmit: condor_failed_output condor_failed_jobs_submit
 	rm `cat condor_failed_output`
 	rm output/job* error/job* log/job*
 	source condor_failed_jobs_submit
+
+compare_stage2_files: nt=94v4
+compare_stage2_files: proc=processing3
+compare_stage2_files:
+	for dtag in `ls lstore_outdirs/${nt}/${proc}` ; do \
+	   find gstore_outdirs/${nt}/*/Ntupler_94v4_$$dtag/ -name "*root" | sed 's,.*/\([^/][^/]*\),\1,' | sort ; \
+	done > names_in_gstore
+	for dtag in `ls lstore_outdirs/${nt}/${proc}` ; do \
+	   find lstore_outdirs/${nt}/${proc}/$$dtag/        -name "*root" | sed 's,.*/\([^/][^/]*\),\1,' | sort ; \
+	done > names_in_lstore
+	diff names_in_gstore names_in_lstore | sed -n '/^< / s,^< ,, p' > compare_stage2_files_missing_files
+	for misfile in `cat compare_stage2_files_missing_files` ; do \
+	   grep -l $$misfile queue_dir/94v4/processing3/jobs_dir/job_* ; \
+	done | sed -e 's/$$/.sub/' -e 's/^/condor_submit /' > compare_stage2_files_missing_files.job_subs
 
 clear_gstore_failed: nt=v37
 clear_gstore_failed:

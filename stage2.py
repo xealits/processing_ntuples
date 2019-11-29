@@ -277,6 +277,17 @@ def passes_dy_tautau_selection_stages(passed_triggers, leps, N_jets, taus, proc_
     pass_objects = pass_dy_objects_mu or pass_dy_objects_el
     if not pass_objects: return channel_stage
 
+    tau_IDlev = 0
+    if len(taus) > 0:
+        tau_IDlev = taus[0][4]
+
+    pass_Tight_sel     = old_jet_sel    and tau_IDlev > TAUS_ID_CUT_Tight
+    pass_Tight_sel_os  = pass_Tight_sel and leps[4][0] * taus[0][2] < 0
+    pass_old_sel       = old_jet_sel and tau_IDlev > TAUS_ID_CUT_Medium
+    pass_old_sel_os    = pass_old_sel and leps[4][0] * taus[0][2] < 0
+    pass_old_selVLoose       = old_jet_sel and tau_IDlev > TAUS_ID_CUT_VLoose
+    pass_old_selVLoose_os    = pass_old_selVLoose and leps[4][0] * taus[0][2] < 0
+
     opposite_charge = leps[4][0] * taus[0][2] < 0
 
     nom_tau = taus[0][0]*taus[0][1][0]
@@ -284,7 +295,40 @@ def passes_dy_tautau_selection_stages(passed_triggers, leps, N_jets, taus, proc_
     pair_mass = pair.mass()
     pass_dy_mass = 75. < pair_mass < 105.
 
-    if   pass_dy_objects_mu and opposite_charge:
+    if   pass_dy_objects_mu and tau_IDlev > TAUS_ID_CUT_Tight and opposite_charge:
+        if pass_dy_mass:
+            channel_stage = 135
+        else:
+            channel_stage = 134
+    elif pass_dy_objects_mu and tau_IDlev > TAUS_ID_CUT_Tight:
+        if pass_dy_mass:
+            channel_stage = 133
+        else:
+            channel_stage = 132
+
+    elif pass_dy_objects_mu and tau_IDlev > TAUS_ID_CUT_Medium and opposite_charge:
+        if pass_dy_mass:
+            channel_stage = 125
+        else:
+            channel_stage = 124
+    elif pass_dy_objects_mu and tau_IDlev > TAUS_ID_CUT_Medium:
+        if pass_dy_mass:
+            channel_stage = 123
+        else:
+            channel_stage = 122
+
+    elif pass_dy_objects_mu and tau_IDlev > TAUS_ID_CUT_VLoose and opposite_charge:
+        if pass_dy_mass:
+            channel_stage = 115
+        else:
+            channel_stage = 114
+    elif pass_dy_objects_mu and tau_IDlev > TAUS_ID_CUT_VLoose:
+        if pass_dy_mass:
+            channel_stage = 113
+        else:
+            channel_stage = 112
+
+    elif pass_dy_objects_mu and opposite_charge:
         if pass_dy_mass:
             channel_stage = 105
         else:
@@ -295,16 +339,49 @@ def passes_dy_tautau_selection_stages(passed_triggers, leps, N_jets, taus, proc_
         else:
             channel_stage = 102
 
+    elif pass_dy_objects_el and tau_IDlev > TAUS_ID_CUT_Tight and opposite_charge:
+        if pass_dy_mass:
+            channel_stage = 235
+        else:
+            channel_stage = 234
+    elif pass_dy_objects_el and tau_IDlev > TAUS_ID_CUT_Tight:
+        if pass_dy_mass:
+            channel_stage = 233
+        else:
+            channel_stage = 232
+
+    elif pass_dy_objects_el and tau_IDlev > TAUS_ID_CUT_Medium and opposite_charge:
+        if pass_dy_mass:
+            channel_stage = 225
+        else:
+            channel_stage = 224
+    elif pass_dy_objects_el and tau_IDlev > TAUS_ID_CUT_Medium:
+        if pass_dy_mass:
+            channel_stage = 223
+        else:
+            channel_stage = 222
+
+    elif pass_dy_objects_el and tau_IDlev > TAUS_ID_CUT_VLoose and opposite_charge:
+        if pass_dy_mass:
+            channel_stage = 215
+        else:
+            channel_stage = 214
+    elif pass_dy_objects_el and tau_IDlev > TAUS_ID_CUT_VLoose:
+        if pass_dy_mass:
+            channel_stage = 213
+        else:
+            channel_stage = 212
+
     elif pass_dy_objects_el and opposite_charge:
         if pass_dy_mass:
-            channel_stage = 115
+            channel_stage = 205
         else:
-            channel_stage = 114
+            channel_stage = 204
     elif pass_dy_objects_el:
         if pass_dy_mass:
-            channel_stage = 113
+            channel_stage = 203
         else:
-            channel_stage = 112
+            channel_stage = 202
 
     return channel_stage
 

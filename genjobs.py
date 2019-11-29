@@ -503,6 +503,7 @@ arguments             =
 output                = output/{jobsh_name}.$(ClusterId).$(ProcId).out
 error                 = error/{jobsh_name}.$(ClusterId).$(ProcId).err
 log                   = log/{jobsh_name}.$(ClusterId).log
++JobFlavour = "longlunch"
 queue
 '''
 
