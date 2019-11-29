@@ -604,6 +604,24 @@ double NT_distr_leading_lep_pt(ObjSystematics sys)
 	return NT_event_leptons[0].pt();
 	}
 
+double NT_distr_dilep_mass(ObjSystematics sys)
+	{
+	if (NT_event_leptons.size()>1)
+		return (NT_event_leptons[0] + NT_event_leptons[1]).mass();
+	else if (NT_event_taus.size()>0)
+		return (NT_event_leptons[0] + NT_event_taus[0]).mass();
+	else
+		return -111.;
+	}
+
+double NT_distr_tau_sv_sign(ObjSystematics sys)
+	{
+	if (NT_event_taus_sv_sign.size()>0)
+		return NT_event_taus_sv_sign[0];
+	else
+		return -111.;
+	}
+
 double NT_distr_sum_cos(ObjSystematics sys)
 	{
 	if (NT_event_leptons.size() == 0 || NT_event_taus.size() == 0) return -11.;
@@ -688,7 +706,14 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	//r = {.nbins=40, .linear_min=0, .linear_max=200}; m["leading_lep_pt"] = {leading_lep_pt, r};
 	// despicable!
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
-	r = {40, true,  0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
+
+	r = {40,  true,   0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
+	r = {21,  true,  -1,  20};                                                     m["tau_sv_sign"]    = {NT_distr_tau_sv_sign, r};
+
+	r = {100, true,   0, 400};                                                     m["dilep_mass"]     = {NT_distr_dilep_mass, r};
+	r = {40,  true,  80, 100};                                                     m["dilep_mass_dy"]  = {NT_distr_dilep_mass, r};
+	r = {40,  true,  20,  80};                                                     m["dilep_mass_dy_tautau"]  = {NT_distr_dilep_mass, r};
+
 	r = {40, true, -2., 2.};                                                     m["sum_cos"]        = {NT_distr_sum_cos, r};
 
 	static double bins_lj_var[] = {0,15,30,45,60,90,120,170,220,270,400};   r = {(sizeof(bins_lj_var) / sizeof(bins_lj_var[0]))-1, false,-1,  -1, bins_lj_var};   m["lj_var"] = {NT_distr_lj_var, r};
