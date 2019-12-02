@@ -1082,6 +1082,8 @@ Each final state channel is defined by a `bool` function,
 that is calculated in the name space of the input `TTree` branches.
 It takes the `ObjSystematics` identifier as input,
 and returns `bool` whether event passes this channel selection or not.
+
+\return bool
  */
 typedef bool (*_F_channel_sel)(ObjSystematics);
 
@@ -1582,6 +1584,7 @@ typedef struct{
 	TString name;                 /**< \brief keep the name of this process to assign final per-channel normalization */
 	_S_chan_def chan_def;         /**< \brief channel definition: `bool` function selecting events, and the nominal event weight funciton */
 	vector<T_proc_histos> procs;  /**< \brief the channels with distributions to record */
+	TString name_catchall_proc;   /**< \brief the name of the catchall processes */
 	vector<TH1D_histo> catchall_proc_histos;  /**< \brief the channels with distributions to record in the catchall process */
 } T_chan_proc_histos;
 
@@ -1887,6 +1890,175 @@ vector<TString> parse_coma_list(char* coma_list)
 	}
 
 
+/** \brief generate a tree with the record histograms from requested systematics, channels, processes, and histograms
+
+\return vector<T_syst_chan_proc_histos>
+ */
+
+vector<T_syst_chan_proc_histos> setup_record_histos(
+	S_dtag_info&     main_dtag_info,
+	vector<TString>& requested_systematics,
+	vector<TString>& requested_channels   ,
+	vector<TString>& requested_procs      ,
+	vector<TString>& requested_distrs     )
+{
+// the output tree
+vector<T_syst_chan_proc_histos> distrs_to_record;
+
+// some info for profiling
+int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
+
+// final state channels
+vector<TString> requested_channels_all = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_elmu", "dy_elmu_ss", "dy_mumu", "dy_elel"};
+if (requested_channels[0] == "all")
+	requested_channels = requested_channels_all;
+
+//const char* requested_channel_names[] = {"tt_elmu", NULL};
+//vector<TString> requested_procs   = {"all"};
+//vector<TString> requested_procs   = {"std"};
+vector<TString> requested_systematics_test = {"NOMINAL",
+	"JERUp",
+	"JERDown",
+	"JESUp",
+	"JESDown",
+	"TESUp",
+	"TESDown",
+	"PUUp",
+	"PUDown",
+	"bSFUp",
+	"bSFDown",
+	"LEPelIDUp",
+	"LEPelIDDown",
+	"LEPelTRGUp",
+	"LEPelTRGDown",
+	"LEPmuIDUp",
+	"LEPmuIDDown",
+	"LEPmuTRGUp",
+	"LEPmuTRGDown",
+	};
+
+if (requested_systematics[0] == "test")
+	requested_systematics = requested_systematics_test;
+else if (requested_systematics[0] == "std")
+	requested_systematics = main_dtag_info.std_systs;
+
+//requested_systematics[0] = "NOMINAL"; requested_systematics[1] = NULL;
+
+//const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
+
+// set the known processes according to the request: whetehr groups of processes are requested or not
+// check if all known processes are requested
+map<TString, _F_genproc_def> known_procs;
+if (requested_procs[0] == "all")
+	{
+	known_procs = main_dtag_info.std_procs.all;
+	// and reset the requested processes to all known processes for this dtag
+	requested_procs.clear();
+	// loop over all known processes
+	for (const auto& proc: main_dtag_info.std_procs.all)
+		{
+		cout_expr(proc.first);
+		requested_procs.push_back(proc.first);
+		}
+	}
+
+else
+	{
+	known_procs = main_dtag_info.std_procs.groups;
+	//known_procs = main_dtag_info.std_procs.all;
+	// populate definitions of groups with the fine-grain definitions of all processes			
+	known_procs.insert(main_dtag_info.std_procs.all.begin(), main_dtag_info.std_procs.all.end());
+	}
+
+
+// name of the catchall process for the defined dtag
+TString procname_catchall = main_dtag_info.std_procs.catchall_name;
+map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.std_procs.channel_standard;
+
+// --------------------------------- SETUP RECORD HISTOS for output
+for (const auto& systname: requested_systematics)
+	{
+	// find the definition of this channel
+	Stopif(known_systematics.find(systname) == known_systematics.end(), continue, "Do not know a systematic %s", systname.Data());
+
+	T_syst_chan_proc_histos systematic = {.name=systname, .syst_def = known_systematics[systname]};
+
+	// define channels
+	for (const auto& channame: requested_channels)
+		{
+		// find the definition of this channel
+		Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
+
+		T_chan_proc_histos channel          = {
+			.name = channame,
+			.chan_def = known_defs_channels[channame],
+			.procs = {},
+			.name_catchall_proc = procname_catchall};
+
+		// check if standard processes per channels are requested
+		vector<TString>* process_definitions_to_use = &requested_procs;
+		if ((*process_definitions_to_use)[0] == "std")
+			{
+			// TODO in case of an unknown process set an inclusive definition
+			Stopif(known_std_procs_per_channel.find(channame) == known_std_procs_per_channel.end(), continue, "Do not know standard processes for the channel %s", channame.Data())
+			// set the standard processes
+			process_definitions_to_use = &known_std_procs_per_channel[channame];
+			}
+
+		// define processes
+		bool is_catchall_proc_done = false; // TODO: it will be set with the first defined process, but make it work always -- push_back an additional process with the inclusive definition
+
+		// loop over requested processes and find their definitions for recording in this channel
+		//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
+		for (const auto& procname: (*process_definitions_to_use))
+			{
+			// find the definition of this channel
+			//TString procname(*requested_proc);
+
+			Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
+
+			T_proc_histos process = {.name=procname, .proc_def=known_procs[procname]};
+
+			// define distributions
+			// create the histograms for all of these definitions
+			for (const auto& distrname: requested_distrs)
+				{
+				Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
+
+				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname, distrname);
+				process.histos.push_back(a_distr);
+
+				if (!is_catchall_proc_done)
+					{
+					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname, distrname);
+					channel.catchall_proc_histos.push_back(a_distr);
+					n_distrs_made +=1;
+					}
+				n_distrs_made +=1;
+				}
+
+			channel.procs.push_back(process);
+			// together with the first requested processes the catchall processes has been set up
+			if (!is_catchall_proc_done)
+				{
+				is_catchall_proc_done = true;
+				n_procs_made +=1;
+				}
+			n_procs_made +=1;
+			}
+
+		systematic.chans.push_back(channel);
+		n_chans_made +=1;
+		}
+
+	distrs_to_record.push_back(systematic);
+	n_systs_made +=1;
+	}
+
+cerr_expr(n_systs_made << " " << n_chans_made << " " << n_procs_made << " " << n_distrs_made);
+return distrs_to_record;
+}
+
 /** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
 
 It parses the requested channels, systematics and distributions;
@@ -1994,156 +2166,15 @@ bool skip_nup5_events = do_WNJets_stitching && isMC && main_dtag.Contains("WJets
 //// define histograms for the distributions
 //vector<TH1D_histo> distrs;
 
+
+
 // define a nested list: list of channels, each containing a list of histograms to record
-vector<T_syst_chan_proc_histos> distrs_to_record;
-
-
-// final state channels
-vector<TString> requested_channels_all = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_elmu", "dy_elmu_ss", "dy_mumu", "dy_elel"};
-if (requested_channels[0] == "all")
-	requested_channels = requested_channels_all;
-
-//const char* requested_channel_names[] = {"tt_elmu", NULL};
-//vector<TString> requested_procs   = {"all"};
-//vector<TString> requested_procs   = {"std"};
-vector<TString> requested_systematics_test = {"NOMINAL",
-	"JERUp",
-	"JERDown",
-	"JESUp",
-	"JESDown",
-	"TESUp",
-	"TESDown",
-	"PUUp",
-	"PUDown",
-	"bSFUp",
-	"bSFDown",
-	"LEPelIDUp",
-	"LEPelIDDown",
-	"LEPelTRGUp",
-	"LEPelTRGDown",
-	"LEPmuIDUp",
-	"LEPmuIDDown",
-	"LEPmuTRGUp",
-	"LEPmuTRGDown",
-	};
-
-if (requested_systematics[0] == "test")
-	requested_systematics = requested_systematics_test;
-else if (requested_systematics[0] == "std")
-	requested_systematics = main_dtag_info.std_systs;
-
-//requested_systematics[0] = "NOMINAL"; requested_systematics[1] = NULL;
-
-//const char* requested_distrs[]        = {"Mt_lep_met_c", "leading_lep_pt", NULL};
-
-// set the known processes according to the request: whetehr groups of processes are requested or not
-// check if all known processes are requested
-map<TString, _F_genproc_def> known_procs;
-if (requested_procs[0] == "all")
-	{
-	known_procs = main_dtag_info.std_procs.all;
-	// and reset the requested processes to all known processes for this dtag
-	requested_procs.clear();
-	// loop over all known processes
-	for (const auto& proc: main_dtag_info.std_procs.all)
-		{
-		cout_expr(proc.first);
-		requested_procs.push_back(proc.first);
-		}
-	}
-
-else
-	{
-	known_procs = main_dtag_info.std_procs.groups;
-	//known_procs = main_dtag_info.std_procs.all;
-	// populate definitions of groups with the fine-grain definitions of all processes			
-	known_procs.insert(main_dtag_info.std_procs.all.begin(), main_dtag_info.std_procs.all.end());
-	}
-
-// name of the catchall process for the defined dtag
-TString procname_catchall = main_dtag_info.std_procs.catchall_name;
-map<TString, vector<TString>>& known_std_procs_per_channel = main_dtag_info.std_procs.channel_standard;
-
-// some info for profiling
-int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
-
-// --------------------------------- SETUP RECORD HISTOS for output
-for (const auto& systname: requested_systematics)
-	{
-	// find the definition of this channel
-	Stopif(known_systematics.find(systname) == known_systematics.end(), continue, "Do not know a systematic %s", systname.Data());
-
-	T_syst_chan_proc_histos systematic = {.name=systname, .syst_def = known_systematics[systname]};
-
-	// define channels
-	for (const auto& channame: requested_channels)
-		{
-		// find the definition of this channel
-		Stopif(known_defs_channels.find(channame) == known_defs_channels.end(), continue, "Do not know the channel %s", channame.Data());
-
-		T_chan_proc_histos channel          = {.name=channame, .chan_def=known_defs_channels[channame]};
-
-		// check if standard processes per channels are requested
-		vector<TString>* process_definitions_to_use = &requested_procs;
-		if ((*process_definitions_to_use)[0] == "std")
-			{
-			// TODO in case of an unknown process set an inclusive definition
-			Stopif(known_std_procs_per_channel.find(channame) == known_std_procs_per_channel.end(), continue, "Do not know standard processes for the channel %s", channame.Data())
-			// set the standard processes
-			process_definitions_to_use = &known_std_procs_per_channel[channame];
-			}
-
-		// define processes
-		bool is_catchall_proc_done = false; // TODO: it will be set with the first defined process, but make it work always -- push_back an additional process with the inclusive definition
-
-		// loop over requested processes and find their definitions for recording in this channel
-		//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
-		for (const auto& procname: (*process_definitions_to_use))
-			{
-			// find the definition of this channel
-			//TString procname(*requested_proc);
-
-			Stopif(known_procs.find(procname) == known_procs.end(), continue, "Do not know the process %s", procname.Data());
-
-			T_proc_histos process = {.name=procname, .proc_def=known_procs[procname]};
-
-			// define distributions
-			// create the histograms for all of these definitions
-			for (const auto& distrname: requested_distrs)
-				{
-				Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
-
-				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname, distrname);
-				process.histos.push_back(a_distr);
-
-				if (!is_catchall_proc_done)
-					{
-					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname, distrname);
-					channel.catchall_proc_histos.push_back(a_distr);
-					n_distrs_made +=1;
-					}
-				n_distrs_made +=1;
-				}
-
-			channel.procs.push_back(process);
-			// together with the first requested processes the catchall processes has been set up
-			if (!is_catchall_proc_done)
-				{
-				is_catchall_proc_done = true;
-				n_procs_made +=1;
-				}
-			n_procs_made +=1;
-			}
-
-		systematic.chans.push_back(channel);
-		n_chans_made +=1;
-		}
-
-	distrs_to_record.push_back(systematic);
-	n_systs_made +=1;
-	}
-
-cerr_expr(n_systs_made << " " << n_chans_made << " " << n_procs_made << " " << n_distrs_made);
+vector<T_syst_chan_proc_histos> distrs_to_record = setup_record_histos(
+	main_dtag_info,
+	requested_systematics ,
+	requested_channels    ,
+	requested_procs       ,
+	requested_distrs      );
 
 // --------------------------------- EVENT LOOP
 // process input files
@@ -2372,24 +2403,24 @@ if (save_in_old_order)
 
 		// same for catchall
 		// the old order of the path
-		//TString path = chan.name + "/" + procname_catchall + "/" + syst_name + "/";
+		//TString path = chan.name + "/" + chan.name_catchall_proc + "/" + syst_name + "/";
 
 		// get or create this path
 		output_file->cd();
 		TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
 		chanpath->cd();
-		TDirectory* procpath = chanpath->Get(procname_catchall) ? (TDirectory*) chanpath->Get(procname_catchall) :  (TDirectory*) chanpath->mkdir(procname_catchall);
+		TDirectory* procpath = chanpath->Get(chan.name_catchall_proc) ? (TDirectory*) chanpath->Get(chan.name_catchall_proc) :  (TDirectory*) chanpath->mkdir(chan.name_catchall_proc);
 		procpath->cd();
 		TDirectory* systpatch = procpath->Get(syst_name) ? (TDirectory*) procpath->Get(syst_name) :  (TDirectory*) procpath->mkdir(syst_name);
 		systpatch->cd();
 
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
-			TString histoname = chan.name + "_" + procname_catchall + "_" + syst_name + "_" + recorded_histo.main_name;
+			TString histoname = chan.name + "_" + chan.name_catchall_proc + "_" + syst_name + "_" + recorded_histo.main_name;
 			recorded_histo.histo->SetName(histoname);
 
 			if (isMC)
-				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, procname_catchall);
+				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, chan.name_catchall_proc);
 			recorded_histo.histo->Write();
 
 			// data simulation if requested
@@ -2455,13 +2486,13 @@ else
 
 		// same for catchall
 		dir_chan->cd();
-		TDirectory* dir_proc_catchall = (TDirectory*) dir_chan->mkdir(procname_catchall);
+		TDirectory* dir_proc_catchall = (TDirectory*) dir_chan->mkdir(chan.name_catchall_proc);
 		//dir_proc_catchall->SetDirectory(dir_chan);
 		dir_proc_catchall->cd();
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
 			if (isMC)
-				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, procname_catchall);
+				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, chan.name_catchall_proc);
 			recorded_histo.histo->Write();
 
 			// data simulation if requested
