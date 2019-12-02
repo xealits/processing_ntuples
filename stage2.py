@@ -281,14 +281,14 @@ def passes_dy_tautau_selection_stages(passed_triggers, leps, N_jets, taus, proc_
     if len(taus) > 0:
         tau_IDlev = taus[0][4]
 
-    pass_Tight_sel     = old_jet_sel    and tau_IDlev > TAUS_ID_CUT_Tight
-    pass_Tight_sel_os  = pass_Tight_sel and leps[4][0] * taus[0][2] < 0
-    pass_old_sel       = old_jet_sel and tau_IDlev > TAUS_ID_CUT_Medium
-    pass_old_sel_os    = pass_old_sel and leps[4][0] * taus[0][2] < 0
-    pass_old_selVLoose       = old_jet_sel and tau_IDlev > TAUS_ID_CUT_VLoose
-    pass_old_selVLoose_os    = pass_old_selVLoose and leps[4][0] * taus[0][2] < 0
+    #pass_Tight_sel     = old_jet_sel    and tau_IDlev > TAUS_ID_CUT_Tight
+    #pass_Tight_sel_os  = pass_Tight_sel and leps[4][0] * taus[0][2] < 0
+    #pass_old_sel       = old_jet_sel and tau_IDlev > TAUS_ID_CUT_Medium
+    #pass_old_sel_os    = pass_old_sel and leps[4][0] * taus[0][2] < 0
+    #pass_old_selVLoose       = old_jet_sel and tau_IDlev > TAUS_ID_CUT_VLoose
+    #pass_old_selVLoose_os    = pass_old_selVLoose and leps[4][0] * taus[0][2] < 0
 
-    opposite_charge = leps[4][0] * taus[0][2] < 0
+    opposite_charge = pass_objects and leps[4][0] * taus[0][2] < 0
 
     nom_tau = taus[0][0]*taus[0][1][0]
     pair    = leps[0][0] + nom_tau
