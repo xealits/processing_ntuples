@@ -1,6 +1,6 @@
 from sys import argv
 import os
-from os.path import isfile
+from os.path import isfile, isdir
 import logging
 import threading
 
@@ -85,6 +85,8 @@ if __name__ == '__main__':
         if isfile(fout_name) and not args.overwrite:
             print "output file exists: %s" % (fout_name)
             continue
+        # test fout_name is not a directory!
+        assert not isdir(fout_name)
 
         if args.old_loop:
             import full_selection
