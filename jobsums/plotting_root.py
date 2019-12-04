@@ -54,7 +54,9 @@ nick_info = {
 "ttbar":         {'color': kOrange+3, 'legend': 'tt_{all}'},
 
 "tt_mutau3ch":   {'color': rgb(255, 255, 178), 'legend': 't#bar{t}#rightarrow #mu#tau_{3h}'},
-"tt_eltau3ch":   {'color': rgb(254,204,92),    'legend': 't#bar{t}#rightarrow e#tau_{3h}'},
+"tt_mutau1ch":   {'color': rgb(255, 255, 178), 'legend': 't#bar{t}#rightarrow #mu#tau_{3h}'},
+"tt_eltau3ch":   {'color': rgb(254,204,92),    'legend': 't#bar{t}#rightarrow e#tau_{1h}'},
+"tt_eltau1ch":   {'color': rgb(254,204,92),    'legend': 't#bar{t}#rightarrow e#tau_{1h}'},
 
 "tt_mutau":      {'color': rgb(255, 255, 178), 'legend': 't#bar{t}#rightarrow #mu#nu_{#mu}#tau_{h}#nu_{#tau}b#bar{b}'},
 "tt_eltau":      {'color': rgb(254,204,92),    'legend': 't#bar{t}#rightarrow e#nu_{e}#tau_{h}#nu_{#tau}b#bar{b}'},
@@ -65,6 +67,7 @@ nick_info = {
 "tt_ljw":        {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow ljw'},
 "tt_ljb":        {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow ljb'},
 "tt_ljo":        {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow ljo'},
+"tt_ljz":        {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow ljz'},
 "tt_lj":         {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow l#nu_{l}qq\'b#bar{b}'},
 "tt_muj":        {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow #mu#nu_{#mu}qq\'b#bar{b}'},
 "tt_elj":        {'color': rgb(240,59,32),     'legend': 't#bar{t}#rightarrow e#nu_{e}qq\'b#bar{b}'},
@@ -82,6 +85,8 @@ nick_colour = {nick: nick_info[nick]['color'] for nick in nick_info}
 nick_order = {
 "tt_mutau3ch":  -1,
 "tt_eltau3ch":  -1,
+"tt_mutau1ch":  -2,
+"tt_eltau1ch":  -2,
 "tt_mutau": -2,
 "tt_eltau": -2,
 "tt_elmu":  -3,
@@ -91,6 +96,7 @@ nick_order = {
 "tt_ljw": -5,
 "tt_ljb": -6,
 "tt_ljo": -7,
+"tt_ljz": -8,
 "tt_lj":  -8,
 "tt_elj": -8,
 "tt_muj": -8,

@@ -10,7 +10,7 @@ histograms_to_fit: systematics=std
 histograms_to_fit: channels=mu_sel,tt_elmu
 histograms_to_fit: processes=std
 histograms_to_fit: distrs=Mt_lep_met_c,leading_lep_pt
-histograms_to_fit: dtags_grep=.*
+histograms_to_fit: dtags_grep=.
 histograms_to_fit:
 	mkdir -p ${distr_out}/${nt}/${proc}/${hists}/
 	#for dtag in `ls ${stage2_dir}/${nt}/${proc}/`; do \

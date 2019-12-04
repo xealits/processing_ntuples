@@ -1557,6 +1557,16 @@ map<TString, S_dtag_info> create_known_dtags_info()
 map<TString, S_dtag_info> known_dtags_info = create_known_dtags_info();
 
 
+/* --------------------------------------------------------------- */
+// helper functions
+
+const char* TString_Data (TString& str) {return str.Data();}
+const char* TH1D_Name    (TH1D& hist) {return hist.GetName();}
+
+/* --------------------------------------------------------------- */
+
+
+
 
 /* --------------------------------------------------------------- */
 
@@ -1602,7 +1612,6 @@ typedef struct{
 
 // normalization per gen lumi event weight
 TH1D* weight_counter = NULL;
-bool normalise_per_weight = true;
 
 // per dtag cross section
 bool normalise_per_cross_section = true;
@@ -1957,7 +1966,7 @@ if (requested_procs[0] == "all")
 	// loop over all known processes
 	for (const auto& proc: main_dtag_info.std_procs.all)
 		{
-		cout_expr(proc.first);
+		//cout_expr(proc.first);
 		requested_procs.push_back(proc.first);
 		}
 	}
@@ -2072,6 +2081,11 @@ finally all histograms are written out in the standard format `channel/process/s
 The input now: `input_filename [input_filename+]`.
  */
 
+// TODO: turn these into arguments for main
+bool do_not_overwrite     = true;
+bool normalise_per_weight = true;
+
+
 int main (int argc, char *argv[])
 {
 argc--;
@@ -2109,7 +2123,6 @@ vector<TString> requested_distrs      = parse_coma_list(*argv++); argc--;
 
 const char* output_filename = *argv++; argc--;
 
-bool do_not_overwrite = true;
 if  (do_not_overwrite)
 	Stopif(access(output_filename, F_OK) != -1, exit(0);, "the output file exists %s", output_filename);
 
@@ -2258,7 +2271,11 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 				// assign the gen process
 				// loop over procs check if this event passes
 				// if not get the catchall proc
-				vector<TH1D_histo>* histos = NULL;
+
+				// set catchall
+				vector<TH1D_histo>* histos = &(chan.catchall_proc_histos);
+
+				// check if any specific channel passes
 				for (int pi=0; pi<chan.procs.size(); pi++)
 					{
 					if (chan.procs[pi].proc_def())
@@ -2267,9 +2284,6 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 						break;
 						}
 					}
-
-				if (histos == NULL)
-					histos = & chan.catchall_proc_histos;
 
 				// record all distributions with the given event weight
 				for (int di=0; di<histos->size(); di++)
@@ -2405,25 +2419,26 @@ if (save_in_old_order)
 		// the old order of the path
 		//TString path = chan.name + "/" + chan.name_catchall_proc + "/" + syst_name + "/";
 
-		// get or create this path
-		output_file->cd();
-		TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
-		chanpath->cd();
-		TDirectory* procpath = chanpath->Get(chan.name_catchall_proc) ? (TDirectory*) chanpath->Get(chan.name_catchall_proc) :  (TDirectory*) chanpath->mkdir(chan.name_catchall_proc);
-		procpath->cd();
-		TDirectory* systpatch = procpath->Get(syst_name) ? (TDirectory*) procpath->Get(syst_name) :  (TDirectory*) procpath->mkdir(syst_name);
-		systpatch->cd();
-
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
+			// get or create this path
+			output_file->cd();
+			TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
+			chanpath->cd();
+			TDirectory* procpath = chanpath->Get(chan.name_catchall_proc) ? (TDirectory*) chanpath->Get(chan.name_catchall_proc) :  (TDirectory*) chanpath->mkdir(chan.name_catchall_proc);
+			procpath->cd();
+			TDirectory* systpatch = procpath->Get(syst_name) ? (TDirectory*) procpath->Get(syst_name) :  (TDirectory*) procpath->mkdir(syst_name);
+			systpatch->cd();
+
 			TString histoname = chan.name + "_" + chan.name_catchall_proc + "_" + syst_name + "_" + recorded_histo.main_name;
+			//cerr_expr(histoname);
 			recorded_histo.histo->SetName(histoname);
 
 			if (isMC)
 				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, chan.name_catchall_proc);
 			recorded_histo.histo->Write();
 
-			// data simulation if requested
+			// data simulation for each recorded distr if requested
 			if (simulate_data && syst_name == "NOMINAL")
 				{
 				output_file->cd();
@@ -2484,13 +2499,14 @@ else
 				}
 			}
 
-		// same for catchall
-		dir_chan->cd();
-		TDirectory* dir_proc_catchall = (TDirectory*) dir_chan->mkdir(chan.name_catchall_proc);
-		//dir_proc_catchall->SetDirectory(dir_chan);
-		dir_proc_catchall->cd();
 		for(const auto& recorded_histo: chan.catchall_proc_histos)
 			{
+			// same for catchall
+			dir_chan->cd();
+			TDirectory* dir_proc_catchall = dir_chan->Get(chan.name_catchall_proc) ? (TDirectory*) dir_chan->Get(chan.name_catchall_proc) : (TDirectory*) dir_chan->mkdir(chan.name_catchall_proc);
+			//dir_proc_catchall->SetDirectory(dir_chan);
+			dir_proc_catchall->cd();
+
 			if (isMC)
 				normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, chan.name_catchall_proc);
 			recorded_histo.histo->Write();
