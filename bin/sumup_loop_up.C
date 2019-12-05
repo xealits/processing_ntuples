@@ -60,6 +60,10 @@ with a separate function to connect an input TTree to that namespace etc.
 
 using namespace std;
 
+// TODO: turn these into arguments for main
+bool do_not_overwrite     = true;
+bool normalise_per_weight = true;
+
 #define cout_expr(Name)   cout << #Name << " = " << Name << std::endl
 #define cerr_expr(Name)   cerr << #Name << " = " << Name << std::endl
 
@@ -712,9 +716,9 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 
 	r = {100, true,   0, 400};                                                     m["dilep_mass"]     = {NT_distr_dilep_mass, r};
 	r = {40,  true,  80, 100};                                                     m["dilep_mass_dy"]  = {NT_distr_dilep_mass, r};
-	r = {40,  true,  20,  80};                                                     m["dilep_mass_dy_tautau"]  = {NT_distr_dilep_mass, r};
+	r = {40,  true,  20, 120};                                                     m["dilep_mass_dy_tautau"]  = {NT_distr_dilep_mass, r};
 
-	r = {40, true, -2., 2.};                                                     m["sum_cos"]        = {NT_distr_sum_cos, r};
+	r = {40,  true, -2., 2.};                                                      m["sum_cos"]        = {NT_distr_sum_cos, r};
 
 	static double bins_lj_var[] = {0,15,30,45,60,90,120,170,220,270,400};   r = {(sizeof(bins_lj_var) / sizeof(bins_lj_var[0]))-1, false,-1,  -1, bins_lj_var};   m["lj_var"] = {NT_distr_lj_var, r};
 	static double bins_lj_var_w_mass[] = {10,40,65,80,95,120,150,200};      r = {(sizeof(bins_lj_var_w_mass) / sizeof(bins_lj_var_w_mass[0]))-1, false,-1,  -1, bins_lj_var_w_mass};   m["lj_var_w_mass"] = {NT_distr_lj_var_w_mass, r};
@@ -1218,12 +1222,6 @@ NT_genproc(tt_ltaul      , 2)
 NT_genproc(tt_taueltaumu , 1)
 //NT_genproc(tt_other      , 0) // no "tt_other"! it is a catchall process, they are handled automatically
 
-// temporary fix for lj events in elmu final state
-bool NT_genproc_tt_elmu_lj()
-	{
-	return NT_gen_proc_id == 3 || NT_gen_proc_id == 0 || (NT_gen_proc_id > 20 && NT_gen_proc_id < 30);
-	}
-
 NT_genproc(dy_tautau , 1)
 
 NT_genproc(wjets_tauh , 2)
@@ -1311,8 +1309,7 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"tt_ljz"        , NT_genproc_tt_ljz        },
 			{"tt_taultauh"   , NT_genproc_tt_taultauh   },
 			{"tt_taulj"      , NT_genproc_tt_taulj      },
-			//{"tt_elmu"       , NT_genproc_tt_elmu       },
-			{"tt_elmu"       , NT_genproc_tt_elmu_lj       }, // FIXME: remove this when the problem with lj events is fixed!
+			{"tt_elmu"       , NT_genproc_tt_elmu       },
 			{"tt_ltaul"      , NT_genproc_tt_ltaul      },
 			{"tt_taueltaumu" , NT_genproc_tt_taueltaumu },
 			//{"tt_other"      , NT_genproc_tt_other      },
@@ -2080,10 +2077,6 @@ finally all histograms are written out in the standard format `channel/process/s
 
 The input now: `input_filename [input_filename+]`.
  */
-
-// TODO: turn these into arguments for main
-bool do_not_overwrite     = true;
-bool normalise_per_weight = true;
 
 
 int main (int argc, char *argv[])
