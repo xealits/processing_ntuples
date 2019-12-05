@@ -959,7 +959,10 @@ bool NT_channel_dy_mutau(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 135 || relevant_selection_stage == 134 || relevant_selection_stage == 125 || relevant_selection_stage == 124;
+
+	double mT = NT_distr_Mt_lep_met(sys);
+
+	return mT < 40 && (relevant_selection_stage == 135 || relevant_selection_stage == 134 || relevant_selection_stage == 125 || relevant_selection_stage == 124);
 	}
 
 bool NT_channel_dy_eltau(ObjSystematics sys)
@@ -973,7 +976,10 @@ bool NT_channel_dy_eltau(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 235 || relevant_selection_stage == 234 || relevant_selection_stage == 225 || relevant_selection_stage == 224;
+
+	double mT = NT_distr_Mt_lep_met(sys);
+
+	return mT < 40 && (relevant_selection_stage == 235 || relevant_selection_stage == 234 || relevant_selection_stage == 225 || relevant_selection_stage == 224);
 	}
 
 bool NT_channel_dy_mutau_ss(ObjSystematics sys)
@@ -987,7 +993,10 @@ bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 133 || relevant_selection_stage == 132 || relevant_selection_stage == 123 || relevant_selection_stage == 122;
+
+	double mT = NT_distr_Mt_lep_met(sys);
+
+	return mT < 40 && (relevant_selection_stage == 133 || relevant_selection_stage == 132 || relevant_selection_stage == 123 || relevant_selection_stage == 122);
 	}
 
 bool NT_channel_dy_eltau_ss(ObjSystematics sys)
@@ -1001,7 +1010,10 @@ bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
 	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
 	else relevant_selection_stage = NT_selection_stage_dy;
-	return relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222;
+
+	double mT = NT_distr_Mt_lep_met(sys);
+
+	return mT < 40 && (relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222);
 	}
 
 bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
