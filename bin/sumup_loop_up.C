@@ -618,6 +618,27 @@ double NT_distr_dilep_mass(ObjSystematics sys)
 		return -111.;
 	}
 
+double NT_distr_tau_pt(ObjSystematics sys)
+	{
+
+	// from stage2.py and std_defs.py:
+	//'tau_pt':        ({'NOMINAL': lambda ev: ev.event_taus[0].pt()    if len(ev.event_taus) > 0   else -111.},    ('histo-range',  [40,0,200])),
+	//'event_taus_TES_up' : 'DoubleVector',
+	//'event_taus_TES_down' : 'DoubleVector',
+	//p4 = tau[0] * TES_nom
+	//event_taus          .push_back(p4)
+	//event_taus_TES_up   .push_back(TES_up / TES_nom)
+	//event_taus_TES_down .push_back(TES_down / TES_nom)
+
+	if (NT_event_taus.size()==0)
+		return -111.;
+
+	double pt = NT_event_taus[0].pt();
+	if      (sys == TESUp)   return pt * NT_event_taus_TES_up[0];
+	else if (sys == TESDown) return pt * NT_event_taus_TES_down[0];
+	else                     return pt;
+	}
+
 double NT_distr_tau_sv_sign(ObjSystematics sys)
 	{
 	if (NT_event_taus_sv_sign.size()>0)
@@ -712,6 +733,9 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
 
 	r = {40,  true,   0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
+	r = {40,  true,   0, 200};                                                     m["tau_pt"]         = {NT_distr_tau_pt, r};
+	// taus have smaller energy in ttbar, therefore we might want to look at a smaller range
+	r = {40,  true,   0, 150};                                                     m["tau_pt_range2"]  = {NT_distr_tau_pt, r};
 	r = {21,  true,  -1,  20};                                                     m["tau_sv_sign"]    = {NT_distr_tau_sv_sign, r};
 
 	r = {100, true,   0, 400};                                                     m["dilep_mass"]     = {NT_distr_dilep_mass, r};
@@ -831,13 +855,13 @@ bool NT_channel_mu_sel_ss(ObjSystematics sys)
 bool NT_channel_mu_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_mu_sel(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_mu_sel_ss(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 bool NT_channel_el_sel(ObjSystematics sys)
@@ -871,13 +895,13 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel_ss(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 // union os mu_sel and el_sel
@@ -912,13 +936,15 @@ bool NT_channel_lep_sel_ss(ObjSystematics sys)
 bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel_ss(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
+	//return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 
@@ -1019,23 +1045,24 @@ bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau_ss(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau_ss(sys);
-	return sel && NT_event_taus_sv_sign[0] > 3.;
+	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 
@@ -1927,7 +1954,35 @@ vector<T_syst_chan_proc_histos> distrs_to_record;
 int n_systs_made = 0, n_chans_made = 0, n_procs_made = 0, n_distrs_made = 0;
 
 // final state channels
-vector<TString> requested_channels_all = {"el_sel", "mu_sel", "el_sel_ss", "mu_sel_ss", "tt_elmu", "tt_elmu_tight", "dy_mutau", "dy_mutau_ss", "dy_eltau", "dy_eltau_ss", "dy_elmu", "dy_elmu_ss", "dy_mumu", "dy_elel"};
+vector<TString> requested_channels_all = {
+	"el_sel",
+	"mu_sel",
+	"el_sel_ss",
+	"mu_sel_ss",
+
+	"el_sel_tauSV3",
+	"mu_sel_tauSV3",
+	"el_sel_ss_tauSV3",
+	"mu_sel_ss_tauSV3",
+
+	"tt_elmu",
+	"tt_elmu_tight",
+
+	"dy_mutau",
+	"dy_mutau_ss",
+	"dy_eltau",
+	"dy_eltau_ss",
+
+	"dy_mutau_tauSV3",
+	"dy_mutau_ss_tauSV3",
+	"dy_eltau_tauSV3",
+	"dy_eltau_ss_tauSV3",
+
+	"dy_elmu",
+	"dy_elmu_ss",
+	"dy_mumu",
+	"dy_elel"};
+
 if (requested_channels[0] == "all")
 	requested_channels = requested_channels_all;
 
