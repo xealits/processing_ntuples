@@ -121,14 +121,14 @@ nick_order = {
 "stop_other": -24,
 "stop":       -24,
 
-"wjets":       -30,
-"wjets_other": -30,
-"wjets_tauh":  -31,
-"wjets_taul":  -32,
+"dy_tautau":   -30,
+"dy_other":    -31,
+"dy":          -32,
 
-"dy_tautau":   -35,
-"dy_other":    -36,
-"dy":          -36,
+"wjets_tauh":  -35,
+"wjets_taul":  -36,
+"wjets":       -37,
+"wjets_other": -37,
 
 "dibosons"       : -40,
 "dibosons_other" : -40,

@@ -957,7 +957,7 @@ bool NT_channel_tt_elmu(ObjSystematics sys)
 	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
 	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
 	else relevant_selection_stage = NT_selection_stage_em;
-	return relevant_selection_stage > 210 || relevant_selection_stage < 220;
+	return relevant_selection_stage > 210 && relevant_selection_stage < 220;
 	}
 
 bool NT_channel_tt_elmu_tight(ObjSystematics sys)
