@@ -1368,6 +1368,11 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"mu_sel",    _mutau_tt_procs},
 			{"mu_sel_ss", _mutau_tt_procs},
 
+			{"el_sel_tauSV3",    _eltau_tt_procs},
+			{"el_sel_ss_tauSV3", _eltau_tt_procs},
+			{"mu_sel_tauSV3",    _mutau_tt_procs},
+			{"mu_sel_ss_tauSV3", _mutau_tt_procs},
+
 			{"lep_sel",    _leptau_tt_procs},
 			{"lep_sel_ss", _leptau_tt_procs},
 
@@ -1380,6 +1385,12 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"dy_mutau_ss",   _mutau_tt_procs},
 			{"dy_eltau",      _eltau_tt_procs},
 			{"dy_eltau_ss",   _eltau_tt_procs},
+
+			{"dy_mutau_tauSV3",      _mutau_tt_procs},
+			{"dy_mutau_ss_tauSV3",   _mutau_tt_procs},
+			{"dy_eltau_tauSV3",      _eltau_tt_procs},
+			{"dy_eltau_ss_tauSV3",   _eltau_tt_procs},
+
 			{"dy_mumu",       _mumu_tt_procs},
 			{"dy_elel",       _mumu_tt_procs},
 
@@ -1399,12 +1410,25 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _leptau_dy_procs},
 			{"mu_sel",    _leptau_dy_procs},
 			{"mu_sel_ss", _leptau_dy_procs},
+
+			{"el_sel_tauSV3",    _leptau_dy_procs},
+			{"el_sel_ss_tauSV3", _leptau_dy_procs},
+			{"mu_sel_tauSV3",    _leptau_dy_procs},
+			{"mu_sel_ss_tauSV3", _leptau_dy_procs},
+
 			{"tt_elmu",       _incl_dy_procs},
 			{"tt_elmu_tight", _incl_dy_procs},
+
 			{"dy_mutau",      _leptau_dy_procs},
 			{"dy_mutau_ss",   _leptau_dy_procs},
 			{"dy_eltau",      _leptau_dy_procs},
 			{"dy_eltau_ss",   _leptau_dy_procs},
+
+			{"dy_mutau_tauSV3",      _leptau_dy_procs},
+			{"dy_mutau_ss_tauSV3",   _leptau_dy_procs},
+			{"dy_eltau_tauSV3",      _leptau_dy_procs},
+			{"dy_eltau_ss_tauSV3",   _leptau_dy_procs},
+
 			{"dy_mumu",       _incl_dy_procs},
 			{"dy_elel",       _incl_dy_procs},
 			{"dy_elmu",       _leptau_dy_procs},
@@ -1428,12 +1452,25 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _eltau_stop_procs},
 			{"mu_sel",    _mutau_stop_procs},
 			{"mu_sel_ss", _mutau_stop_procs},
+
+			{"el_sel_tauSV3",    _eltau_stop_procs},
+			{"el_sel_ss_tauSV3", _eltau_stop_procs},
+			{"mu_sel_tauSV3",    _mutau_stop_procs},
+			{"mu_sel_ss_tauSV3", _mutau_stop_procs},
+
 			{"tt_elmu",        _elmu_stop_procs},
 			{"tt_elmu_tight",  _elmu_stop_procs},
+
 			{"dy_mutau",      _mutau_stop_procs},
 			{"dy_mutau_ss",   _mutau_stop_procs},
 			{"dy_eltau",      _eltau_stop_procs},
 			{"dy_eltau_ss",   _eltau_stop_procs},
+
+			{"dy_mutau_tauSV3",      _mutau_stop_procs},
+			{"dy_mutau_ss_tauSV3",   _mutau_stop_procs},
+			{"dy_eltau_tauSV3",      _eltau_stop_procs},
+			{"dy_eltau_ss_tauSV3",   _eltau_stop_procs},
+
 			{"dy_mumu",        _mumu_stop_procs},
 			{"dy_elel",        _mumu_stop_procs},
 			{"dy_elmu",       _elmu_stop_procs},
@@ -1455,12 +1492,25 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _eltau_wjets_procs},
 			{"mu_sel",    _mutau_wjets_procs},
 			{"mu_sel_ss", _mutau_wjets_procs},
+
+			{"el_sel_tauSV3",    _eltau_wjets_procs},
+			{"el_sel_ss_tauSV3", _eltau_wjets_procs},
+			{"mu_sel_tauSV3",    _mutau_wjets_procs},
+			{"mu_sel_ss_tauSV3", _mutau_wjets_procs},
+
 			{"tt_elmu",        _elmu_wjets_procs},
 			{"tt_elmu_tight",  _elmu_wjets_procs},
+
 			{"dy_mutau",      _mutau_wjets_procs},
 			{"dy_mutau_ss",   _mutau_wjets_procs},
 			{"dy_eltau",      _eltau_wjets_procs},
 			{"dy_eltau_ss",   _eltau_wjets_procs},
+
+			{"dy_mutau_tauSV3",      _mutau_wjets_procs},
+			{"dy_mutau_ss_tauSV3",   _mutau_wjets_procs},
+			{"dy_eltau_tauSV3",      _eltau_wjets_procs},
+			{"dy_eltau_ss_tauSV3",   _eltau_wjets_procs},
+
 			{"dy_mumu",        _mumu_wjets_procs},
 			{"dy_elel",        _mumu_wjets_procs},
 			{"dy_elmu",       _elmu_wjets_procs},
@@ -2075,11 +2125,17 @@ for (const auto& systname: requested_systematics)
 			// TODO in case of an unknown process set an inclusive definition
 			Stopif(known_std_procs_per_channel.find(channame) == known_std_procs_per_channel.end(), continue, "Do not know standard processes for the channel %s", channame.Data())
 			// set the standard processes
+
+			// debugging gdb does not pront neither TString not a map of it
+			cerr_expr(channame);
+			for (const auto& proc: known_std_procs_per_channel)
+				{
+				cerr_expr(proc.first.Data() << " " << proc.second.size());
+				}
+			//
+
 			process_definitions_to_use = &known_std_procs_per_channel[channame];
 			}
-
-		// define processes
-		bool is_catchall_proc_done = false; // TODO: it will be set with the first defined process, but make it work always -- push_back an additional process with the inclusive definition
 
 		// loop over requested processes and find their definitions for recording in this channel
 		//for (const char** requested_proc = requested_procs; *requested_proc != NULL; requested_proc++)
@@ -2101,22 +2157,24 @@ for (const auto& systname: requested_systematics)
 				TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname + "_" + systname + "_" + distrname, distrname);
 				process.histos.push_back(a_distr);
 
-				if (!is_catchall_proc_done)
-					{
-					TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname, distrname);
-					channel.catchall_proc_histos.push_back(a_distr);
-					n_distrs_made +=1;
-					}
 				n_distrs_made +=1;
 				}
 
 			channel.procs.push_back(process);
-			// together with the first requested processes the catchall processes has been set up
-			if (!is_catchall_proc_done)
-				{
-				is_catchall_proc_done = true;
-				n_procs_made +=1;
-				}
+			n_procs_made +=1;
+			}
+
+		// setup catchall process
+
+		// define distributions
+		// create the histograms for all of these definitions
+		for (const auto& distrname: requested_distrs)
+			{
+			Stopif(known_defs_distrs.find(distrname) == known_defs_distrs.end(), continue, "Do not know a distribution %s", distrname.Data());
+
+			TH1D_histo a_distr = create_TH1D_histo(known_defs_distrs[distrname], channame + "_" + procname_catchall + "_" + systname + "_" + distrname, distrname);
+			channel.catchall_proc_histos.push_back(a_distr);
+			n_distrs_made +=1;
 			n_procs_made +=1;
 			}
 
