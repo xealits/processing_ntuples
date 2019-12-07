@@ -1,5 +1,7 @@
 # fitting
-make histograms_to_fit nt=94v5 proc=processing1 hists=fit1  channels=el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,dy_mutau_tauSV3,dy_mumu,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt
+make histograms_to_fit nt=94v5 proc=processing1 hists=fit3 lumi=1000000  channels=el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,dy_mutau_tauSV3,dy_mumu,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt
+make histograms_to_fit nt=94v5 proc=processing1 hists=fit2 lumi=140000   channels=el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,dy_mutau_tauSV3,dy_mumu,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt
+make histograms_to_fit nt=94v5 proc=processing1 hists=fit1               channels=el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,dy_mutau_tauSV3,dy_mumu,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt
 
 make histograms_to_fit nt=94v4 proc=processing3 hists=fit1  distrs=Mt_lep_met_c,leading_lep_pt
 
