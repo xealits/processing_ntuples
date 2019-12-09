@@ -2125,15 +2125,6 @@ for (const auto& systname: requested_systematics)
 			// TODO in case of an unknown process set an inclusive definition
 			Stopif(known_std_procs_per_channel.find(channame) == known_std_procs_per_channel.end(), continue, "Do not know standard processes for the channel %s", channame.Data())
 			// set the standard processes
-
-			// debugging gdb does not pront neither TString not a map of it
-			cerr_expr(channame);
-			for (const auto& proc: known_std_procs_per_channel)
-				{
-				cerr_expr(proc.first.Data() << " " << proc.second.size());
-				}
-			//
-
 			process_definitions_to_use = &known_std_procs_per_channel[channame];
 			}
 
@@ -2537,8 +2528,11 @@ if (save_in_old_order)
 		// the old order of the path
 		//TString path = chan.name + "/" + chan.name_catchall_proc + "/" + syst_name + "/";
 
-		for(const auto& recorded_histo: chan.catchall_proc_histos)
+		//for(const auto& recorded_histo: chan.catchall_proc_histos)
+		for (unsigned int rec_histo_i = 0; rec_histo_i<chan.catchall_proc_histos.size(); rec_histo_i++)
 			{
+			const auto& recorded_histo = chan.catchall_proc_histos[rec_histo_i];
+
 			// get or create this path
 			output_file->cd();
 			TDirectory* chanpath = output_file->Get(chan.name) ? (TDirectory*) output_file->Get(chan.name) :  (TDirectory*) output_file->mkdir(chan.name);
@@ -2572,8 +2566,15 @@ if (save_in_old_order)
 				TH1D* data_histo = (TH1D*) recorded_histo.histo->Clone();
 				data_histo->SetDirectory(systpatch);
 				data_histo->SetName(data_name);
-				data_histo->Reset();
-				data_histo->Fill(1);
+
+				//data_histo->Reset();
+				//data_histo->Fill(1);
+				// instead, add histograms from all processes
+				for(const auto& proc: chan.procs)
+					{
+					data_histo->Add(proc.histos[rec_histo_i].histo);
+					}
+
 				data_histo->Write();
 				}
 
@@ -2605,20 +2606,22 @@ else
 			TDirectory* dir_proc = (TDirectory*) dir_chan->mkdir(proc.name);
 			//dir_proc->SetDirectory(dir_chan);
 			dir_proc->cd();
+
 			for(const auto& recorded_histo: proc.histos)
 				{
 				//recorded_histo.histo->Print();
-
 				// all final normalizations of the histogram
 				if (isMC)
 					normalise_final(recorded_histo.histo, main_dtag_info.cross_section, lumi, syst_name, chan.name, proc.name);
-
 				recorded_histo.histo->Write();
 				}
 			}
 
-		for(const auto& recorded_histo: chan.catchall_proc_histos)
+		//for(const auto& recorded_histo: chan.catchall_proc_histos)
+		for (unsigned int rec_histo_i = 0; rec_histo_i<chan.catchall_proc_histos.size(); rec_histo_i++)
 			{
+			const auto& recorded_histo = chan.catchall_proc_histos[rec_histo_i];
+
 			// same for catchall
 			dir_chan->cd();
 			TDirectory* dir_proc_catchall = dir_chan->Get(chan.name_catchall_proc) ? (TDirectory*) dir_chan->Get(chan.name_catchall_proc) : (TDirectory*) dir_chan->mkdir(chan.name_catchall_proc);
@@ -2644,8 +2647,15 @@ else
 				TH1D* data_histo = (TH1D*) recorded_histo.histo->Clone();
 				data_histo->SetDirectory(procpath);
 				data_histo->SetName(data_name);
-				data_histo->Reset();
-				data_histo->Fill(1);
+
+				//data_histo->Reset();
+				//data_histo->Fill(1);
+				// instead, add histograms from all processes
+				for(const auto& proc: chan.procs)
+					{
+					data_histo->Add(proc.histos[rec_histo_i].histo);
+					}
+
 				data_histo->Write();
 				}
 
