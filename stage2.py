@@ -25,6 +25,18 @@ with_bSF = True
 WITH_RECOIL_CORRECTIONS = False
 N_RECOIL_JETS = 0
 
+# https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
+b_tag_wp_loose  = 0.1522 # 0.5426 # 0.460 # 
+b_tag_wp_medium = 0.4941 # 0.8484 # 0.8   # 
+b_tag_wp_tight  = 0.8001 # 0.9535 # 0.935 # 
+# medium is used as the main b tag
+#b_tag_wp = b_tag_wp_medium
+'''
+                  if not jet_tau_match_old and b_tagged_medium:
+                      if jet_pt > JETS_PT_CUT:
+                          N_jets_nom_med += 1
+'''
+
 ISO_LEPS    = True
 JETS_PT_CUT = 20. # 21. # 
 TAUS_PT_CUT = 20. # 21. # # 20GeV for DY->tautau selection
@@ -3470,11 +3482,6 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
         if len(ev.jet_b_discr) > 0:
             lead_jet_b_discr = ev.jet_b_discr[0]
-
-        b_tag_wp_loose  = 0.5426 # 0.460 # 
-        b_tag_wp_medium = 0.8484 # 0.8   # 
-        b_tag_wp_tight  = 0.9535 # 0.935 # 
-        b_tag_wp = b_tag_wp_medium
 
         tau_dR_jet_min = 0.4 # ak4 jets
 
