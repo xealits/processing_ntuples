@@ -1,3 +1,7 @@
+# I need the background!!
+python genjobs.py 94v5 processingTestB2L --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_TTToSemiLeptonic_v2
+python genjobs.py 94v5 processingTestB1M --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_TTToSemiLeptonic_v2
+
 # testing b-tagging
 python genjobs.py 94v5 processingTestB2L --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_TTTo2L2Nu
 python genjobs.py 94v5 processingTestB1M --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_TTTo2L2Nu
