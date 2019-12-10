@@ -733,6 +733,7 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
 
 	r = {40,  true,   0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
+	r = {40,  true,  30,  40};                                                     m["leading_lep_pt_el_edge35"] = {NT_distr_leading_lep_pt, r};
 	r = {40,  true,   0, 200};                                                     m["tau_pt"]         = {NT_distr_tau_pt, r};
 	// taus have smaller energy in ttbar, therefore we might want to look at a smaller range
 	r = {40,  true,   0, 150};                                                     m["tau_pt_range2"]  = {NT_distr_tau_pt, r};

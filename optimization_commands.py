@@ -127,8 +127,8 @@ selection_channels = {
 }
 
 
-processes = processes_ttbar_dilep
 processes = processes_ttbar_semilep
+processes = processes_ttbar_dilep
 
 # write down the files
 if write_jobs:
@@ -200,7 +200,7 @@ else:
             histo_basic = f_opt.Get(histo_basic_name)
             basic_integral = histo_basic.Integral()
 
-            #print('%20s %g' % (basic_name, basic_integral))
+            #print('%20s %g' % (histo_basic_name, basic_integral))
             if basic_integral == 0: continue
 
             obj_integrals = []

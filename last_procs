@@ -1,5 +1,9 @@
 # testing b-tagging
+python genjobs.py 94v5 processingTestB2L --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_TTTo2L2Nu
 python genjobs.py 94v5 processingTestB1M --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_TTTo2L2Nu
+
+# check the real electron pT edge
+make histograms_to_fit nt=94v5 proc=processing1 hists=checkEleEdge      systematics=NOMINAL  channels=el_sel_tauSV3,el_sel processes=std distrs=leading_lep_pt_el_edge35 dtags_grep=TTTo2L
 
 # fitting
 make histograms_to_fit nt=94v5 proc=processing1 hists=fit1DataSum        channels=el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,dy_mutau_tauSV3,dy_mumu,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt

@@ -27,7 +27,7 @@ N_RECOIL_JETS = 0
 
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
 b_tag_wp_loose  = 0.1522 # 0.5426 # 0.460 # 
-b_tag_wp_medium = 0.4941 # 0.8484 # 0.8   # 
+b_tag_wp_medium = 0.1522 # 0.4941 # 0.8484 # 0.8   # 
 b_tag_wp_tight  = 0.8001 # 0.9535 # 0.935 # 
 # medium is used as the main b tag
 #b_tag_wp = b_tag_wp_medium
@@ -96,8 +96,8 @@ def passes_elmu_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
     pass_elmu_leps    = main_tt_elmu_trig and len(leps[4]) == 2
     pass_elmu_leps_os = pass_elmu_leps and leps[4][0] * leps[4][1] == -11*13
 
-    pass_elmu_leps_jets = pass_elmu_leps and N_jets[1] > 1
-    pass_elmu_leps_jets_bjet = pass_elmu_leps_jets and N_jets[0] > 0
+    pass_elmu_leps_jets = pass_elmu_leps # and N_jets[1] > 1
+    pass_elmu_leps_jets_bjet = pass_elmu_leps_jets and N_jets[0] > 1 # only 2 b jets
 
     #if   pass_elmu_leps_jets_bjet and pass_elmu_leps_os:
     #    channel_stage = 206
@@ -172,7 +172,10 @@ def passes_tt_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
 
     #old_jet_sel = len(jets.medium) > 0 and (len(jets.taumatched[0]) + len(jets.taumatched[1]) + len(jets.medium) + len(jets.loose) + len(jets.rest)) > 2
     # N b-tagged, N all jets
-    old_jet_sel = N_jets[0] > 0 and N_jets[1] > 2 and len(leps[0]) == 1
+    # 3 jets, 1 btaged
+    #old_jet_sel = N_jets[0] > 0 and N_jets[1] > 2 and len(leps[0]) == 1
+    # 2 btaged jets
+    old_jet_sel = N_jets[0] > 1 and len(leps[0]) == 1
     old_jet_sel_tau_cand    = old_jet_sel and len(taus) > 0
     old_jet_sel_tau_cand_os = old_jet_sel_tau_cand and leps[4][0] * taus[0][2] < 0
 
