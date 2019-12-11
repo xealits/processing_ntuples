@@ -26,9 +26,9 @@ WITH_RECOIL_CORRECTIONS = False
 N_RECOIL_JETS = 0
 
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
-b_tag_wp_loose  = 0.1522 # 0.5426 # 0.460 # 
-b_tag_wp_medium = 0.1522 # 0.4941 # 0.8484 # 0.8   # 
-b_tag_wp_tight  = 0.8001 # 0.9535 # 0.935 # 
+b_tag_wp_loose  = 0.1522 # 0.5426 # 0.460 #
+b_tag_wp_medium = 0.4941 # 0.1522 # 0.8484 # 0.8   #
+b_tag_wp_tight  = 0.8001 # 0.9535 # 0.935 #
 # medium is used as the main b tag
 #b_tag_wp = b_tag_wp_medium
 '''
@@ -60,7 +60,7 @@ PROP_ALL_JETS    = True
 REQUIRE_MLB = False
 
 def PASSES_FUNC(pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all):
-    return pass_mu or pass_el or pass_elmu or pass_mu_all or pass_el_all or pass_mumu
+    return pass_mu # or pass_el or pass_elmu or pass_mu_all or pass_el_all or pass_mumu
     #return pass_elmu
     #return pass_mu or pass_el or pass_elmu_el or pass_elmu # or pass_mumu or pass_elel
 
@@ -97,7 +97,7 @@ def passes_elmu_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
     pass_elmu_leps_os = pass_elmu_leps and leps[4][0] * leps[4][1] == -11*13
 
     pass_elmu_leps_jets = pass_elmu_leps # and N_jets[1] > 1
-    pass_elmu_leps_jets_bjet = pass_elmu_leps_jets and N_jets[0] > 1 # only 2 b jets
+    pass_elmu_leps_jets_bjet = pass_elmu_leps_jets and N_jets[0] > 0 # only 1 b jets
 
     #if   pass_elmu_leps_jets_bjet and pass_elmu_leps_os:
     #    channel_stage = 206
@@ -175,7 +175,9 @@ def passes_tt_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
     # 3 jets, 1 btaged
     #old_jet_sel = N_jets[0] > 0 and N_jets[1] > 2 and len(leps[0]) == 1
     # 2 btaged jets
-    old_jet_sel = N_jets[0] > 1 and len(leps[0]) == 1
+    #old_jet_sel = N_jets[0] > 1 and len(leps[0]) == 1
+    # only 1 btagged jet
+    old_jet_sel = N_jets[0] > 0 and len(leps[0]) == 1
     old_jet_sel_tau_cand    = old_jet_sel and len(taus) > 0
     old_jet_sel_tau_cand_os = old_jet_sel_tau_cand and leps[4][0] * taus[0][2] < 0
 
