@@ -1,6 +1,6 @@
 # NOMINAL figures with data, NO DY
-make histograms_to_fit nt=94v5  proc=processing2 hists=plot1      systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
-make histograms_to_fit nt=94v10 proc=processing2 hists=plot1      systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
+make histograms_to_fit nt=94v5  proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
+make histograms_to_fit nt=94v10 proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
 
 
 # re-stage, MC and Data

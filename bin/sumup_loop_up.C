@@ -1519,6 +1519,42 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			}
 		};
 
+	m["data"] = {
+		.catchall_name = "data", // usually we run only on DYTo2L, so this is the elel and mumu
+		.all={},
+		.groups={},
+		.channel_standard = {
+			{"el_sel",    {}},
+			{"el_sel_ss", {}},
+			{"mu_sel",    {}},
+			{"mu_sel_ss", {}},
+
+			{"el_sel_tauSV3",    {}},
+			{"el_sel_ss_tauSV3", {}},
+			{"mu_sel_tauSV3",    {}},
+			{"mu_sel_ss_tauSV3", {}},
+
+			{"tt_elmu",       {}},
+			{"tt_elmu_tight", {}},
+
+			{"dy_mutau",      {}},
+			{"dy_mutau_ss",   {}},
+			{"dy_eltau",      {}},
+			{"dy_eltau_ss",   {}},
+
+			{"dy_mutau_tauSV3",      {}},
+			{"dy_mutau_ss_tauSV3",   {}},
+			{"dy_eltau_tauSV3",      {}},
+			{"dy_eltau_ss_tauSV3",   {}},
+
+			{"dy_mumu",       {}},
+			{"dy_elel",       {}},
+			{"dy_elmu",       {}},
+			{"dy_elmu_ss",    {}},
+			}
+		};
+
+
 
 
 
@@ -1637,6 +1673,12 @@ map<TString, S_dtag_info> create_known_dtags_info()
 		.std_systs = {SYSTS_TT}};
 
 	// I probably need some defaults for not found dtags
+
+	// TODO: for now enter Data as any MC
+	m["Data2017legacy"                      ] = {.cross_section=   1.           ,
+		.usual_gen_lumi=  1.,
+		.std_procs = known_procs_info["data"],
+		.std_systs = {"NOMINAL"}};
 
 	return m;
 	}
