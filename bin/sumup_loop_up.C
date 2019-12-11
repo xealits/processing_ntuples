@@ -1168,8 +1168,8 @@ map<TString, _S_chan_def> create_known_channel_definitions()
 	_quick_set_chandef(m, lep_sel_tauSV3      , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
 	_quick_set_chandef(m, lep_sel_ss_tauSV3   , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
 
-	_quick_set_chandef(m, tt_elmu      , NT_sysweight_NOMINAL_HLT_MU);
-	_quick_set_chandef(m, tt_elmu_tight, NT_sysweight_NOMINAL_HLT_MU);
+	_quick_set_chandef(m, tt_elmu      , NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, tt_elmu_tight, NT_sysweight_NOMINAL_HLT_EL);
 
 	_quick_set_chandef(m, dy_elmu    , NT_sysweight_NOMINAL_HLT_MU);
 	_quick_set_chandef(m, dy_elmu_ss , NT_sysweight_NOMINAL_HLT_MU);
@@ -1184,7 +1184,7 @@ map<TString, _S_chan_def> create_known_channel_definitions()
 	_quick_set_chandef(m, dy_eltau_tauSV3   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
 	_quick_set_chandef(m, dy_eltau_ss_tauSV3, NT_sysweight_NOMINAL_HLT_EL_MedTau);
 
-	_quick_set_chandef(m, dy_mumu    , NT_sysweight_NOMINAL_HLT_EL);
+	_quick_set_chandef(m, dy_mumu    , NT_sysweight_NOMINAL_HLT_MU);
 	_quick_set_chandef(m, dy_elel    , NT_sysweight_NOMINAL_HLT_EL);
 
 	return m;
