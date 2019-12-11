@@ -60,7 +60,7 @@ PROP_ALL_JETS    = True
 REQUIRE_MLB = False
 
 def PASSES_FUNC(pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all):
-    return pass_mu # or pass_el or pass_elmu or pass_mu_all or pass_el_all or pass_mumu
+    return pass_mu or pass_el or pass_elmu or pass_mu_all or pass_el_all or pass_mumu
     #return pass_elmu
     #return pass_mu or pass_el or pass_elmu_el or pass_elmu # or pass_mumu or pass_elel
 
@@ -91,7 +91,7 @@ def passes_wjets_control_selection(passed_triggers, leps, N_jets, taus, proc_met
 def passes_elmu_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
     channel_stage = 0
     pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
-    main_tt_elmu_trig = pass_elmu or pass_elmu_el
+    main_tt_elmu_trig = pass_elmu_el # pass_elmu or pass_elmu_el
 
     pass_elmu_leps    = main_tt_elmu_trig and len(leps[4]) == 2
     pass_elmu_leps_os = pass_elmu_leps and leps[4][0] * leps[4][1] == -11*13
@@ -126,6 +126,35 @@ def passes_elmu_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
         channel_stage = 202
 
     return channel_stage
+
+def passes_tt_mumu_selection_stages(passed_triggers, leps, N_jets, taus, proc_met):
+    channel_stage = 0
+    pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
+    main_trig = pass_mumu
+
+    channel_stage =  0
+
+    if not main_trig: return channel_stage
+
+    # only 1 btagged jet
+    jet_sel = N_jets[0] > 0 and len(leps[0]) == 2
+    leps_os = leps[4][0] * leps[4][1] < 0
+
+    leplep_mass = (leps[0][0] + leps[0][1]).mass()
+    not_dy_mass = leplep_mass < 80.  or leplep_mass > 100.
+
+    if   jet_sel and not_dy_mass and leps_os:
+        channel_stage = 15
+    elif jet_sel and not_dy_mass:
+        channel_stage =  5
+
+    elif jet_sel and leps_os:
+        channel_stage = 14
+    elif jet_sel:
+        channel_stage =  4
+
+    return channel_stage
+
 
 def passes_tt_preselection_stages(passed_triggers, leps, N_jets, taus, proc_met):
     n_b_notau, n_b_all, n_all_jets = N_jets
@@ -2423,8 +2452,8 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         # for now I'm just trying to get rid of el-mu mix in MC
         #pass_elmu = ev.leps_ID == -11*13 and ev.HLT_mu and not ev.HLT_el and ev.no_iso_veto_leps and \
         pass_elmu_id = abs(ev.leps_ID) == 11*13 and ev.no_iso_veto_leps and \
-            (ev.lep_p4[0].pt() > 20 and abs(ev.lep_p4[0].eta()) < 2.4) and \
-            (ev.lep_p4[1].pt() > 20 and abs(ev.lep_p4[1].eta()) < 2.4)
+            (ev.lep_p4[0].pt() > 29. and abs(ev.lep_p4[0].eta()) < 2.4) and \
+            (ev.lep_p4[1].pt() > 29. and abs(ev.lep_p4[1].eta()) < 2.4)
 
         #   (ev.lep_matched_HLT[0] if abs(ev.lep_id[0]) == 13 else ev.lep_matched_HLT[1]) and \
         #pass_elmu = pass_elmu_id and ((ev.lep_relIso[0] < 0.15 and ev.lep_relIso[1] < 0.0588) if abs(ev.lep_id[0]) == 13 else (ev.lep_relIso[1] < 0.15 and ev.lep_relIso[0] < 0.0588))
@@ -2449,9 +2478,10 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
         pass_mumu = ev.leps_ID == -13*13 and ev.HLT_mu and (ev.lep_matched_HLT[0] or ev.lep_matched_HLT[1]) and ev.no_iso_veto_leps and \
             (ev.lep_p4[0].pt() > 30 and abs(ev.lep_p4[0].eta()) < 2.4) and \
-            (ev.lep_p4[1].pt() > 30 and abs(ev.lep_p4[1].eta()) < 2.4) and \
-            abs(ev.lep_dxy[0]) < 0.01 and abs(ev.lep_dz[0]) < 0.02 and \
-            abs(ev.lep_dxy[1]) < 0.01 and abs(ev.lep_dz[1]) < 0.02
+            (ev.lep_p4[1].pt() > 30 and abs(ev.lep_p4[1].eta()) < 2.4)
+        #    and \
+        #    abs(ev.lep_dxy[0]) < 0.01 and abs(ev.lep_dz[0]) < 0.02 and \
+        #    abs(ev.lep_dxy[1]) < 0.01 and abs(ev.lep_dz[1]) < 0.02
 
         pass_elel = ev.leps_ID == -11*11 and ev.HLT_el and (ev.lep_matched_HLT[0] or ev.lep_matched_HLT[1]) and ev.no_iso_veto_leps and \
             (ev.lep_p4[0].pt() > 30 and abs(ev.lep_p4[0].eta()) < 2.4) and \
@@ -4317,11 +4347,19 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         em_channel_sel_stage_JESUp   = passes_elmu_selection_stages(passed_triggers, leps, (N_jets_JESUp_med,   N_jets_JESUp_all),   [tau for tau in sel_taus if (tau[0]*tau[1][0]).pt() > TAUS_PT_CUT], proc_met)
         em_channel_sel_stage_JESDown = passes_elmu_selection_stages(passed_triggers, leps, (N_jets_JESDown_med, N_jets_JESDown_all), [tau for tau in sel_taus if (tau[0]*tau[1][0]).pt() > TAUS_PT_CUT], proc_met)
 
+        # tt mumu dilepton selection
+        mm_channel_sel_stage         = passes_tt_mumu_selection_stages(passed_triggers, leps, (N_jets_nom_med,     N_jets_nom_all), [], proc_met)
+        mm_channel_sel_stage_JERUp   = passes_tt_mumu_selection_stages(passed_triggers, leps, (N_jets_JERUp_med,   N_jets_JERUp_all),   [], proc_met)
+        mm_channel_sel_stage_JERDown = passes_tt_mumu_selection_stages(passed_triggers, leps, (N_jets_JERDown_med, N_jets_JERDown_all), [], proc_met)
+        mm_channel_sel_stage_JESUp   = passes_tt_mumu_selection_stages(passed_triggers, leps, (N_jets_JESUp_med,   N_jets_JESUp_all),   [], proc_met)
+        mm_channel_sel_stage_JESDown = passes_tt_mumu_selection_stages(passed_triggers, leps, (N_jets_JESDown_med, N_jets_JESDown_all), [], proc_met)
+
         #passes = tt_channel_stage < 1 and tt_channel_sel_stage_TESUp < 1 and tt_channel_sel_stage_TESDown < 1 and tt_channel_sel_stage_JESUp < 1 and tt_channel_sel_stage_JESDown < 1 and tt_channel_sel_stage_JERUp < 1 and tt_channel_sel_stage_JERDown < 1 and dy_channel_sel_stage < 1
         notpasses_tt_leptau = tt_channel_sel_stage < 1 and tt_channel_sel_stage_TESUp < 1 and tt_channel_sel_stage_TESDown < 1 and tt_channel_sel_stage_JESUp < 1 and tt_channel_sel_stage_JESDown < 1 and tt_channel_sel_stage_JERUp < 1 and tt_channel_sel_stage_JERDown < 1
         # and em_channel_sel_stage < 1 and tt_channel_stage_alliso < 1
         #notpasses_tt_elmu   = em_channel_sel_stage < 1 and em_channel_sel_stage_JESUp < 1 and em_channel_sel_stage_JESDown < 1 and em_channel_sel_stage_JERUp < 1 and em_channel_sel_stage_JERDown < 1
         notpasses_em        = em_channel_sel_stage < 1 and em_channel_sel_stage_JERUp < 1 and em_channel_sel_stage_JERDown < 1 and em_channel_sel_stage_JESUp < 1 and em_channel_sel_stage_JESDown < 1
+        notpasses_mm        = mm_channel_sel_stage < 1 and mm_channel_sel_stage_JERUp < 1 and mm_channel_sel_stage_JERDown < 1 and mm_channel_sel_stage_JESUp < 1 and mm_channel_sel_stage_JESDown < 1
         notpasses_alliso = tt_channel_stage_alliso < 1
 
         notpasses_dy_tautau = dy_channel_sel_stage < 1 and dy_channel_sel_stage_TESUp < 1 and dy_channel_sel_stage_TESDown < 1 and dy_channel_sel_stage_JESUp < 1 and dy_channel_sel_stage_JESDown < 1 and dy_channel_sel_stage_JERUp < 1 and dy_channel_sel_stage_JERDown < 1
@@ -4338,7 +4376,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         # only main selection
         #if notpasses_tt_leptau:
         #if notpasses_tt_leptau and notpasses_em and notpasses_dy_tautau and notpasses_dy_mumu and notpasses_wjets and notpasses_alliso and notpasses_presel:
-        if notpasses_tt_leptau and notpasses_em and notpasses_dy_tautau and notpasses_dy_elmu and notpasses_dy_mumu:
+        if notpasses_tt_leptau and notpasses_em and notpasses_mm and notpasses_dy_tautau and notpasses_dy_elmu and notpasses_dy_mumu:
             continue
 
         # SAVE SELECTION, objects and weights
@@ -4383,6 +4421,12 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         selection_stage_em_JERDown[0] = em_channel_sel_stage_JERDown
         selection_stage_em_JESUp  [0] = em_channel_sel_stage_JESUp  
         selection_stage_em_JESDown[0] = em_channel_sel_stage_JESDown
+
+        selection_stage_mm[0]         = mm_channel_sel_stage
+        selection_stage_mm_JERUp  [0] = mm_channel_sel_stage_JERUp  
+        selection_stage_mm_JERDown[0] = mm_channel_sel_stage_JERDown
+        selection_stage_mm_JESUp  [0] = mm_channel_sel_stage_JESUp  
+        selection_stage_mm_JESDown[0] = mm_channel_sel_stage_JESDown
 
         runNumber[0]   = ev.runNumber
         indexevents[0] = ev.indexevents
@@ -4623,7 +4667,7 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
 
         # taus
         # taus_nom.medium.append((p4, TES_factor, tau_pdgID, i, jetmatched))
-        for tau in sel_taus:
+        for tau_i, tau in enumerate(sel_taus):
             tau_index = tau[3]
 
             # old TES
@@ -4641,6 +4685,16 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
             event_taus          .push_back(p4)
             event_taus_TES_up   .push_back(TES_up / TES_nom)
             event_taus_TES_down .push_back(TES_down / TES_nom)
+
+            # if there is a tau and non-b jet, calculate "w mass estimate": mass of tau + leading non-b jet
+            if sel_jets.rest:
+                #
+                jet = sel_jets.rest[0]
+                corrected_jet = jet[0] * jet[1][0]
+                estim_w_mass = (p4 + corrected_jet).mass()
+                event_estim_w_mass[0] = estim_w_mass
+            else:
+                event_estim_w_mass[0] = -111.
 
             event_taus_ids.push_back(tau[2])
             event_taus_IDlev.push_back(tau[4])

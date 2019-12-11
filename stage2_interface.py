@@ -246,8 +246,16 @@ stage2_vars = {
 'selection_stage_em_JESUp'   : 'i',
 'selection_stage_em_JESDown' : 'i',
 
+'selection_stage_mm'         : 'i',
+'selection_stage_mm_JERUp'   : 'i',
+'selection_stage_mm_JERDown' : 'i',
+'selection_stage_mm_JESUp'   : 'i',
+'selection_stage_mm_JESDown' : 'i',
+
 'nup' :  'i',
 'amcatnlo_w' :  'f',
+
+'event_estim_w_mass' :  'f',
 
 'event_jets_lj_var' :  'f',
 'event_jets_lj_w_mass' :  'f',
