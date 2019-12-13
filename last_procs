@@ -2,6 +2,11 @@
 make histograms_to_fit nt=94v5  proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
 make histograms_to_fit nt=94v10 proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
 
+make histograms_to_fit exe=sumup_loop_test nt=94v10 proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
+
+# for the fit
+make histograms_to_fit nt=94v5  proc=processing2 hists=fit1  simulate_data_output=1     channels=el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight,dy_mutau_tauSV3,dy_mumu processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt
+
 
 # re-stage, MC and Data
 python genjobs.py 94v5 processing2 --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_ext1_v1,MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1,MC2017legacy_Fall17_SingleT_tW_5FS_powheg_new_pmx_v1,MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1,MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1,MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v2,MC2017legacy_Fall17_TTTo2L2Nu,MC2017legacy_Fall17_TTToHadronic_13TeV_v2,MC2017legacy_Fall17_TTToSemiLeptonic_new_pmx_v1,MC2017legacy_Fall17_TTToSemiLeptonic_v2,MC2017legacy_Fall17_WJets_madgraph_ext1v2,MC2017legacy_Fall17_WJets_madgraph_v2,MC2017legacy_Fall17_WJets_madgraph_v3

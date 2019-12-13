@@ -11,6 +11,7 @@ histograms_to_fit: channels=mu_sel,tt_elmu
 histograms_to_fit: processes=std
 histograms_to_fit: distrs=Mt_lep_met_c,leading_lep_pt
 histograms_to_fit: dtags_grep=.
+histograms_to_fit: exe=sumup_loop
 histograms_to_fit:
 	mkdir -p ${distr_out}/${nt}/${proc}/${hists}/
 	#for dtag in `ls ${stage2_dir}/${nt}/${proc}/`; do \
@@ -18,7 +19,7 @@ histograms_to_fit:
 	#   time sumup_loop ${simulate_data_output} 1 0 ${lumi} std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
 	#done
 	# same with xargs
-	ls ${stage2_dir}/${nt}/${proc}/ | grep "${dtags_grep}" | xargs -P ${n_proc} -I DTAG sh -c "time sumup_loop ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
+	ls ${stage2_dir}/${nt}/${proc}/ | grep "${dtags_grep}" | xargs -P ${n_proc} -I DTAG sh -c "time ${exe} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
 	#hadd ${distr_out}/distrs_${nt}_${proc}_mc_1.root ${distr_out}/${nt}/${proc}/*root
 	hadd ${distr_out}/distrs_${nt}_${proc}_${hists}.root  ${distr_out}/${nt}/${proc}/${hists}/*root
 

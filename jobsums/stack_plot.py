@@ -579,6 +579,7 @@ def get_histos(infile, channels, shape_channel, sys_name, distr_name, skip_QCD=a
                init_integral = histo.Integral()
                if args.do_not_reweight:
                    logging.info("no reweighting for MC")
+                   histo.Scale( args.lumi)
                    pass
                else:
                    histo.Scale(final_factor)
@@ -1824,7 +1825,7 @@ else:
 
     right_title.SetTextAlign(33)
     right_title.SetMargin(0)
-    right_title.AddText("%s fb^{-1} (13 TeV)" % (args.lumi / 1000. if args.lumi else args.lumi_label))
+    right_title.AddText("%s fb^{-1} (13 TeV)" % (args.lumi / 1000. if not args.lumi_label else args.lumi_label))
     right_title.SetTextFont(132)
     right_title.SetFillColor(0)
 

@@ -2404,7 +2404,7 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 			ObjSystematics obj_systematic = distrs_to_record[si].syst_def.obj_sys_id;
 
 			// the factor to the NOMINAL_base weight
-			double event_weight_factor    = distrs_to_record[si].syst_def.weight_func();
+			double event_weight_factor    = isMC ? distrs_to_record[si].syst_def.weight_func() : 1.;
 
 			// record distributions in all final states where the event passes
 			vector<T_chan_proc_histos>& channels = distrs_to_record[si].chans;
@@ -2416,7 +2416,7 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 				if (!chan.chan_def.chan_sel(obj_systematic)) continue;
 
 				// calculate the NOMINAL_base event weight for the channel
-				double event_weight = chan.chan_def.chan_sel_weight();
+				double event_weight = isMC ? chan.chan_def.chan_sel_weight() : 1.;
 				// and multiply by the systematic factor
 				event_weight *= event_weight_factor;
 
