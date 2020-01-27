@@ -8,6 +8,7 @@
 <environment>
 <!-- Common tools and examples -->
 <!--
+<use name="root"/>
 
 <use name="lhapdf"/>
 <use name="roottmva"/>
