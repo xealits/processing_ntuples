@@ -1,7 +1,3 @@
-<use name="lhapdf"/>
-<use name="roottmva"/>
-<use name="roofit"/>
-<use name="roostats"/>
 <use name="PhysicsTools/FWLite"/>
 
 <!--
@@ -9,15 +5,20 @@
 <use name="UserCode/ttbar-leptons-80X"/>
 -->
 
+<environment>
+<!-- Common tools and examples -->
+<!--
+
+<use name="lhapdf"/>
+<use name="roottmva"/>
+<use name="roofit"/>
+<use name="roostats"/>
 <use name="TauAnalysis/SVfitStandalone"/>
 <use name="RecoJets/JetProducers"/>
 <use name="HiggsAnalysis/CombinedLimit"/>
 <use name="RecoEgamma/ElectronIdentification"/>
 <use name="EgammaAnalysis/ElectronTools"/>
 
-<environment>
-<!-- Common tools and examples -->
-<!--
   <bin name="extractLumiJSON"             file="common/extractLumiJSON.cc"></bin>
   <bin name="jsonTools"                   file="common/jsonTools.cc"></bin>
   <bin name="computeLimit"                file="common/computeLimit.cc"></bin>
