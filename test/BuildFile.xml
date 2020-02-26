@@ -1,3 +1,7 @@
+<use name="lhapdf"/>
+<use name="roottmva"/>
+<use name="roofit"/>
+<use name="roostats"/>
 <use name="PhysicsTools/FWLite"/>
 
 <!--
@@ -5,21 +9,15 @@
 <use name="UserCode/ttbar-leptons-80X"/>
 -->
 
-<environment>
-<!-- Common tools and examples -->
-<!--
-<use name="root"/>
-
-<use name="lhapdf"/>
-<use name="roottmva"/>
-<use name="roofit"/>
-<use name="roostats"/>
 <use name="TauAnalysis/SVfitStandalone"/>
 <use name="RecoJets/JetProducers"/>
 <use name="HiggsAnalysis/CombinedLimit"/>
 <use name="RecoEgamma/ElectronIdentification"/>
 <use name="EgammaAnalysis/ElectronTools"/>
 
+<environment>
+<!-- Common tools and examples -->
+<!--
   <bin name="extractLumiJSON"             file="common/extractLumiJSON.cc"></bin>
   <bin name="jsonTools"                   file="common/jsonTools.cc"></bin>
   <bin name="computeLimit"                file="common/computeLimit.cc"></bin>
@@ -92,10 +90,11 @@
 -->
 
   <bin name="sumup_loop"            file="sumup_loop_up.C"></bin>
+  <bin name="test_xml"              file="test_xml.cpp"></bin>
 
 </environment>
 
 <!--
 <flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -Os"/>
 -->
-<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -O0"/>
+<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -O0 -I/usr/include/libxml2 -lxml2" LDLIBS="xml2"/>
