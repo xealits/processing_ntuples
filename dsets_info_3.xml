@@ -1,0 +1,1038 @@
+<hard_processes>
+  <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_10to50_amcatnlo" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_10to50_amcatnlo_v2" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_10to50_amcatnlo_v1_ext1" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_10to50_madgraph_v1" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_madgraph" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_madgraph_ext2_v1" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_madgraph_herwig" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-herwigpp_30M/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_amcatnlo_ext2_v1" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_amcatnlo_CUETP8M1Down" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_CUETP8M1Down/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_amcatnlo_CUETP8M1Up" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_CUETP8M1Up/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_amcatnlo_DownPS" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_DownPS/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_50toInf_amcatnlo_UpPS" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_UpPS/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_100to200_amcatnlo" logic_path="/DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_200to400_amcatnlo" logic_path="/DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_400to500_amcatnlo" logic_path="/DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_500to700_amcatnlo" logic_path="/DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_700to800_amcatnlo" logic_path="/DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_800to1000_amcatnlo" logic_path="/DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_1000to1500_amcatnlo" logic_path="/DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_1500to2000_amcatnlo" logic_path="/DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_DYJetsToLL_2000to3000_amcatnlo" logic_path="/DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1867.0">
+    <dset dtag="MC2016_Summer16_DYJetsToTauTau_50toInf_amcatnlo" logic_path="/DYJetsToTauTau_ForcedMuEleDecay_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2015_Spring16_DYJetsToLL_50toInf_amcatnlo" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2015_Spring16_DYJetsToLL_50toInf_madgraph" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1206.0">
+    <dset dtag="MC2015_Spring16_QCD_HT-1000-1500" logic_path="/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="27540000.0">
+    <dset dtag="MC2015_Spring16_QCD_HT-100-200" logic_path="/QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="120.4">
+    <dset dtag="MC2015_Spring16_QCD_HT-1500-2000" logic_path="/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v3/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="25.25">
+    <dset dtag="MC2015_Spring16_QCD_HT-2000-Inf" logic_path="/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1717000.0">
+    <dset dtag="MC2015_Spring16_QCD_HT-200-300" logic_path="/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="351300.0">
+    <dset dtag="MC2015_Spring16_QCD_HT-300-500" logic_path="/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="31630.0">
+    <dset dtag="MC2015_Spring16_QCD_HT-500-700" logic_path="/QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="6802.0">
+    <dset dtag="MC2015_Spring16_QCD_HT-700-1000" logic_path="/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="20.25">
+    <dset dtag="MC2016_Summer16_EWKWMinus2Jets" logic_path="/EWKWMinus2Jets_WToLNu_M-50_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="25.62">
+    <dset dtag="MC2016_Summer16_EWKWPlus2Jets" logic_path="/EWKWPlus2Jets_WToLNu_M-50_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.987">
+    <dset dtag="MC2016_Summer16_EWKZ2Jets" logic_path="/EWKZ2Jets_ZToLL_M-50_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016B_03Feb2017_ver2" logic_path="/JetHT/Run2016B-03Feb2017_ver2-v2/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016D_03Feb2017_v1" logic_path="/JetHT/Run2016D-03Feb2017-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016E_03Feb2017_v1" logic_path="/JetHT/Run2016E-03Feb2017-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016F_03Feb2017_v1" logic_path="/JetHT/Run2016F-03Feb2017-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016G_03Feb2017_v1" logic_path="/JetHT/Run2016G-03Feb2017-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016H_03Feb2017_ver2" logic_path="/JetHT/Run2016H-03Feb2017_ver2-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data13TeV_JetHT2016H_03Feb2017_ver3" logic_path="/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="27540000.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-100-200" logic_path="/QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1717000.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-200-300" logic_path="/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="351300.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-300-500" logic_path="/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="31630.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-500-700" logic_path="/QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="6802.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-700-1000" logic_path="/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1206.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-1000-1500" logic_path="/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="120.4">
+    <dset dtag="MC2016_Summer16_QCD_HT-1500-2000" logic_path="/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="25.25">
+    <dset dtag="MC2016_Summer16_QCD_HT-2000-Inf" logic_path="/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-50-100" logic_path="/QCD_HT50to100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-200-300_ext1" logic_path="/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-300-500_ext1" logic_path="/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-500-700_ext1" logic_path="/QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-700-1000_ext1" logic_path="/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-1000-1500_ext1" logic_path="/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-1500-2000_ext1" logic_path="/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016_Summer16_QCD_HT-2000-Inf_ext1" logic_path="/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="10.4305">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_1000toInf" logic_path="/QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="10.4305">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_1000toInf_ext1" logic_path="/QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v3/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1273190000.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_15to20" logic_path="/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="558528000.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_20to30" logic_path="/QCD_Pt-20to30_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="139803000.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_30to50" logic_path="/QCD_Pt-30to50_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="19222500.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_50to80" logic_path="/QCD_Pt-50to80_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="2758420.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_80to120" logic_path="/QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="2758420.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_80to120_ext1" logic_path="/QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v3/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="469797.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_120to170" logic_path="/QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="117989.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_170to300" logic_path="/QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="117989.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_170to300_ext1" logic_path="/QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="7820.25">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_300to470" logic_path="/QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="7820.25">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_300to470_ext1" logic_path="/QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="7820.25">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_300to470_ext2" logic_path="/QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="645.528">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_470to600" logic_path="/QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="645.528">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_470to600_ext1" logic_path="/QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="645.528">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_470to600_ext2" logic_path="/QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="187.109">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_600to800" logic_path="/QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="187.109">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_600to800_ext1" logic_path="/QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="32.3486">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_800to1000" logic_path="/QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="32.3486">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_800to1000_ext1" logic_path="/QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="32.3486">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt5_800to1000_ext2" logic_path="/QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="720648000.0">
+    <dset dtag="MC2016_Summer16_QCD_MuEnriched_Pt15_20toInf" logic_path="/QCD_Pt-20toInf_MuEnrichedPt15_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="557600000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-20to30" logic_path="/QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="136000000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-30to50" logic_path="/QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="136000000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-30to50_ext1" logic_path="/QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="19800000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-50to80" logic_path="/QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="19800000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-50to80_ext1" logic_path="/QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="2800000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-80to120" logic_path="/QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="2800000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-80to120_ext1" logic_path="/QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="477000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-120to170" logic_path="/QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="477000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-120to170_ext1" logic_path="/QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="114000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-170to300" logic_path="/QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="9000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-300toInf" logic_path="/QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="162060000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-30toInf" logic_path="/QCD_Pt-30toInf_DoubleEMEnriched_MGG-40to80_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="108000000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-30to40" logic_path="/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="54120000.0">
+    <dset dtag="MC2016_Summer16_QCD_EMEnriched_Pt-40toInf" logic_path="/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.36">
+    <dset dtag="MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo" logic_path="/ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="70.69">
+    <dset dtag="MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg" logic_path="/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="70.69">
+    <dset dtag="MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg" logic_path="/ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2016_Summer16_SingleTbar_tW_5FS_powheg" logic_path="/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2016_Summer16_SingleT_tW_5FS_powheg" logic_path="/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" is2017rereco="1.0" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017_SingleElectron_B" logic_path="/SingleElectron/Run2016B-03Feb2017_ver2-v2/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_fsrdown" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-fsrdown-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_fsrdown_ext1" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-fsrdown-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_fsrdown_ext2" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-fsrdown-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_fsrup" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-fsrup-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_fsrup_ext1" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-fsrup-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_fsrup_ext2" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-fsrup-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_isrdown" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-isrdown-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_isrdown_ext1" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-isrdown-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_isrdown_ext2" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-isrdown-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_isrup" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-isrup-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_isrup_ext2" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-isrup-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_CUETP8M2T4down" logic_path="/TT_TuneCUETP8M2T4down_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_CUETP8M2T4down_ext1" logic_path="/TT_TuneCUETP8M2T4down_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_CUETP8M2T4up" logic_path="/TT_TuneCUETP8M2T4up_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_CUETP8M2T4up_ext1" logic_path="/TT_TuneCUETP8M2T4up_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_hdampDOWN" logic_path="/TT_hdampDOWN_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_hdampDOWN_ext1" logic_path="/TT_hdampDOWN_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_hdampUP" logic_path="/TT_hdampUP_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_hdampUP_ext1" logic_path="/TT_hdampUP_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_amcatnlo_backup" logic_path="/TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_amcatnlo" logic_path="/TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_GluonMoveCRTune" logic_path="/TT_TuneCUETP8M2T4_GluonMoveCRTune_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_QCDCRTune" logic_path="/TT_TuneCUETP8M2T4_QCDbasedCRTune_erdON_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_QCDCRTune_ext1" logic_path="/TT_TuneCUETP8M2T4_QCDbasedCRTune_erdON_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_herwigpp" logic_path="/TT_TuneEE5C_13TeV-powheg-herwigpp/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_herwigpp_ext2" logic_path="/TT_TuneEE5C_13TeV-powheg-herwigpp/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016_Summer16_TTJets_powheg_herwigpp_ext3" logic_path="/TT_TuneEE5C_13TeV-powheg-herwigpp/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="9493.0">
+    <dset dtag="MC2016_Summer16_W1Jets_madgraph" logic_path="/W1JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3120.0">
+    <dset dtag="MC2016_Summer16_W2Jets_madgraph" logic_path="/W2JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3120.0">
+    <dset dtag="MC2016_Summer16_W2Jets_madgraph_ext1" logic_path="/W2JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="942.3">
+    <dset dtag="MC2016_Summer16_W3Jets_madgraph" logic_path="/W3JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="942.3">
+    <dset dtag="MC2016_Summer16_W3Jets_madgraph_ext1" logic_path="/W3JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="524.2">
+    <dset dtag="MC2016_Summer16_W4Jets_madgraph" logic_path="/W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="524.2">
+    <dset dtag="MC2016_Summer16_W4Jets_madgraph_ext1" logic_path="/W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="524.2">
+    <dset dtag="MC2016_Summer16_W4Jets_madgraph_ext2" logic_path="/W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="61526.7">
+    <dset dtag="MC2016_Summer16_WJets_amcatnlo" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="61526.7">
+    <dset dtag="MC2016_Summer16_WJets_amcatnlo_ext2_v2" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2016_Summer16_WJets_madgraph" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2016_Summer16_WJets_madgraph_ext2_v1" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="12.178">
+    <dset dtag="MC2016_Summer16_WWTo2L2Nu_powheg" logic_path="/WWTo2L2Nu_13TeV-powheg/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="49.997">
+    <dset dtag="MC2016_Summer16_WWToLNuQQ_powheg" logic_path="/WWToLNuQQ_13TeV-powheg/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="10.71">
+    <dset dtag="MC2016_Summer16_WZTo1L1Nu2Q_amcatnlo_madspin" logic_path="/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v3/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.033">
+    <dset dtag="MC2016_Summer16_WZTo1L3Nu_amcatnlo_madspin" logic_path="/WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5.595">
+    <dset dtag="MC2016_Summer16_WZTo2L2Q_amcatnlo_madspin" logic_path="/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="4.42965">
+    <dset dtag="MC2016_Summer16_WZTo3LNu_powheg" logic_path="/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="0.564">
+    <dset dtag="MC2016_Summer16_ZZTo2L2Nu_powheg" logic_path="/ZZTo2L2Nu_13TeV_powheg_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.22">
+    <dset dtag="MC2016_Summer16_ZZTo2L2Q_amcatnlo_madspin" logic_path="/ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1" logic_path="/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_ext1_v1" logic_path="/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_new_pmx_v1" logic_path="/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_new_pmx_ext1_v1" logic_path="/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1" logic_path="/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v2" logic_path="/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1" logic_path="/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2017legacy_Fall17_SingleT_tW_5FS_powheg_new_pmx_v1" logic_path="/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="22.82">
+    <dset dtag="MC2017_Fall17_WZTuneCP5_13TeV" logic_path="/WZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2017legacy_Fall17_WJets_madgraph_v2" logic_path="/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2017legacy_Fall17_WJets_madgraph_v3" logic_path="/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2017legacy_Fall17_WJets_madgraph_ext1v2" logic_path="/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="72.1">
+    <dset dtag="MC2017legacy_Fall17_TTTo2L2Nu" logic_path="/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="72.1">
+    <dset dtag="MC2017legacy_Fall17_TTTo2L2Nu_v2" logic_path="/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="72.1">
+    <dset dtag="MC2017legacy_Fall17_TTTo2L2Nu_new_pmx_v1" logic_path="/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="313.9">
+    <dset dtag="MC2017legacy_Fall17_TTToHadronic_13TeV" logic_path="/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="313.9">
+    <dset dtag="MC2017legacy_Fall17_TTToHadronic_13TeV_v2" logic_path="/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="445.8">
+    <dset dtag="MC2017legacy_Fall17_TTToSemiLeptonic_v2" logic_path="/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="445.8">
+    <dset dtag="MC2017legacy_Fall17_TTToSemiLeptonic_new_pmx_v1" logic_path="/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="0.02227">
+    <dset dtag="MC2017_Fall17_WpWpJJ_QCD_13TeV" logic_path="/WpWpJJ_QCD_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleElectron_2017F" logic_path="/SingleElectron/Run2017F-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleElectron_2017E" logic_path="/SingleElectron/Run2017E-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleElectron_2017D" logic_path="/SingleElectron/Run2017D-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleElectron_2017C" logic_path="/SingleElectron/Run2017C-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleElectron_2017B" logic_path="/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleMuon_2017B" logic_path="/SingleMuon/Run2017B-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleMuon_2017C" logic_path="/SingleMuon/Run2017C-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleMuon_2017D" logic_path="/SingleMuon/Run2017D-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleMuon_2017E" logic_path="/SingleMuon/Run2017E-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2017legacy_13TeV_SingleMuon_2017F" logic_path="/SingleMuon/Run2017F-31Mar2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016B_ver1" logic_path="/SingleMuon/Run2016B-17Jul2018_ver1-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016B_ver2" logic_path="/SingleMuon/Run2016B-17Jul2018_ver2-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016C" logic_path="/SingleMuon/Run2016C-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016D" logic_path="/SingleMuon/Run2016D-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016E" logic_path="/SingleMuon/Run2016E-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016F" logic_path="/SingleMuon/Run2016F-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016G" logic_path="/SingleMuon/Run2016G-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016H" logic_path="/SingleMuon/Run2016H-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016B_ver1" logic_path="/SingleElectron/Run2016B-17Jul2018_ver1-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016B_ver2" logic_path="/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016C" logic_path="/SingleElectron/Run2016C-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016D" logic_path="/SingleElectron/Run2016D-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016E" logic_path="/SingleElectron/Run2016E-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016F" logic_path="/SingleElectron/Run2016F-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016G" logic_path="/SingleElectron/Run2016G-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
+    <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016H" logic_path="/SingleElectron/Run2016H-17Jul2018-v1/MINIAOD">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
+    <dset dtag="MC2016legacy_Summer16_DYJetsToLL_10to50_amcatnlo_v2" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
+    <dset dtag="MC2016legacy_Summer16_DYJetsToLL_10to50_amcatnlo_v1_ext1" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016legacy_Summer16_DYJetsToLL_50toInf_madgraph_ext1_v2" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5765.4">
+    <dset dtag="MC2016legacy_Summer16_DYJetsToLL_50toInf_madgraph_ext2_v1" logic_path="/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.36">
+    <dset dtag="MC2016legacy_Summer16_schannel_4FS_leptonicDecays_amcatnlo" logic_path="/ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="70.69">
+    <dset dtag="MC2016legacy_Summer16_tchannel_antitop_4f_leptonicDecays_powheg" logic_path="/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="70.69">
+    <dset dtag="MC2016legacy_Summer16_tchannel_top_4f_leptonicDecays_powheg" logic_path="/ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2016legacy_Summer16_SingleTbar_tW_5FS_powheg" logic_path="/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="35.6">
+    <dset dtag="MC2016legacy_Summer16_SingleT_tW_5FS_powheg" logic_path="/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016legacy_Summer16_TTJets_powheg" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="831.76">
+    <dset dtag="MC2016legacy_Summer16_TTJets_powheg_backup" logic_path="/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="9493.0">
+    <dset dtag="MC2016legacy_Summer16_W1Jets_madgraph" logic_path="/W1JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3120.0">
+    <dset dtag="MC2016legacy_Summer16_W2Jets_madgraph" logic_path="/W2JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3120.0">
+    <dset dtag="MC2016legacy_Summer16_W2Jets_madgraph_ext1" logic_path="/W2JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="942.3">
+    <dset dtag="MC2016legacy_Summer16_W3Jets_madgraph" logic_path="/W3JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="942.3">
+    <dset dtag="MC2016legacy_Summer16_W3Jets_madgraph_ext1" logic_path="/W3JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="524.2">
+    <dset dtag="MC2016legacy_Summer16_W4Jets_madgraph" logic_path="/W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="524.2">
+    <dset dtag="MC2016legacy_Summer16_W4Jets_madgraph_ext1" logic_path="/W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="524.2">
+    <dset dtag="MC2016legacy_Summer16_W4Jets_madgraph_ext2" logic_path="/W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="61526.7">
+    <dset dtag="MC2016legacy_Summer16_WJets_amcatnlo" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="61526.7">
+    <dset dtag="MC2016legacy_Summer16_WJets_amcatnlo_ext2_v1" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2016legacy_Summer16_WJets_madgraph" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="50690.0">
+    <dset dtag="MC2016legacy_Summer16_WJets_madgraph_ext2_v2" logic_path="/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="12.178">
+    <dset dtag="MC2016legacy_Summer16_WWTo2L2Nu_powheg" logic_path="/WWTo2L2Nu_13TeV-powheg/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="49.997">
+    <dset dtag="MC2016legacy_Summer16_WWToLNuQQ_powheg" logic_path="/WWToLNuQQ_13TeV-powheg/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="49.997">
+    <dset dtag="MC2016legacy_Summer16_WWToLNuQQ_powheg_ext1" logic_path="/WWToLNuQQ_13TeV-powheg/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="10.71">
+    <dset dtag="MC2016legacy_Summer16_WZTo1L1Nu2Q_amcatnlo_madspin" logic_path="/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.033">
+    <dset dtag="MC2016legacy_Summer16_WZTo1L3Nu_amcatnlo_madspin" logic_path="/WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="5.595">
+    <dset dtag="MC2016legacy_Summer16_WZTo2L2Q_amcatnlo_madspin" logic_path="/WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="4.42965">
+    <dset dtag="MC2016legacy_Summer16_WZTo3LNu_powheg" logic_path="/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="4.42965">
+    <dset dtag="MC2016legacy_Summer16_WZTo3LNu_powheg_ext1" logic_path="/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="0.564">
+    <dset dtag="MC2016legacy_Summer16_ZZTo2L2Nu_powheg" logic_path="/ZZTo2L2Nu_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="3.22">
+    <dset dtag="MC2016legacy_Summer16_ZZTo2L2Q_amcatnlo_madspin" logic_path="/ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1206.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-1000-1500" logic_path="/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-1000-1500_ext1" logic_path="/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="27540000.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-100-200" logic_path="/QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-1500-2000" logic_path="/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="120.4">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-1500-2000_ext1" logic_path="/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-2000-Inf" logic_path="/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="25.25">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-2000-Inf_ext1" logic_path="/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1717000.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-200-300" logic_path="/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-200-300_ext1" logic_path="/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-300-500" logic_path="/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process isMC="1.0" xsec="351300.0" LumiMask="">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-300-500_ext1" logic_path="/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="31630.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-500-700" logic_path="/QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-500-700_ext1" logic_path="/QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-700-1000" logic_path="/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="6802.0">
+    <dset dtag="MC2016legacy_Summer16_QCD_HT-700-1000_ext1" logic_path="/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-2000-Inf" logic_path="/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-2000-Inf_old_pmx" logic_path="/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_old_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-1500-2000" logic_path="/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-1500-2000_old_pmx" logic_path="/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_old_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-1000-1500" logic_path="/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-1000-1500_new_pmx" logic_path="/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-700-1000" logic_path="/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-700-1000_new_pmx" logic_path="/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-500-700" logic_path="/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-500-700_old_pmx" logic_path="/QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_old_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-300-500" logic_path="/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-300-500_new_pmx" logic_path="/QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-200-300" logic_path="/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-200-300_new_pmx" logic_path="/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-100-200" logic_path="/QCD_HT100to200_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM">
+    </dset>
+  </hard_process>
+  <hard_process LumiMask="" isMC="1.0" xsec="1.0">
+    <dset dtag="MC2017legacy_Summer16_QCD_HT-100-200_ext1" logic_path="/QCD_HT100to200_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM">
+    </dset>
+  </hard_process>
+</hard_processes>
