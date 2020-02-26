@@ -92,10 +92,11 @@
 -->
 
   <bin name="sumup_loop"            file="sumup_loop_up.C"></bin>
+  <bin name="test_xml"              file="test_xml.cpp"></bin>
 
 </environment>
 
 <!--
 <flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -Os"/>
 -->
-<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -O0"/>
+<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -O0 -I/usr/include/libxml2 -lxml2" LDLIBS="xml2"/>
