@@ -9,88 +9,12 @@
 <use name="UserCode/ttbar-leptons-80X"/>
 -->
 
-<use name="TauAnalysis/SVfitStandalone"/>
-<use name="RecoJets/JetProducers"/>
-<use name="HiggsAnalysis/CombinedLimit"/>
-<use name="RecoEgamma/ElectronIdentification"/>
-<use name="EgammaAnalysis/ElectronTools"/>
+<use name="UserCode/proc"/>
+
 
 <environment>
-<!-- Common tools and examples -->
-<!--
-  <bin name="extractLumiJSON"             file="common/extractLumiJSON.cc"></bin>
-  <bin name="jsonTools"                   file="common/jsonTools.cc"></bin>
-  <bin name="computeLimit"                file="common/computeLimit.cc"></bin>
-  <bin name="runPlotter"                  file="common/runPlotter.cc"></bin> 
-  <bin name="runPLRanalysis"              file="common/runPLRanalysis.cc"></bin>
-  <bin name="computeLeptonEfficency"      file="common/computeLeptonEfficency.cc"></bin>
-  <bin name="runEfficencyMiniAODExample"  file="common/runEfficencyMiniAODExample.cc"></bin>
--->
-
-<!-- Analysis specific code (please keep that in subdirectories and refer to test/<subdir> for instructions) -->
-<!--  <bin name="runLeptonEffStudy"           file="chhiggs/runLeptonEffStudy.cc"></bin> temporarily deactivated-->
-<!--
-  <bin name="runChHiggsAnalysis"          file="chhiggs/runAnalysis.cc"></bin>
-  <bin name="runFixedPlotter"             file="chhiggs/runFixedPlotter.cc"></bin> 
-  <bin name="fitTTbarCrossSection"        file="chhiggs/fitTTbarCrossSection.cc"></bin>
-
-  <bin name="syncExercise_Dileptons"  file="syncExercise_Dileptons.cc"></bin>
-  <bin name="easyKinoTTbar"    file="easyKinoTTbar.cc"></bin>
-  <bin name="triggerMatching"  file="triggerMatching.cc"></bin>
--->
-
-<!--
-  <bin name="eventSelection"   file="eventSelection.cc"></bin>
-  <bin name="jetToTauFakeRate" file="jetSelectionForTauFakeRate.cc"></bin>
-  <bin name="ntupleEvents"     file="ntupleEvents.cc"></bin>
-  <bin name="elmuFakeRates"    file="elmuFakeRates.cc"></bin>
-
-  <bin name="scopeEvents"      file="scopeEvents.cc"></bin>
-  <bin name="pilupDistr"       file="pilupDistr.cc"></bin>
--->
-  <!-- <bin name="tauOrigins"       file="tauOrigins.cc"></bin> -->
-
-  <!--
-  <bin name="tauMatching"      file="tauMatching.cc"></bin>
-  <bin name="demoKinoTTbar"    file="demoKinoTTbar.cc"></bin>
-
-  <bin name="generationTree"   file="generationTree.cc"></bin>
-  <bin name="printoutTriggers" file="printoutTriggers.cc"></bin>
-      UP the printoutTriggers with HLT pathnames
-      
-      so trigger object has: filterLabels, algorithmNames, conditionName, pathName
-      
-      printoutTriggers prints
-      - list of all available HLT triggers (not only the SingleLepton or others)
-      - loops through trigger objects and prints their filterLabels, algorithmNames, conditionNames, pathNames
-      
-          modified:   bin/BuildFile.xml
-          modified:   bin/printoutTriggers.cc
-          modified:   jobing/Makefile
-          modified:   src/recordFuncs.cc
-      
-      Then the muons are selected with standard Tight ID/Iso, 30 GeV pT, 2.4-2.5 eta.
-      And phi,eta,pt of all muons are printed.
-  -->
-
-
-
-<!-- <bin name="eventSelection_tokens"  file="ttbar-leptons-80X/eventSelection_tokens.cc"></bin> -->
-
-
-
-<!--  <bin name="runTtHMuMuAnalysis"          file="tthmumu/runAnalysis.cc"></bin>-->
-
-<!--
-  <bin name="runHZZ2l2vAnalysis"          file="hzz2l2v/runHZZ2l2vAnalysis.cc"></bin>
-  <bin name="extractPhotonWeights"        file="hzz2l2v/extractPhotonWeights.cc"></bin>
-  <bin name="runZHTauTauAnalysis"         file="zhtautau/runZHTauTauAnalysis.cc"></bin>
-  <bin name="extractFRWeights"            file="zhtautau/extractFRWeights.cc"></bin>
-  <bin name="stacked_histo_distr"            file="stacked_histo_distr.cc"></bin>
--->
-
-  <bin name="sumup_loop"            file="sumup_loop_up.C"></bin>
   <bin name="test_xml"              file="test_xml.cpp"></bin>
+  <bin name="get_xsec_for_file"     file="get_xsec_for_file.cpp"></bin>
 
 </environment>
 

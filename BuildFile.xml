@@ -29,10 +29,12 @@
 <use name="CondTools/BTau"/>
 <use name="RecoJet/JetProducers"/>
 
-<use name="HTT-utilities/RecoilCorrections"/> -->
+<use name="HTT-utilities/RecoilCorrections"/>
+<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -Os"/>
+ -->
 
 <export>
   <lib name="1"/>
 </export>
 
-<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -Os"/>
+<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -O0 -I/usr/include/libxml2 -lxml2"/>
