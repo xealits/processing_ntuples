@@ -2310,195 +2310,11 @@ for (unsigned int ievt = 0; ievt < n_entries; ievt++)
 	}
 }
 
-/** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
-
-It parses the requested channels, systematics and distributions;
-prepares the structure of the loop;
-loops over all given files and `TTree`s in them,
-recording the distributions at the requested systematics;
-applies final corrections to the distributions;
-and if asked normalizes the distribution to `cross_section/gen_lumi`;
-finally all histograms are written out in the standard format `channel/process/systematic/channel_process_systematic_distr`.
-
-The input now: `input_filename [input_filename+]`.
- */
-
-
-int main (int argc, char *argv[])
+void write_output(const char* output_filename, vector<T_syst_chan_proc_histos>& distrs_to_record,
+	S_dtag_info& main_dtag_info,
+	Float_t lumi,
+	bool isMC, bool save_in_old_order, bool simulate_data)
 {
-argc--;
-const char* exec_name = argv[0];
-argv++;
-
-if (argc < 7)
-	{
-	std::cout << "Usage:" << " 0|1<simulate_data> 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
-	exit(0);
-	}
-
-gROOT->Reset();
-
-/* --- input options --- */
-
-// set to normalize per gen lumi number of events
-//bool normalise_per_weight = <user input>;
-
-// a special weird feature:
-// produce an output as if it were data
-// with NOMINAL systematic
-// and  data    proc name
-// histograms are filled with 1
-bool simulate_data       = Int_t(atoi(*argv++)) == 1; argc--;
-
-bool save_in_old_order   = Int_t(atoi(*argv++)) == 1; argc--;
-bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
-Float_t lumi(atof(*argv++)); argc--;
-
-vector<TString> requested_systematics = parse_coma_list(*argv++); argc--;
-vector<TString> requested_channels    = parse_coma_list(*argv++); argc--;
-vector<TString> requested_procs       = parse_coma_list(*argv++); argc--;
-vector<TString> requested_distrs      = parse_coma_list(*argv++); argc--;
-
-const char* output_filename = *argv++; argc--;
-
-if  (do_not_overwrite)
-	Stopif(access(output_filename, F_OK) != -1, exit(0);, "the output file exists %s", output_filename);
-
-
-cerr_expr(do_WNJets_stitching << " " << output_filename);
-/* --------------------- */
-
-
-//Int_t rebin_factor(atoi(argv[3]));
-//TString dir(argv[4]);
-//TString dtag1(argv[5]);
-
-/* Here we will parse user's request for figures
- * to create the structure filled up in the event loop.
- */
-
-// figure out the dtag of the input files from the first input file
-TString first_input_filename(argv[0]);
-TString main_dtag("");
-
-// loop over known dtags and find whether any of the matches
-map<TString, S_dtag_info>::iterator a_dtag_info = known_dtags_info.begin();
-while (a_dtag_info != known_dtags_info.end())
-	{
-	// Accessing KEY from element pointed by it.
-	TString dtag_name = a_dtag_info->first;
-	if (first_input_filename.Contains(dtag_name))
-		{
-		main_dtag = dtag_name;
-		break;
-		}
-	// Increment the Iterator to point to next entry
-	a_dtag_info++;
-	}
-
-// test if no dtag was recognized
-//Stopif(!main_dtag, ;, "could not recognize any known dtag in %s", first_input_filename.Data());
-Stopif(main_dtag.EqualTo(""), ;, "could not recognize any known dtag in %s", first_input_filename.Data());
-//if (main_dtag.EqualTo(""))
-//	{
-//	cerr_expr();
-//	}
-
-S_dtag_info main_dtag_info = known_dtags_info[main_dtag];
-cerr_expr(main_dtag << " : " << main_dtag_info.cross_section);
-
-bool isMC = main_dtag.Contains("MC");
-//if (!isMC) normalise_per_weight = false;
-normalise_per_weight &= isMC;
-
-// for WNJets stiching
-bool skip_nup5_events = do_WNJets_stitching && isMC && main_dtag.Contains("WJets_madgraph");
-
-//// define histograms for the distributions
-//vector<TH1D_histo> distrs;
-
-
-
-// define a nested list: list of channels, each containing a list of histograms to record
-vector<T_syst_chan_proc_histos> distrs_to_record = setup_record_histos(
-	main_dtag_info,
-	requested_systematics ,
-	requested_channels    ,
-	requested_procs       ,
-	requested_distrs      );
-
-// --------------------------------- EVENT LOOP
-// process input files
-for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
-	{
-	TString input_filename(argv[cur_var]);
-
-	cerr_expr(cur_var << " " << input_filename);
-	//cerr_expr(input_filename);
-
-	//dtags.push_back(dtag);
-	//files.push_back(TFile::Open(dir + "/" + dtag + ".root"));
-	//dtags.push_back(5);
-
-	// get input ttree
-	TFile* input_file  = TFile::Open(input_filename);
-	Stopif(!input_file,  continue, "cannot Open TFile in %s, skipping", input_filename.Data());
-
-	TTree* NT_output_ttree = (TTree*) input_file->Get("ttree_out");
-	Stopif(!NT_output_ttree, continue, "cannot Get TTree in file %s, skipping", input_filename.Data());
-
-	if (normalise_per_weight)
-		{
-		// get weight distribution for the file
-		TH1D* weight_counter_in_file = (TH1D*) input_file->Get("weight_counter");
-		// if the common weight counter is still not set -- clone
-		if (!weight_counter)
-			{
-			weight_counter = (TH1D*) weight_counter_in_file->Clone();
-			weight_counter->SetDirectory(0);
-			}
-		else
-			{
-			weight_counter->Add(weight_counter_in_file);
-			}
-		}
-
-	// loop over events in the ttree and record the requested histograms
-	event_loop(NT_output_ttree, distrs_to_record, skip_nup5_events, isMC);
-
-	// close the input file
-	input_file->Close();
-	}
-
-// if there is still no weight counter when it was requested
-// then no files were processed (probably all were skipped)
-Stopif(normalise_per_weight && !weight_counter, exit(0), "no weight counter even though it was requested, probably no files were processed, exiting")
-
-/*
-for(std::map<TString, double>::iterator it = xsecs.begin(); it != xsecs.end(); ++it)
-	{
-	TString dtag = it->first;
-	double xsec  = it->second;
-	cout << "For dtag " << dtag << " xsec " << xsec << "\n";
-	}
-*/
-
-
-//std::vector < TString > dtags;
-//std::vector < TFile * > files;
-//std::vector < TH1D * > histos;
-//std::vector < TH1D * > weightflows;
-//// nick->summed histo
-//std::map<TString, TH1D *> nicknamed_mc_histos;
-////vector<int> dtags;
-////dtags.reserve();
-
-// make stack of MC, scaling according to ratio = lumi * xsec / weightflow4 (bin5?)
-// also nickname the MC....
-// per-dtag for now..
-
-// --------------------------------- OUTPUT
-
 TFile* output_file  = (TFile*) new TFile(output_filename, "RECREATE");
 output_file->Write();
 
@@ -2698,3 +2514,193 @@ if (normalise_per_weight)
 output_file->Close();
 }
 
+/** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
+
+It parses the requested channels, systematics and distributions;
+prepares the structure of the loop;
+loops over all given files and `TTree`s in them,
+recording the distributions at the requested systematics;
+applies final corrections to the distributions;
+and if asked normalizes the distribution to `cross_section/gen_lumi`;
+finally all histograms are written out in the standard format `channel/process/systematic/channel_process_systematic_distr`.
+
+The input now: `input_filename [input_filename+]`.
+ */
+
+
+int main (int argc, char *argv[])
+{
+argc--;
+const char* exec_name = argv[0];
+argv++;
+
+if (argc < 7)
+	{
+	std::cout << "Usage:" << " 0|1<simulate_data> 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
+	exit(0);
+	}
+
+gROOT->Reset();
+
+/* --- input options --- */
+
+// set to normalize per gen lumi number of events
+//bool normalise_per_weight = <user input>;
+
+// a special weird feature:
+// produce an output as if it were data
+// with NOMINAL systematic
+// and  data    proc name
+// histograms are filled with 1
+bool simulate_data       = Int_t(atoi(*argv++)) == 1; argc--;
+
+bool save_in_old_order   = Int_t(atoi(*argv++)) == 1; argc--;
+bool do_WNJets_stitching = Int_t(atoi(*argv++)) == 1; argc--;
+Float_t lumi(atof(*argv++)); argc--;
+
+vector<TString> requested_systematics = parse_coma_list(*argv++); argc--;
+vector<TString> requested_channels    = parse_coma_list(*argv++); argc--;
+vector<TString> requested_procs       = parse_coma_list(*argv++); argc--;
+vector<TString> requested_distrs      = parse_coma_list(*argv++); argc--;
+
+const char* output_filename = *argv++; argc--;
+
+if  (do_not_overwrite)
+	Stopif(access(output_filename, F_OK) != -1, exit(0);, "the output file exists %s", output_filename);
+
+
+cerr_expr(do_WNJets_stitching << " " << output_filename);
+/* --------------------- */
+
+
+//Int_t rebin_factor(atoi(argv[3]));
+//TString dir(argv[4]);
+//TString dtag1(argv[5]);
+
+/* Here we will parse user's request for figures
+ * to create the structure filled up in the event loop.
+ */
+
+// figure out the dtag of the input files from the first input file
+TString first_input_filename(argv[0]);
+TString main_dtag("");
+
+// loop over known dtags and find whether any of the matches
+map<TString, S_dtag_info>::iterator a_dtag_info = known_dtags_info.begin();
+while (a_dtag_info != known_dtags_info.end())
+	{
+	// Accessing KEY from element pointed by it.
+	TString dtag_name = a_dtag_info->first;
+	if (first_input_filename.Contains(dtag_name))
+		{
+		main_dtag = dtag_name;
+		break;
+		}
+	// Increment the Iterator to point to next entry
+	a_dtag_info++;
+	}
+
+// test if no dtag was recognized
+//Stopif(!main_dtag, ;, "could not recognize any known dtag in %s", first_input_filename.Data());
+Stopif(main_dtag.EqualTo(""), ;, "could not recognize any known dtag in %s", first_input_filename.Data());
+//if (main_dtag.EqualTo(""))
+//	{
+//	cerr_expr();
+//	}
+
+S_dtag_info main_dtag_info = known_dtags_info[main_dtag];
+cerr_expr(main_dtag << " : " << main_dtag_info.cross_section);
+
+bool isMC = main_dtag.Contains("MC");
+//if (!isMC) normalise_per_weight = false;
+normalise_per_weight &= isMC;
+
+// for WNJets stiching
+bool skip_nup5_events = do_WNJets_stitching && isMC && main_dtag.Contains("WJets_madgraph");
+
+//// define histograms for the distributions
+//vector<TH1D_histo> distrs;
+
+
+
+// define a nested list: list of channels, each containing a list of histograms to record
+vector<T_syst_chan_proc_histos> distrs_to_record = setup_record_histos(
+	main_dtag_info,
+	requested_systematics ,
+	requested_channels    ,
+	requested_procs       ,
+	requested_distrs      );
+
+// --------------------------------- EVENT LOOP
+// process input files
+for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
+	{
+	TString input_filename(argv[cur_var]);
+
+	cerr_expr(cur_var << " " << input_filename);
+	//cerr_expr(input_filename);
+
+	//dtags.push_back(dtag);
+	//files.push_back(TFile::Open(dir + "/" + dtag + ".root"));
+	//dtags.push_back(5);
+
+	// get input ttree
+	TFile* input_file  = TFile::Open(input_filename);
+	Stopif(!input_file,  continue, "cannot Open TFile in %s, skipping", input_filename.Data());
+
+	TTree* NT_output_ttree = (TTree*) input_file->Get("ttree_out");
+	Stopif(!NT_output_ttree, continue, "cannot Get TTree in file %s, skipping", input_filename.Data());
+
+	if (normalise_per_weight)
+		{
+		// get weight distribution for the file
+		TH1D* weight_counter_in_file = (TH1D*) input_file->Get("weight_counter");
+		// if the common weight counter is still not set -- clone
+		if (!weight_counter)
+			{
+			weight_counter = (TH1D*) weight_counter_in_file->Clone();
+			weight_counter->SetDirectory(0);
+			}
+		else
+			{
+			weight_counter->Add(weight_counter_in_file);
+			}
+		}
+
+	// loop over events in the ttree and record the requested histograms
+	event_loop(NT_output_ttree, distrs_to_record, skip_nup5_events, isMC);
+
+	// close the input file
+	input_file->Close();
+	}
+
+// if there is still no weight counter when it was requested
+// then no files were processed (probably all were skipped)
+Stopif(normalise_per_weight && !weight_counter, exit(0), "no weight counter even though it was requested, probably no files were processed, exiting")
+
+/*
+for(std::map<TString, double>::iterator it = xsecs.begin(); it != xsecs.end(); ++it)
+	{
+	TString dtag = it->first;
+	double xsec  = it->second;
+	cout << "For dtag " << dtag << " xsec " << xsec << "\n";
+	}
+*/
+
+
+//std::vector < TString > dtags;
+//std::vector < TFile * > files;
+//std::vector < TH1D * > histos;
+//std::vector < TH1D * > weightflows;
+//// nick->summed histo
+//std::map<TString, TH1D *> nicknamed_mc_histos;
+////vector<int> dtags;
+////dtags.reserve();
+
+// make stack of MC, scaling according to ratio = lumi * xsec / weightflow4 (bin5?)
+// also nickname the MC....
+// per-dtag for now..
+
+// --------------------------------- OUTPUT
+write_output(output_filename, distrs_to_record, main_dtag_info, lumi, isMC, save_in_old_order, simulate_data);
+}
