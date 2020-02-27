@@ -2224,6 +2224,92 @@ cerr_expr(n_systs_made << " " << n_chans_made << " " << n_procs_made << " " << n
 return distrs_to_record;
 }
 
+void event_loop(TTree* NT_output_ttree, vector<T_syst_chan_proc_histos>& distrs_to_record,
+	bool skip_nup5_events, bool isMC)
+{
+// open the interface to stage2 TTree-s
+//#define NTUPLE_INTERFACE_OPEN
+#define NTUPLE_INTERFACE_CONNECT
+#include "stage2_interface.h"
+
+unsigned int n_entries = NT_output_ttree->GetEntries();
+//cerr_expr(n_entries);
+
+for (unsigned int ievt = 0; ievt < n_entries; ievt++)
+	{
+	NT_output_ttree->GetEntry(ievt);
+
+	if (skip_nup5_events && NT_nup > 5) continue;
+
+	//// tests
+	////cerr_expr(NT_runNumber);
+	//cerr_expr(NT_event_leptons[0].pt());
+	//cerr_expr(NT_event_leptons_genmatch[0]);
+
+	//Stopif(ievt > 10, break, "reached 10 events, exiting");
+
+	// loop over systematics
+	for (int si=0; si<distrs_to_record.size(); si++)
+		{
+		ObjSystematics obj_systematic = distrs_to_record[si].syst_def.obj_sys_id;
+
+		// the factor to the NOMINAL_base weight
+		double event_weight_factor    = isMC ? distrs_to_record[si].syst_def.weight_func() : 1.;
+
+		// record distributions in all final states where the event passes
+		vector<T_chan_proc_histos>& channels = distrs_to_record[si].chans;
+		for (int ci=0; ci<channels.size(); ci++)
+			{
+			T_chan_proc_histos& chan = channels[ci];
+
+			// check if event passes the channel selection
+			if (!chan.chan_def.chan_sel(obj_systematic)) continue;
+
+			// calculate the NOMINAL_base event weight for the channel
+			double event_weight = isMC ? chan.chan_def.chan_sel_weight() : 1.;
+			// and multiply by the systematic factor
+			event_weight *= event_weight_factor;
+
+			// assign the gen process
+			// loop over procs check if this event passes
+			// if not get the catchall proc
+
+			// set catchall
+			vector<TH1D_histo>* histos = &(chan.catchall_proc_histos);
+
+			// check if any specific channel passes
+			for (int pi=0; pi<chan.procs.size(); pi++)
+				{
+				if (chan.procs[pi].proc_def())
+					{
+					histos = &chan.procs[pi].histos;
+					break;
+					}
+				}
+
+			// record all distributions with the given event weight
+			for (int di=0; di<histos->size(); di++)
+				{
+				TH1D_histo& histo_torecord = (*histos)[di];
+				// TODO memoize if possible
+				double value = histo_torecord.func(obj_systematic);
+				histo_torecord.histo->Fill(value, event_weight);
+				//histo_torecord.histo->Fill(value);
+				}
+			// <-- I keep the loops with explicit indexes, since the indexes can be used to implement memoization
+
+			//for(const auto& histo_torecord: chan.histos)
+			//	{
+			//	double value = histo_torecord.func(obj_systematic);
+			//	histo_torecord.histo->Fill(value, event_weight);
+			//	}
+			}
+		}
+
+	// end of event loop
+	}
+}
+
 /** \brief The main program executes user's request over the given list of files, in all found `TTree`s in the files.
 
 It parses the requested channels, systematics and distributions;
@@ -2377,87 +2463,8 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 			}
 		}
 
-	// open the interface to stage2 TTree-s
-	//#define NTUPLE_INTERFACE_OPEN
-	#define NTUPLE_INTERFACE_CONNECT
-	#include "stage2_interface.h"
-
-	unsigned int n_entries = NT_output_ttree->GetEntries();
-	//cerr_expr(n_entries);
-
-	for (unsigned int ievt = 0; ievt < n_entries; ievt++)
-		{
-		NT_output_ttree->GetEntry(ievt);
-
-		if (skip_nup5_events && NT_nup > 5) continue;
-
-		//// tests
-		////cerr_expr(NT_runNumber);
-		//cerr_expr(NT_event_leptons[0].pt());
-		//cerr_expr(NT_event_leptons_genmatch[0]);
-
-		//Stopif(ievt > 10, break, "reached 10 events, exiting");
-
-		// loop over systematics
-		for (int si=0; si<distrs_to_record.size(); si++)
-			{
-			ObjSystematics obj_systematic = distrs_to_record[si].syst_def.obj_sys_id;
-
-			// the factor to the NOMINAL_base weight
-			double event_weight_factor    = isMC ? distrs_to_record[si].syst_def.weight_func() : 1.;
-
-			// record distributions in all final states where the event passes
-			vector<T_chan_proc_histos>& channels = distrs_to_record[si].chans;
-			for (int ci=0; ci<channels.size(); ci++)
-				{
-				T_chan_proc_histos& chan = channels[ci];
-
-				// check if event passes the channel selection
-				if (!chan.chan_def.chan_sel(obj_systematic)) continue;
-
-				// calculate the NOMINAL_base event weight for the channel
-				double event_weight = isMC ? chan.chan_def.chan_sel_weight() : 1.;
-				// and multiply by the systematic factor
-				event_weight *= event_weight_factor;
-
-				// assign the gen process
-				// loop over procs check if this event passes
-				// if not get the catchall proc
-
-				// set catchall
-				vector<TH1D_histo>* histos = &(chan.catchall_proc_histos);
-
-				// check if any specific channel passes
-				for (int pi=0; pi<chan.procs.size(); pi++)
-					{
-					if (chan.procs[pi].proc_def())
-						{
-						histos = &chan.procs[pi].histos;
-						break;
-						}
-					}
-
-				// record all distributions with the given event weight
-				for (int di=0; di<histos->size(); di++)
-					{
-					TH1D_histo& histo_torecord = (*histos)[di];
-					// TODO memoize if possible
-					double value = histo_torecord.func(obj_systematic);
-					histo_torecord.histo->Fill(value, event_weight);
-					//histo_torecord.histo->Fill(value);
-					}
-				// <-- I keep the loops with explicit indexes, since the indexes can be used to implement memoization
-
-				//for(const auto& histo_torecord: chan.histos)
-				//	{
-				//	double value = histo_torecord.func(obj_systematic);
-				//	histo_torecord.histo->Fill(value, event_weight);
-				//	}
-				}
-			}
-
-		// end of event loop
-		}
+	// loop over events in the ttree and record the requested histograms
+	event_loop(NT_output_ttree, distrs_to_record, skip_nup5_events, isMC);
 
 	// close the input file
 	input_file->Close();
@@ -2490,34 +2497,10 @@ for(std::map<TString, double>::iterator it = xsecs.begin(); it != xsecs.end(); +
 // also nickname the MC....
 // per-dtag for now..
 
+// --------------------------------- OUTPUT
+
 TFile* output_file  = (TFile*) new TFile(output_filename, "RECREATE");
 output_file->Write();
-
-/*
-for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
-	{
-	distrs[distr_i].histo->Print(); // for the tests
-	distrs[distr_i].histo->Write();
-	}
-*/
-
-/*
-for (int chan_i = 0; chan_i<requested_channels.size(); chan_i++)
-	{
-	//TODO create nested TDirectories for easier manual management, or do they slow down hadd?
-
-	// output the histograms
-	vector<TH1D_histo>& distrs = requested_channels[chan_i].distrs;
-	for (int distr_i = 0; distr_i<distrs.size(); distr_i++)
-		{
-		// TODO memoize, optimize
-		distrs[distr_i].histo->Print();
-		distrs[distr_i].histo->Write();
-		}
-	}
-*/
-
-// --------------------------------- OUTPUT
 
 if (save_in_old_order)
   {

@@ -12,7 +12,7 @@ time: order=0
 time: compile
 	time sumup_loop ${simulate_data_output} ${order} 1 41300 std all std Mt_lep_met_c,leading_lep_pt outfile_time.root ../lstore_outdirs/94v4/processing3/MC2017legacy_Fall17_TTTo2L2Nu/*root
 
-compile: sumup_loop_up.C test_xml.cpp
+compile: sumup_loop_up.C
 	time scram b
 	touch compile
 
