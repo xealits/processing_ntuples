@@ -1,0 +1,50 @@
+tau_mass_semilep->SetLineColor(kRed)
+
+dressed_tau_neutral_mass_semilep        ->SetLineColor(kRed)
+dressed_tau_neutral_mass_w_gamma_semilep->SetLineColor(kRed)
+
+dressed_tau_sc_mass_w_gamma_semilep ->SetLineColor(kRed)
+dressed_tau_sc_mass_semilep         ->SetLineColor(kRed)
+
+dressed_tau_flipped_mass_w_gamma_semilep->SetLineColor(kRed)
+dressed_tau_flipped_mass_semilep        ->SetLineColor(kRed)
+
+
+tau_mass_semilep                        ->Scale(1./  tau_mass_semilep                        ->Integral())
+dressed_tau_neutral_mass_semilep        ->Scale(1./  dressed_tau_neutral_mass_semilep        ->Integral())
+dressed_tau_neutral_mass_w_gamma_semilep->Scale(1./  dressed_tau_neutral_mass_w_gamma_semilep->Integral())
+dressed_tau_sc_mass_w_gamma_semilep     ->Scale(1./  dressed_tau_sc_mass_w_gamma_semilep ->Integral())
+dressed_tau_sc_mass_semilep             ->Scale(1./  dressed_tau_sc_mass_semilep         ->Integral())
+dressed_tau_flipped_mass_w_gamma_semilep->Scale(1./  dressed_tau_flipped_mass_w_gamma_semilep->Integral())
+dressed_tau_flipped_mass_semilep        ->Scale(1./  dressed_tau_flipped_mass_semilep        ->Integral())
+
+tau_mass_dilep                        ->Scale(1./  tau_mass_dilep                        ->Integral())
+dressed_tau_neutral_mass_dilep        ->Scale(1./  dressed_tau_neutral_mass_dilep        ->Integral())
+dressed_tau_neutral_mass_w_gamma_dilep->Scale(1./  dressed_tau_neutral_mass_w_gamma_dilep->Integral())
+dressed_tau_sc_mass_w_gamma_dilep     ->Scale(1./  dressed_tau_sc_mass_w_gamma_dilep ->Integral())
+dressed_tau_sc_mass_dilep             ->Scale(1./  dressed_tau_sc_mass_dilep         ->Integral())
+dressed_tau_flipped_mass_w_gamma_dilep->Scale(1./  dressed_tau_flipped_mass_w_gamma_dilep->Integral())
+dressed_tau_flipped_mass_dilep        ->Scale(1./  dressed_tau_flipped_mass_dilep        ->Integral())
+
+
+
+dressed_tau_neutral_mass_dilep        ->Draw()
+dressed_tau_neutral_mass_w_gamma_dilep->Draw("same")
+dressed_tau_sc_mass_w_gamma_dilep     ->Draw()
+dressed_tau_sc_mass_dilep             ->Draw("same")
+dressed_tau_flipped_mass_w_gamma_dilep->Draw()
+dressed_tau_flipped_mass_dilep        ->Draw("same")
+
+
+
+tau_mass_dilep   ->Draw()
+tau_mass_semilep ->Draw("same")
+
+dressed_tau_neutral_mass_semilep      ->Draw("")
+dressed_tau_neutral_mass_dilep        ->Draw("same")
+
+dressed_tau_sc_mass_semilep           ->Draw("")
+dressed_tau_sc_mass_dilep             ->Draw("same")
+
+dressed_tau_flipped_mass_dilep        ->Draw("")
+dressed_tau_flipped_mass_semilep      ->Draw("same")
