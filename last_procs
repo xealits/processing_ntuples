@@ -1,3 +1,16 @@
+# nvtx figures for thesis
+# still not in stage2!!!! how?
+
+# re-stage again, MC and Data
+python genjobs.py 94v5 processing2NVTX --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_ext1_v1,MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1,MC2017legacy_Fall17_SingleT_tW_5FS_powheg_new_pmx_v1,MC2017legacy_Fall17_SingleT_tW_5FS_powheg_v1,MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v1,MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg_v2,MC2017legacy_Fall17_TTTo2L2Nu,MC2017legacy_Fall17_TTToHadronic_13TeV_v2,MC2017legacy_Fall17_TTToSemiLeptonic_new_pmx_v1,MC2017legacy_Fall17_TTToSemiLeptonic_v2,MC2017legacy_Fall17_WJets_madgraph_ext1v2,MC2017legacy_Fall17_WJets_madgraph_v2,MC2017legacy_Fall17_WJets_madgraph_v3
+
+# Data
+python genjobs.py 94v10 processing2NVTX --do-W-stitching channels_nom_sys_muon_sel_main --submit queue --batch-system condor --dtags Data2017legacy_13TeV_SingleElectron_2017B,Data2017legacy_13TeV_SingleElectron_2017C,Data2017legacy_13TeV_SingleElectron_2017D,Data2017legacy_13TeV_SingleElectron_2017E,Data2017legacy_13TeV_SingleElectron_2017F,Data2017legacy_13TeV_SingleMuon_2017B,Data2017legacy_13TeV_SingleMuon_2017C,Data2017legacy_13TeV_SingleMuon_2017D,Data2017legacy_13TeV_SingleMuon_2017E,Data2017legacy_13TeV_SingleMuon_2017F
+
+make histograms_to_fit nt=94v5  proc=processing2NVTX hists=plot1 simulate_data_output=0     systematics=NOMINAL,PUUp,PUDown  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,nvtx
+make histograms_to_fit nt=94v10 proc=processing2NVTX hists=plot1 simulate_data_output=0     systematics=NOMINAL,PUUp,PUDown  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,nvtx
+
+
 # NOMINAL figures with data, NO DY
 make histograms_to_fit nt=94v5  proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign
 make histograms_to_fit nt=94v10 proc=processing2 hists=plot1 simulate_data_output=0     systematics=NOMINAL  channels=el_sel,el_sel_ss,mu_sel,mu_sel_ss,el_sel_tauSV3,mu_sel_tauSV3,el_sel_ss_tauSV3,mu_sel_ss_tauSV3,tt_elmu_tight processes=std distrs=Mt_lep_met_c,leading_lep_pt,tau_pt,tau_sv_sign

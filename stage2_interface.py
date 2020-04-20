@@ -255,6 +255,9 @@ stage2_vars = {
 'nup' :  'i',
 'amcatnlo_w' :  'f',
 
+'nvtx'     :  'i',
+'nvtx_gen' :  'i',
+
 'event_estim_w_mass' :  'f',
 
 'event_jets_lj_var' :  'f',

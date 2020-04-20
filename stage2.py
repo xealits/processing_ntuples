@@ -2320,6 +2320,12 @@ def full_loop(tree, ttree_out, dtag, lumi_bcdef, lumi_gh, logger, channels_to_se
         #    if ev.gen_NUP > 5: continue
         nup[0] = ev.gen_NUP
 
+        nvtx[0] = ev.nvtx
+        if isMC:
+            nvtx_gen[0] = ev.nvtx_gen
+        else:
+            nvtx_gen[0] = -111
+
         #if iev <  range_min: continue
         #if iev >= 10: break
         #ev = tree.GetEntry(iev)

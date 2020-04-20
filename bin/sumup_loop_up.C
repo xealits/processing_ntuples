@@ -603,6 +603,11 @@ typedef struct {
 	double value;
 } TH1D_histo;
 
+double NT_distr_nvtx(ObjSystematics sys)
+	{
+	return NT_nvtx;
+	}
+
 double NT_distr_leading_lep_pt(ObjSystematics sys)
 	{
 	return NT_event_leptons[0].pt();
@@ -731,6 +736,8 @@ map<TString, _TH1D_histo_def> create_known__TH1D_histo_definitions()
 	//r = {.nbins=40, .linear_min=0, .linear_max=200}; m["leading_lep_pt"] = {leading_lep_pt, r};
 	// despicable!
 	// "sorry, unimplemented: non-trivial designated initializers not supported"
+
+	r = {50,  true,   0, 50};                                                      m["nvtx"] = {NT_distr_nvtx, r};
 
 	r = {40,  true,   0, 200};                                                     m["leading_lep_pt"] = {NT_distr_leading_lep_pt, r};
 	r = {40,  true,  30,  40};                                                     m["leading_lep_pt_el_edge35"] = {NT_distr_leading_lep_pt, r};
