@@ -46,6 +46,9 @@ parser.add_argument("-n", "--ntupler-dir",    type=str, default='./gstore_outdir
 parser.add_argument("-p", "--processing-dir", type=str, default='./lstore_outdirs/',
         help="the directory with Processed output (default /lstore/cms/olek/outdirs/)")
 
+parser.add_argument("--dsets-info-filename", type=str, default='./dsets_info.yaml',
+        help="the file with the information on the ntupled datasets (default ./dsets_info.yaml)")
+
 parser.add_argument("--dtags", type=str, default='std',
         help='dtags or groups of dtags to submit, separated by coma like "std,updowns" (default std)')
 
@@ -84,7 +87,7 @@ assert isdir(args.processing_dir)
 # dsets info is needed to get the DSET-FIRST-NAME of the requested dtag
 # (TODO: probably I can substitute the dtag with the firstname altogether
 #  -- no! I do need to distinguish ext datasets for running separately on them -- FIRST-NAME does not distinguish)
-dsets_info_filename = "./dsets_info.yaml"
+dsets_info_filename = args.dsets_info_filename # "./dsets_info.yaml"
 with open(dsets_info_filename) as f:
     dsets_info = load(f)
 logging.debug("loaded dsets info from %s" % repr(dsets_info_filename))

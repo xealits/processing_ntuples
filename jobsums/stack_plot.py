@@ -24,7 +24,10 @@ parser.add_argument("-x", "--shape",  type=str, default='', help="selection for 
 parser.add_argument("-p", "--plot",  action='store_true', help="don't save the root file, plot stacked histogram in png")
 parser.add_argument("-r", "--ratio", action='store_true', help="don't save the root file, make ratio plot (in addition to stack or alone)")
 parser.add_argument("-l", "--logy", action='store_true', help="set logarithmic scale for Y axis of stack plot")
-parser.add_argument("--normalize", action='store_true', help="normalize the integral to data")
+
+parser.add_argument("--normalize-data", type=float, help="scale up the data")
+parser.add_argument("--normalize-mc",   type=float, help="scale up the mc")
+parser.add_argument("--normalize",  nargs='?', const=-1, type=float, help="normalize the integral to data if <0 ")
 parser.add_argument("--do-not-reweight", action='store_true', help="do not change MC in any way, do not reweight or normalize")
 parser.add_argument("-o", "--output-directory", type=str, default='', help="optional output directory")
 parser.add_argument("--output-type", type=str, default='png', help="the output type (png by default)")
@@ -42,8 +45,11 @@ parser.add_argument("--scale-relative-errors", type=float, default=1., help="to 
 parser.add_argument("--ratio-range", type=float, default=0.5, help="range of ratio plot (1-range 1+range)")
 
 parser.add_argument("--label",  type=str, help="add a text label on the plot at top-left corner")
+parser.add_argument("--label-offset",  type=float, default=0.05, help="offset in X axis of the position of the label (0.05 by default)")
 
 parser.add_argument("--left-title",  type=str, default="CMS", help="the text of the left title (CMS default)")
+parser.add_argument("--left-title-offset",  type=float, default=0., help="the offset in X direction of the position of the left title")
+parser.add_argument("--left-title-inside",  action="store_true", help="put the left title inside the plot box")
 
 parser.add_argument("--fonts1",                type=int,   default=133, help="the font of main text")
 parser.add_argument("--font-size-axes-labels", type=float, default=14,  help="the text size of the labels of axes")
@@ -105,7 +111,7 @@ parser.add_argument("-f", "--form-shapes", action='store_true', help="plot the s
 #parser.add_argument("-e", "--shape-evolution", type=str, default='usual', help="plot the same distr in different channels normalized to 1")
 parser.add_argument("--processes", type=str, default='all', help="set processes to consider (all by default)")
 
-parser.add_argument("--data-nick", type=str, default='data', help="data nick")
+parser.add_argument("--data-nick", type=str, default='data_other', help="data nick")
 
 parser.add_argument("--exp-legend",   action='store_true', help="experimentary legend drawing")
 parser.add_argument("--top-legend",   action='store_true', help="draw legend at the top")
@@ -579,11 +585,14 @@ def get_histos(infile, channels, shape_channel, sys_name, distr_name, skip_QCD=a
                init_integral = histo.Integral()
                if args.do_not_reweight:
                    logging.info("no reweighting for MC")
-                   histo.Scale( args.lumi)
                    pass
                else:
                    histo.Scale(final_factor)
                    logging.info("final factor %20s %20f   %5f %5f %5f     %20f = %10.2f / %10f" % (nick, args.lumi, tauIDSF_factor, pu_factor, th_factor, final_factor, histo.Integral(), init_integral))
+
+           if args.normalize_mc:
+               logging.info("post-final factor %10f" % args.normalize_mc)
+               histo.Scale(args.normalize_mc)
 
            # wjets normalization
            if args.wjets > 0 and 'wjets' in nick:
@@ -606,6 +615,9 @@ def get_histos(infile, channels, shape_channel, sys_name, distr_name, skip_QCD=a
 
            # set black linecolor
            histo.SetLineColor(kBlack)
+
+           # no titles
+           histo.SetTitle("")
 
            # mc qcd normalization
            if nick in ('qcd', 'qcd_other'):
@@ -922,15 +934,16 @@ for distr_name, histos_per_channel in histos_data_per_distr:
         histos_data_sum.Add(h)
     histos_data_sums_per_distr.append(histos_data_sum)
 
-if histos_data_sums_per_distr:
-    histos_data_sum = histos_data_sums_per_distr[0] # [:1]
-else:
-    histos_data_sum = hs_sum2.Clone()
-    histos_data_sum.SetDirectory(0)
-    histos_data_sum.SetName("data")
+histos_data_sum = histos_data_sums_per_distr[0] # [:1]
 
-if args.normalize:
-    ratio = histos_data_sum.Integral() / hs_sum2.Integral()
+if args.normalize_data:
+    histos_data_sum.Scale(args.normalize_data)
+
+if args.normalize is not None:
+    if args.normalize <= 0:
+        ratio = histos_data_sum.Integral() / hs_sum2.Integral()
+    else:
+        ratio = args.normalize
     hs_sum2.Scale(ratio)
     for name, histos in used_histos_per_distr:
         for h, nick, channel in histos:
@@ -973,9 +986,9 @@ if not args.fake_rate and not args.skip_legend and not (args.no_data or args.no_
     if args.no_horizontal_error_bars:
         #histos_data[0][0].Draw('X0ep')
         #leg.AddEntry(histos_data_sum, "data", "lX0ep")
-        leg.AddEntry(histos_data_sum, "data", "ep")
+        leg.AddEntry(histos_data_sum, "Data", "ep")
     else:
-        leg.AddEntry(histos_data_sum, "data", "lep")
+        leg.AddEntry(histos_data_sum, "Data", "lep")
 
 if args.leg_n_columns:
     leg.SetNColumns(args.leg_n_columns)
@@ -1417,7 +1430,7 @@ else:
 
     if args.ratio and args.plot:
         pad1 = TPad("pad1","This is pad1", 0., 0.3, pad_right_edge, 1.)
-        pad2 = TPad("pad2","This is pad2", 0., 0.0, pad_right_edge, 0.3)
+        pad2 = TPad("pad2","This is pad2", 0., 0.0, pad_right_edge, 0.29)
 
         # trying to draw the axis labels on top of histograms
         pad1.GetFrame().SetFillColor(42)
@@ -1786,12 +1799,14 @@ else:
     if args.exp_legend:
         #left_title = TPaveText(0.05, 0.9, 0.4, 0.94, "brNDC")
         left_title = TPaveText(0.12, 0.8, 0.35, 0.88, "brNDC")
+    elif args.left_title_inside:
+        left_title = TPaveText(args.margin_y + args.left_title_offset, 0.82, 0.5, 0.9, "brNDC")
     else:
         #left_title = TPaveText(0.1, 0.9, 0.4, 0.94, "brNDC")
         #left_title = TPaveText(0.12, 0.8, 0.35, 0.88, "brNDC")
         #left_title = TPaveText(0.1, 0.8, 0.25, 0.88, "brNDC")
         #left_title = TPaveText(0.1, 0.92, 0.5, 0.99, "brNDC")
-        left_title = TPaveText(args.margin_y, 0.92, 0.5, 1., "brNDC")
+        left_title = TPaveText(args.margin_y + args.left_title_offset, 0.92, 0.5, 1., "brNDC")
 
     #if args.no_data or args.no_data_plot:
     #    left_title.AddText("CMS simulation")
@@ -1834,7 +1849,7 @@ else:
 
     if args.label:
         #label_title = TPaveText(args.margin_y, 0.82, 0.5, 0.92, "brNDC")
-        label_title = TPaveText(args.margin_y + 0.05, 0.80, 0.3, 0.88, "brNDC")
+        label_title = TPaveText(args.margin_y + args.label_offset, 0.82, 0.5, 0.9, "brNDC")
 
         label_title.SetTextAlign(13)
         label_title.SetMargin(0)
@@ -1857,7 +1872,7 @@ else:
        if args.exp_legend: leg.SetBorderSize(0)
 
        # add the legend entry for MC sum error band
-       leg.AddEntry(hs_sum2, "uncertainty", 'f')
+       leg.AddEntry(hs_sum2, "Uncertainty", 'f')
        leg.Draw("same")
 
     if args.output_name:
@@ -1865,7 +1880,6 @@ else:
     else:
         stack_or_ratio = ('_stack' if args.plot else '') + ('_ratio' if args.ratio else '')
         shape_chan = ('_x_' + args.shape) if args.shape else ''
-        channel  = args.channel.split(',')[0]
         filename = out_dir + '_'.join((args.mc_file.replace('/', ',').split('.root')[0], args.data_file.replace('/', ',').split('.root')[0], distr_names[0], channel, sys_name)) + stack_or_ratio + shape_chan + ('_dataqcd' if args.qcd > 0. else '') + ('_fakerate' if args.fake_rate else '') + ('_cumulative' if args.cumulative else '') + ('_cumulative-fractions' if args.cumulative_fractions else '') + ('_logy' if args.logy else '') + ('_normalize' if args.normalize else '') + ('_nolegend' if args.skip_legend else '') + ('_noQCD' if args.skip_QCD else '') + ('_nodata' if args.no_data else '') + ('_nodataplot' if args.no_data_plot else '') + args.output_suffix + '.' + args.output_type
 
     if isfile(filename) and not args.overwrite:

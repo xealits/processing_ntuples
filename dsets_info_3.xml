@@ -715,6 +715,7 @@
     <dset dtag="Data2017legacy_13TeV_SingleMuon_2017F" logic_path="/SingleMuon/Run2017F-31Mar2018-v1/MINIAOD">
     </dset>
   </hard_process>
+
   <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
     <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016B_ver1" logic_path="/SingleMuon/Run2016B-17Jul2018_ver1-v1/MINIAOD">
     </dset>
@@ -747,6 +748,7 @@
     <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleMuon2016H" logic_path="/SingleMuon/Run2016H-17Jul2018-v1/MINIAOD">
     </dset>
   </hard_process>
+
   <hard_process LumiMask="https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt" isMC="0.0" xsec="1.0">
     <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016B_ver1" logic_path="/SingleElectron/Run2016B-17Jul2018_ver1-v1/MINIAOD">
     </dset>
@@ -779,6 +781,7 @@
     <dset dtag="Data2016legacy_13TeV_17Jul2018_SingleElectron2016H" logic_path="/SingleElectron/Run2016H-17Jul2018-v1/MINIAOD">
     </dset>
   </hard_process>
+
   <hard_process LumiMask="" isMC="1.0" xsec="18610.0">
     <dset dtag="MC2016legacy_Summer16_DYJetsToLL_10to50_amcatnlo_v2" logic_path="/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM">
     </dset>

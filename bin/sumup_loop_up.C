@@ -176,11 +176,16 @@ double NT_sysweight_NOMINAL_HLT_LEP()
 
 double NT_sysweight_NOMINAL_HLT_EL_MedTau()
 	{
+	// old stage2 output, from the 2016 xsection measurement
+	//return NT_event_weight*0.95;
+	// new, 2017 stage2
 	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG * NT_event_taus_SF_Medium[0];
 	}
 
 double NT_sysweight_NOMINAL_HLT_MU_MedTau()
 	{
+	// old stage2 output, from the 2016 xsection measurement
+	//return NT_event_weight*0.95;
 	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG * NT_event_taus_SF_Medium[0];
 	}
 
@@ -900,6 +905,44 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 	return relevant_selection_stage == 18 || relevant_selection_stage == 16;
 	}
 
+// old stage2 presel!! from xsec measurement
+bool NT_channel_el_old_presel(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	//if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
+	//else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_JERUp  ;
+	//else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_JERDown;
+	//else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_JESUp  ;
+	//else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_JESDown;
+	//else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_TESUp  ;
+	//else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_TESDown;
+	relevant_selection_stage = NT_selection_stage_presel;
+	return (relevant_selection_stage == 19 || relevant_selection_stage == 17);
+	}
+
+bool NT_channel_el_old_presel_ss(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	relevant_selection_stage = NT_selection_stage_presel;
+	return (relevant_selection_stage == 18 || relevant_selection_stage == 16); // || relevant_selection_stage == 15);
+	}
+
+bool NT_channel_mu_old_presel(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	relevant_selection_stage = NT_selection_stage_presel;
+	//return relevant_selection_stage == 9;
+	return (relevant_selection_stage == 9 || relevant_selection_stage == 7);
+	}
+
+bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
+	{
+	int relevant_selection_stage = 0;
+	relevant_selection_stage = NT_selection_stage_presel;
+	return (relevant_selection_stage == 8 || relevant_selection_stage == 6);
+	}
+
+
 bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel(sys);
@@ -1175,6 +1218,12 @@ map<TString, _S_chan_def> create_known_channel_definitions()
 	_quick_set_chandef(m, lep_sel_tauSV3      , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
 	_quick_set_chandef(m, lep_sel_ss_tauSV3   , NT_sysweight_NOMINAL_HLT_LEP_MedTau);
 
+	// old stage2 presel-s, from 2016 xsection measurement
+	_quick_set_chandef(m, el_old_presel   , NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, el_old_presel_ss, NT_sysweight_NOMINAL_HLT_EL_MedTau);
+	_quick_set_chandef(m, mu_old_presel   , NT_sysweight_NOMINAL_HLT_MU_MedTau);
+	_quick_set_chandef(m, mu_old_presel_ss, NT_sysweight_NOMINAL_HLT_MU_MedTau);
+
 	_quick_set_chandef(m, tt_elmu      , NT_sysweight_NOMINAL_HLT_EL);
 	_quick_set_chandef(m, tt_elmu_tight, NT_sysweight_NOMINAL_HLT_EL);
 
@@ -1334,6 +1383,8 @@ vector<TString>  _elmu_wjets_procs = {};
 vector<TString>  _mumu_wjets_procs = {};
 vector<TString>  _elel_wjets_procs = {};
 
+vector<TString>  _any_procs = {};
+
 // ^--- I am not sure this is the best approach to define these standard processes
 //      initially I wanted to have a bunch of general sets, not the concrete per-channel ones
 
@@ -1375,6 +1426,10 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _eltau_tt_procs},
 			{"mu_sel",    _mutau_tt_procs},
 			{"mu_sel_ss", _mutau_tt_procs},
+			{"el_old_presel",    _eltau_tt_procs},
+			{"el_old_presel_ss", _eltau_tt_procs},
+			{"mu_old_presel",    _mutau_tt_procs},
+			{"mu_old_presel_ss", _mutau_tt_procs},
 
 			{"el_sel_tauSV3",    _eltau_tt_procs},
 			{"el_sel_ss_tauSV3", _eltau_tt_procs},
@@ -1418,6 +1473,10 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _leptau_dy_procs},
 			{"mu_sel",    _leptau_dy_procs},
 			{"mu_sel_ss", _leptau_dy_procs},
+			{"el_old_presel",    _leptau_dy_procs},
+			{"el_old_presel_ss", _leptau_dy_procs},
+			{"mu_old_presel",    _leptau_dy_procs},
+			{"mu_old_presel_ss", _leptau_dy_procs},
 
 			{"el_sel_tauSV3",    _leptau_dy_procs},
 			{"el_sel_ss_tauSV3", _leptau_dy_procs},
@@ -1460,6 +1519,10 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _eltau_stop_procs},
 			{"mu_sel",    _mutau_stop_procs},
 			{"mu_sel_ss", _mutau_stop_procs},
+			{"el_old_presel",    _eltau_stop_procs},
+			{"el_old_presel_ss", _eltau_stop_procs},
+			{"mu_old_presel",    _mutau_stop_procs},
+			{"mu_old_presel_ss", _mutau_stop_procs},
 
 			{"el_sel_tauSV3",    _eltau_stop_procs},
 			{"el_sel_ss_tauSV3", _eltau_stop_procs},
@@ -1500,6 +1563,10 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", _eltau_wjets_procs},
 			{"mu_sel",    _mutau_wjets_procs},
 			{"mu_sel_ss", _mutau_wjets_procs},
+			{"el_old_presel",    _eltau_wjets_procs},
+			{"el_old_presel_ss", _eltau_wjets_procs},
+			{"mu_old_presel",    _mutau_wjets_procs},
+			{"mu_old_presel_ss", _mutau_wjets_procs},
 
 			{"el_sel_tauSV3",    _eltau_wjets_procs},
 			{"el_sel_ss_tauSV3", _eltau_wjets_procs},
@@ -1526,6 +1593,47 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			}
 		};
 
+	m["qcd"] = {
+		.catchall_name = "qcd_other",
+		.all={},
+		.groups={},
+
+		.channel_standard = {
+			{"el_sel",    _any_procs},
+			{"el_sel_ss", _any_procs},
+			{"mu_sel",    _any_procs},
+			{"mu_sel_ss", _any_procs},
+			{"el_old_presel",    _any_procs},
+			{"el_old_presel_ss", _any_procs},
+			{"mu_old_presel",    _any_procs},
+			{"mu_old_presel_ss", _any_procs},
+
+			{"el_sel_tauSV3",    _any_procs},
+			{"el_sel_ss_tauSV3", _any_procs},
+			{"mu_sel_tauSV3",    _any_procs},
+			{"mu_sel_ss_tauSV3", _any_procs},
+
+			{"tt_elmu",        _any_procs},
+			{"tt_elmu_tight",  _any_procs},
+
+			{"dy_mutau",      _any_procs},
+			{"dy_mutau_ss",   _any_procs},
+			{"dy_eltau",      _any_procs},
+			{"dy_eltau_ss",   _any_procs},
+
+			{"dy_mutau_tauSV3",      _any_procs},
+			{"dy_mutau_ss_tauSV3",   _any_procs},
+			{"dy_eltau_tauSV3",      _any_procs},
+			{"dy_eltau_ss_tauSV3",   _any_procs},
+
+			{"dy_mumu",       _any_procs},
+			{"dy_elel",       _any_procs},
+			{"dy_elmu",       _any_procs},
+			{"dy_elmu_ss",    _any_procs},
+			}
+		};
+
+
 	m["data"] = {
 		.catchall_name = "data", // usually we run only on DYTo2L, so this is the elel and mumu
 		.all={},
@@ -1535,6 +1643,10 @@ map<TString, _S_proc_ID_defs> create_known_procs_info()
 			{"el_sel_ss", {}},
 			{"mu_sel",    {}},
 			{"mu_sel_ss", {}},
+			{"el_old_presel",    {}},
+			{"el_old_presel_ss", {}},
+			{"mu_old_presel",    {}},
+			{"mu_old_presel_ss", {}},
 
 			{"el_sel_tauSV3",    {}},
 			{"el_sel_ss_tauSV3", {}},
@@ -1649,18 +1761,89 @@ map<TString, S_dtag_info> create_known_dtags_info()
 		.usual_gen_lumi= 23102470.188817,
 		.std_procs = known_procs_info["wjets"],
 		.std_systs = {SYSTS_OTHER_MC}};
+
+	m["MC2016_Summer16_WJets_madgraph"              ] = {.cross_section= 52940.                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["wjets"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_W1Jets_madgraph"              ] = {.cross_section= 9493.                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["wjets"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_W2Jets_madgraph"              ] = {.cross_section= 3120.                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["wjets"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_W3Jets_madgraph"              ] = {.cross_section= 942.29999999999995                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["wjets"],
+		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_W4Jets_madgraph"              ] = {.cross_section= 524.20000000000005                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["wjets"],
+		.std_systs = {SYSTS_OTHER_MC}};
+
+	m["MC2016_Summer16_QCD_HT-100-200"              ] = {.cross_section= 27540000 / 0.131                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-200-300"              ] = {.cross_section= 1717000 / 0.098                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-300-500"              ] = {.cross_section= 351300 / (0.088 * 100)                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-500-700"              ] = {.cross_section= 31630 / (0.067 * 2)                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-700-1000"              ] = {.cross_section= 6802 / (0.066 * 2)                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-1000-1500"              ] = {.cross_section= 1206 * 10 / 0.059                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-1500-2000"              ] = {.cross_section= 120.4 / 0.067                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+	m["MC2016_Summer16_QCD_HT-2000-Inf"              ] = {.cross_section= 25.25  / 0.07                            ,
+		.usual_gen_lumi= 23102470.188817,
+		.std_procs = known_procs_info["qcd"],
+		.std_systs = {SYSTS_QCD_MC}};
+
+	// there is also MC2016_Summer16_DYJetsToLL_10to50_amcatnlo but it is not important
 	m["MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph" ] = {.cross_section=  6225.42                          ,
 		.usual_gen_lumi= 18928303.971956,
 		.std_procs = known_procs_info["dy"],
 		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_DYJetsToLL_50toInf_madgraph" ] = {.cross_section=  6225.42                          ,
+		.usual_gen_lumi= 18928303.971956,
+		.std_procs = known_procs_info["dy"],
+		.std_systs = {SYSTS_OTHER_MC}};
+
 	m["MC2017legacy_Fall17_SingleT_tW_5FS_powheg"       ] = {.cross_section=    35.6                           ,
 		.usual_gen_lumi=  5099879.048270,
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_SingleT_tW_5FS_powheg"       ] = {.cross_section=    35.6                           ,
+		.usual_gen_lumi=  5099879.048270,
+		.std_procs=known_procs_info["stop"],
+		.std_systs = {SYSTS_OTHER_MC}};
+
 	m["MC2017legacy_Fall17_SingleTbar_tW_5FS_powheg"    ] = {.cross_section=    35.6                           ,
 		.usual_gen_lumi=  2349775.859249,
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
+	m["MC2016_Summer16_SingleTbar_tW_5FS_powheg"    ] = {.cross_section=    35.6                           ,
+		.usual_gen_lumi=  2349775.859249,
+		.std_procs=known_procs_info["stop"],
+		.std_systs = {SYSTS_OTHER_MC}};
+
 	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              ,
 		.usual_gen_lumi= 29213134.729453,
 		.std_procs=known_procs_info["tt"],
@@ -1686,6 +1869,27 @@ map<TString, S_dtag_info> create_known_dtags_info()
 		.usual_gen_lumi=  1.,
 		.std_procs = known_procs_info["data"],
 		.std_systs = {"NOMINAL"}};
+
+	// the 2016 cross section analysis
+	m["Data13TeV_SingleElectron2016"                      ] = {.cross_section=   1.           ,
+		.usual_gen_lumi=  1.,
+		.std_procs = known_procs_info["data"],
+		.std_systs = {"NOMINAL"}};
+	m["Data13TeV_SingleMuon2016"                      ] = {.cross_section=   1.           ,
+		.usual_gen_lumi=  1.,
+		.std_procs = known_procs_info["data"],
+		.std_systs = {"NOMINAL"}};
+
+/* there are more:
+MC2016_Summer16_DYJetsToLL_10to50_amcatnlo           MC2016_Summer16_QCD_HT-200-300            MC2016_Summer16_W1Jets_madgraph       MC2016_Summer16_WJets_madgraph                MC2016_Summer16_ZZTo2L2Nu_powheg
+MC2016_Summer16_DYJetsToLL_10to50_amcatnlo_v1_ext1   MC2016_Summer16_QCD_HT-2000-Inf           MC2016_Summer16_W2Jets_madgraph       MC2016_Summer16_WJets_madgraph_ext2_v1        MC2016_Summer16_ZZTo2L2Q_amcatnlo_madspin
+MC2016_Summer16_DYJetsToLL_10to50_amcatnlo_v2        MC2016_Summer16_QCD_HT-300-500            MC2016_Summer16_W2Jets_madgraph_ext1  MC2016_Summer16_WWTo2L2Nu_powheg              MC2016_Summer16_schannel_4FS_leptonicDecays_amcatnlo
+MC2016_Summer16_DYJetsToLL_50toInf_madgraph          MC2016_Summer16_QCD_HT-500-700            MC2016_Summer16_W3Jets_madgraph       MC2016_Summer16_WWToLNuQQ_powheg              MC2016_Summer16_tchannel_antitop_4f_leptonicDecays_powheg
+MC2016_Summer16_DYJetsToLL_50toInf_madgraph_ext2_v1  MC2016_Summer16_QCD_HT-700-1000           MC2016_Summer16_W3Jets_madgraph_ext1  MC2016_Summer16_WZTo1L1Nu2Q_amcatnlo_madspin  MC2016_Summer16_tchannel_top_4f_leptonicDecays_powheg
+MC2016_Summer16_QCD_HT-100-200                       MC2016_Summer16_SingleT_tW_5FS_powheg     MC2016_Summer16_W4Jets_madgraph       MC2016_Summer16_WZTo1L3Nu_amcatnlo_madspin
+MC2016_Summer16_QCD_HT-1000-1500                     MC2016_Summer16_SingleTbar_tW_5FS_powheg  MC2016_Summer16_W4Jets_madgraph_ext1  MC2016_Summer16_WZTo2L2Q_amcatnlo_madspin
+MC2016_Summer16_QCD_HT-1500-2000                     MC2016_Summer16_TTJets_powheg             MC2016_Summer16_W4Jets_madgraph_ext2  MC2016_Summer16_WZTo3LNu_powheg
+*/
 
 	return m;
 	}
