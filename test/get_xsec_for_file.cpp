@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "UserCode/proc/interface/DsetsInfo.hpp"
 
-#include "UserCode/proc/interface/Stopif.h"
+#include "UserCode/proc/interface/handy_macros.h"
 
 int main (int argc, char *argv[])
 {
