@@ -245,7 +245,7 @@ else if (ntupler)
 
 
 // normalizations for MC datasets -- corrections of the overall generated event yield to keep it unchanged after all the MC callibrations
-typedef map<TString, double>        T_known_normalization_per_somename;
+typedef map<TString, double>        T_known_MC_normalization_per_somename;
 
 typedef int (*F_connect_ntuple_interface)(TTree*);
 

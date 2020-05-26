@@ -1440,7 +1440,7 @@ T_known_defs_procs create_known_defs_procs_stage2()
 /* --------------------------------------------------------------- */
 // final normalizations
 
-T_known_normalization_per_somename create_known_normalization_per_syst_stage2()
+T_known_MC_normalization_per_somename create_known_MC_normalization_per_syst_stage2()
 	{
 	map<TString, double> m;
 
@@ -1613,11 +1613,11 @@ T_known_normalization_per_somename create_known_normalization_per_syst_stage2()
 	return m;
 	}
 
-//map<TString, double> known_normalization_per_syst = create_known_normalization_per_syst();
-//T_known_normalization_per_somename known_normalization_per_syst_stage2 = create_known_normalization_per_syst();
-//T_known_normalization_per_somename known_normalization_per_syst_stage2 = create_known_normalization_per_syst_stage2();
+//map<TString, double> known_normalization_per_syst = create_known_MC_normalization_per_syst();
+//T_known_MC_normalization_per_somename known_normalization_per_syst_stage2 = create_known_MC_normalization_per_syst();
+//T_known_MC_normalization_per_somename known_normalization_per_syst_stage2 = create_known_MC_normalization_per_syst_stage2();
 
-T_known_normalization_per_somename create_known_normalization_per_proc_stage2()
+T_known_MC_normalization_per_somename create_known_MC_normalization_per_proc_stage2()
 	{
 	map<TString, double> m;
 
@@ -1640,17 +1640,17 @@ T_known_normalization_per_somename create_known_normalization_per_proc_stage2()
 	return m;
 	}
 
-//T_known_normalization_per_somename known_normalization_per_proc_stage2 = create_known_normalization_per_proc();
+//T_known_MC_normalization_per_somename known_normalization_per_proc_stage2 = create_known_MC_normalization_per_proc();
 
 
-T_known_normalization_per_somename create_known_normalization_per_chan_stage2()
+T_known_MC_normalization_per_somename create_known_MC_normalization_per_chan_stage2()
 	{
 	map<TString, double> m;
 
 	return m;
 	}
 
-//T_known_normalization_per_somename known_normalization_per_chan_stage2 = create_known_normalization_per_chan_stage2();
+//T_known_MC_normalization_per_somename known_normalization_per_chan_stage2 = create_known_MC_normalization_per_chan_stage2();
 
 
 int connect_ntuple_interface_stage2(TTree* NT_output_ttree)

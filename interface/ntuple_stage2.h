@@ -16,9 +16,9 @@ T_known_defs_distrs   create_known_defs_distrs_stage2(void);
 T_known_defs_channels create_known_defs_channels_stage2(void);
 T_known_defs_systs    create_known_defs_systs_stage2(void);
 
-T_known_normalization_per_somename create_known_normalization_per_syst_stage2(void);
-T_known_normalization_per_somename create_known_normalization_per_proc_stage2(void);
-T_known_normalization_per_somename create_known_normalization_per_chan_stage2(void);
+T_known_MC_normalization_per_somename create_known_MC_normalization_per_syst_stage2(void);
+T_known_MC_normalization_per_somename create_known_MC_normalization_per_proc_stage2(void);
+T_known_MC_normalization_per_somename create_known_MC_normalization_per_chan_stage2(void);
 
 
 //F_connect_ntuple_interface connect_ntuple_interface_stage2;

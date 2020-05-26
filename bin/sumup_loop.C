@@ -364,9 +364,9 @@ TH1D* weight_counter = NULL;
 // per dtag cross section -- make it a commandline option if you want
 bool normalise_per_cross_section = true;
 
-T_known_normalization_per_somename    known_normalization_per_syst = create_known_normalization_per_syst_stage2();
-T_known_normalization_per_somename    known_normalization_per_proc = create_known_normalization_per_proc_stage2();
-T_known_normalization_per_somename    known_normalization_per_chan = create_known_normalization_per_chan_stage2();
+T_known_MC_normalization_per_somename    known_normalization_per_syst = create_known_MC_normalization_per_syst_stage2();
+T_known_MC_normalization_per_somename    known_normalization_per_proc = create_known_MC_normalization_per_proc_stage2();
+T_known_MC_normalization_per_somename    known_normalization_per_chan = create_known_MC_normalization_per_chan_stage2();
 
 void normalise_final(TH1D* histo, double cross_section, double scale, const TString& name_syst, const TString& name_chan, const TString& name_proc)
 	{
