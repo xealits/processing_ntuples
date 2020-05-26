@@ -35,11 +35,11 @@
 
 #if defined(NTUPLE_INTERFACE_CLASS_DECLARE) // ALSO: in EDM Classes NTuple is pointer to TFile Service!
 	// to declare vector of types (int/float etc): declate just vector
-	#define VECTOR_PARAMs_in_NTuple(NTuple, TYPE, Name)   std::vector<TYPE> NT_##Name;
+	#define VECTOR_PARAMs_in_NTuple(NTuple, TYPE, Name)   std::vector<TYPE> NT_##Name; std::vector<TYPE>* pt_NT_##Name = &NT_##Name;
 	// to declare vector of objects: declate vector and a pointer to it
-	#define VECTOR_OBJECTs_in_NTuple(NTuple, Name, ...)   __VA_ARGS__ NT_##Name; __VA_ARGS__* pt_NT_##Name;
+	#define VECTOR_OBJECTs_in_NTuple(NTuple, Name, ...)   __VA_ARGS__ NT_##Name; __VA_ARGS__* pt_NT_##Name = &NT_##Name;
 	// objects and types (simple parameters)
-	#define OBJECT_in_NTuple(NTuple, Name, ...)     __VA_ARGS__   NT_##Name;
+	#define OBJECT_in_NTuple(NTuple, Name, ...)     __VA_ARGS__   NT_##Name; __VA_ARGS__*  pt_NT_##Name = &NT_##Name; // __VA_ARGS__*  pt_NT_##Name = 0;
 	#define Float_t_in_NTuple(NTuple, Name)         Float_t NT_##Name;
 	#define Int_t_in_NTuple(NTuple, Name)           Int_t   NT_##Name;
 	#define ULong64_t_in_NTuple(NTuple, Name)       ULong64_t   NT_##Name;
@@ -92,9 +92,9 @@
 	#define Bool_t_in_NTuple(NTuple, Name)          PARAMETER_in_NTuple(NTuple, Bool_t, Name);
 
 #elif defined(NTUPLE_INTERFACE_CONNECT)
-	#define VECTOR_PARAMs_in_NTuple(NTuple, TYPE, Name)   std::vector<TYPE>* pt_NT_##Name = &NT_##Name; NTuple->SetBranchAddress(#Name, &pt_NT_##Name);
-	#define VECTOR_OBJECTs_in_NTuple(NTuple, Name, ...)   __VA_ARGS__* pt_NT_##Name = &NT_##Name ; NTuple->SetBranchAddress(#Name, &pt_NT_##Name);
-	#define OBJECT_in_NTuple(NTuple, Name, ...)     __VA_ARGS__*  pt_NT_##Name = 0; NTuple->SetBranchAddress(#Name, &pt_NT_##Name);
+	#define VECTOR_PARAMs_in_NTuple(NTuple, TYPE, Name)   NTuple->SetBranchAddress(#Name, &pt_NT_##Name);
+	#define VECTOR_OBJECTs_in_NTuple(NTuple, Name, ...)   NTuple->SetBranchAddress(#Name, &pt_NT_##Name);
+	#define OBJECT_in_NTuple(NTuple, Name, ...)     NTuple->SetBranchAddress(#Name, &pt_NT_##Name);
 	#define PARAMETER_in_NTuple(NTuple, TYPE, Name) NTuple->SetBranchAddress(#Name, &NT_##Name);
 	#define Float_t_in_NTuple(NTuple, Name)         PARAMETER_in_NTuple(NTuple, Float_t, Name);
 	#define Int_t_in_NTuple(NTuple, Name)           PARAMETER_in_NTuple(NTuple, Int_t, Name);
@@ -109,6 +109,9 @@
 #ifndef NTUPLEOUTPUT_LORENTZVECTOR_H
 #define NTUPLEOUTPUT_LORENTZVECTOR_H
 // the exact LorentzVector declaration
+#include "TROOT.h"
+#include "TMath.h"
+#include "Math/LorentzVector.h"
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVector;
 typedef ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag> Vector_3D;
 // typedef ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepSym<double,3>>  Error_3D; // not used in stage2 and crashes in new CMSSW for some reason?

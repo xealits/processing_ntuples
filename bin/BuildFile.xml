@@ -1,4 +1,5 @@
 <use name="PhysicsTools/FWLite"/>
+<use name="UserCode/proc"/> <!-- links the lib compiled from our proc/src/ directory -->
 
 <!--
 <use name="UserCode/llvv_fwk"/>

@@ -1,3 +1,7 @@
+compile:
+	time scram b -j 5
+	touch compile
+
 histograms_to_fit: stage2_dir=lstore_outdirs/
 histograms_to_fit: nt=94v3
 histograms_to_fit: proc=processing1
