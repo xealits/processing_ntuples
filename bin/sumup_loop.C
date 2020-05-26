@@ -73,14 +73,14 @@ bool normalise_per_weight = true;
 // -------------------- main record parameters
 
 // TODO: move this under an if in the main function
-//T_known_systematics   known_systematics   = known_systematics_stage2;
+//T_known_defs_systs   known_systematics   = known_systematics_stage2;
 //T_known_defs_channels known_defs_channels = known_defs_channels_stage2;
 //T_known_defs_distrs   known_defs_distrs   = known_defs_distrs_stage2;
 
 // another way
-T_known_systematics   known_systematics   = create_known_systematics_stage2();
-T_known_defs_channels known_defs_channels = create_known_channel_definitions_stage2();
-T_known_defs_distrs   known_defs_distrs   = create_known__TH1D_histo_definitions_stage2();
+T_known_defs_systs    known_systematics   = create_known_defs_systs_stage2();
+T_known_defs_channels known_defs_channels = create_known_defs_channels_stage2();
+T_known_defs_distrs   known_defs_distrs   = create_known_defs_distrs_stage2();
 
 // main record parameters --------------------
 
@@ -188,7 +188,7 @@ double br_tau_hadronic = 1. - br_tau_lepton;
 
 double ttbar_xsec = 831.76; // at 13 TeV
 
-map<TString, S_dtag_info> create_known_dtags_info(T_known_procs_info known_procs_info)
+map<TString, S_dtag_info> create_known_dtags_info(T_known_defs_procs known_procs_info)
 	{
 	//map<const char*, S_dtag_info> m;
 	map<TString, S_dtag_info> m;
@@ -330,7 +330,7 @@ MC2016_Summer16_QCD_HT-1500-2000                     MC2016_Summer16_TTJets_powh
 	return m;
 	}
 
-T_known_procs_info        known_procs_info = create_known_procs_info_stage2();
+T_known_defs_procs        known_procs_info = create_known_defs_procs_stage2();
 map<TString, S_dtag_info> known_dtags_info = create_known_dtags_info(known_procs_info);
 
 // ----------------- dtag info

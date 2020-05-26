@@ -239,7 +239,7 @@ NT_sysweight(PDFCT14n56Down    , 1.)
 #define _quick_set_objsys(sysname) m[#sysname] = {sysname, NT_sysweight_NOMINAL}
 #define _quick_set_wgtsys(sysname) m[#sysname] = {NOMINAL, NT_sysweight_##sysname}
 
-T_known_systematics create_known_systematics_stage2()
+T_known_defs_systs create_known_defs_systs_stage2()
 	{
 	map<TString, _S_systematic_definition> m;
 	m["NOMINAL"] = {NOMINAL, NT_sysweight_NOMINAL};
@@ -406,7 +406,7 @@ T_known_systematics create_known_systematics_stage2()
 	return m;
 	}
 
-//T_known_systematics known_systematics_stage2 = create_known_systematics();
+//T_known_defs_systs known_systematics_stage2 = create_known_systematics();
 //known_systematics_stage2 = create_known_systematics();
 
 double NT_distr_nvtx(ObjSystematics sys)
@@ -535,7 +535,7 @@ so it must be a function
 \return map<const char*, _TH1D_histo_def>
  */
 
-T_known_defs_distrs create_known__TH1D_histo_definitions_stage2()
+T_known_defs_distrs create_known_defs_distrs_stage2()
 {
 	map<TString, _TH1D_histo_def> m;
 	_TH1D_histo_range r;
@@ -949,7 +949,7 @@ bool NT_channel_dy_elel(ObjSystematics sys)
 \return map<const char*, _F_channel_sel>
  */
 
-T_known_defs_channels create_known_channel_definitions_stage2()
+T_known_defs_channels create_known_defs_channels_stage2()
 {
 	//map<TString, _F_channel_sel> m;
 	map<TString, _S_chan_def> m;
@@ -1126,9 +1126,9 @@ vector<TString>  _any_procs = {};
 //      initially I wanted to have a bunch of general sets, not the concrete per-channel ones
 
 
-T_known_procs_info create_known_procs_info_stage2()
+T_known_defs_procs create_known_defs_procs_stage2()
 	{
-	T_known_procs_info m;
+	T_known_defs_procs m;
 
 	m["tt"] = {
 		.catchall_name = "tt_other",

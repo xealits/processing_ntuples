@@ -133,7 +133,7 @@ typedef struct {
 
 typedef struct {ObjSystematics obj_sys_id; _F_sysweight weight_func;} _S_systematic_definition;
 
-typedef map<TString, _S_systematic_definition> T_known_systematics; // used in sumup_loop main
+typedef map<TString, _S_systematic_definition> T_known_defs_systs; // used in sumup_loop main
 
 // ----- distribution
 
@@ -227,8 +227,8 @@ the same gen-level process is defined differently in original ntuples and in sta
 therefore TODO: the known dtags must be produced in main on if (type of ntuples)
 for now just link them directly with stage2 ntuples interface
  */
-typedef map<TString, _S_proc_ID_defs> T_known_procs_info;
-//extern T_known_procs_info known_procs_info_stage2;
+typedef map<TString, _S_proc_ID_defs> T_known_defs_procs;
+//extern T_known_defs_procs known_procs_info_stage2;
 /* extern means it must be defined elsewhere -- in ntuple_stage2.cpp
    let's just move this definition in ntuple_stage2 interface
  */
@@ -237,9 +237,9 @@ typedef map<TString, _S_proc_ID_defs> T_known_procs_info;
 map<TString, _S_proc_ID_defs> known_procs_info = create_known_procs_info(); <-- basically, this must be run in main like:
 
 if      (stage2)
-	T_known_procs_info known_procs_info = create_known_procs_info(known_procs_info_stage2);
+	T_known_defs_procs known_procs_info = create_known_procs_info(known_procs_info_stage2);
 else if (ntupler)
-	T_known_procs_info known_procs_info = create_known_procs_info(known_procs_info_ntupler);
+	T_known_defs_procs known_procs_info = create_known_procs_info(known_procs_info_ntupler);
 */
 
 

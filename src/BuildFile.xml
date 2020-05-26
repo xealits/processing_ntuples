@@ -1,4 +1,0 @@
-<use name="PhysicsTools/FWLite"/> <!-- to have TROOT TSystem etc -->
-
-<!-- debug symbols -->
-<flags CXXFLAGS="-g -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable  -O0 -I/usr/include/libxml2 -lxml2"/>
