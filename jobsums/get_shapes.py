@@ -98,7 +98,13 @@ legend_names = {
 'tau40/inclusive2': '30<p_{T}<40',
 'tau60/inclusive2': '40<p_{T}<60',
 'tauMore60/inclusive2': '60<p_{T}',
+
+'signal':     '#splitline{Signal}{t#bar{t}#rightarrow l#nu #tau_{h}#nu b#bar{b}}',
+'background': "#splitline{Background}{t#bar{t}#rightarrow l#nu q#bar{q}' b#bar{b}}",
+'signal_dy_sel':     '#splitline{Signal}{DY#rightarrow #tau_{l} #tau_{h}}',
+'background_dy_sel': "#splitline{Background}{W+jets}",
 }
+
 
 for i, fileparameter in enumerate(args.input_files):
     pars = fileparameter.split(':')
