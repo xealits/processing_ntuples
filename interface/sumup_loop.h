@@ -22,8 +22,8 @@ using namespace std;
 // helper functions for gdb
 // substitute TStrings with standard supported string everywhere
 
-const char* TString_Data (TString& str) {return str.Data();}
-const char* TH1D_Name    (TH1D& hist) {return hist.GetName();}
+const char* debug_TString_Data (TString& str) {return str.Data();}
+const char* debug_TH1D_Name    (TH1D& hist) {return hist.GetName();}
 
 /* --------------------------------------------------------------- */
 
