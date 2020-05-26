@@ -406,8 +406,7 @@ T_known_defs_systs create_known_defs_systs_stage2()
 	return m;
 	}
 
-//T_known_defs_systs known_systematics_stage2 = create_known_systematics();
-//known_systematics_stage2 = create_known_systematics();
+
 
 double NT_distr_nvtx(ObjSystematics sys)
 	{
@@ -511,26 +510,9 @@ double NT_distr_met(ObjSystematics sys)
 	}
 
 
-/* "name": (func for value, range or custom range)
- *         -- it needs a function producing TH1D_histo, like in this block:
-
-{
-	TH1D* ahist = (TH1D*) new TH1D("lep_pt", "lep_pt", 40, 0, 200);
-	TH1D_histo a_distr = {ahist, leading_lep_pt, 0.};
-	distrs.push_back(a_distr);
-}
-
-somehow it seems another macro would do it!
-
-but the name of the histogram might be complex and set at runtime:
-channel_proc_sys_distr
-
-so it must be a function
- */ 
-
 
 /**
-\brief The initialization function for the definitions of the known distributions.
+\brief The initialization function for the definitions of the known distributions in the stage2 output ntuples.
 
 \return map<const char*, _TH1D_histo_def>
  */
@@ -584,16 +566,6 @@ T_known_defs_distrs create_known_defs_distrs_stage2()
 	return m;
 }
 
-/** \brief The known distributions.
- */
-
-//T_known_defs_distrs known_defs_distrs_stage2 = create_known__TH1D_histo_definitions();
-//known_defs_distrs_stage2 = create_known__TH1D_histo_definitions();
-
-
-/*
- * 
- */
 
 /*
  * The final state channels:
@@ -944,9 +916,11 @@ bool NT_channel_dy_elel(ObjSystematics sys)
 
 #define _quick_set_chandef(m, chan_name, sel_weight_func) m[#chan_name] = {NT_channel_ ## chan_name, sel_weight_func}
 
-/** \brief The initialization function for the `bool` functions of the known distributions.
+/** \brief The initialization function for the `bool` functions of the known distributions in the stage2 output ntuples.
 
-\return map<const char*, _F_channel_sel>
+`T_known_defs_channels == map<const char*, _F_channel_sel>`
+
+\return T_known_defs_channels
  */
 
 T_known_defs_channels create_known_defs_channels_stage2()
@@ -997,11 +971,6 @@ T_known_defs_channels create_known_defs_channels_stage2()
 	return m;
 }
 
-
-/** \brief The known channels.
- */
-//T_known_defs_channels known_defs_channels_stage2 = create_known_channel_definitions();
-//known_defs_channels_stage2 = create_known_channel_definitions();
 
 
 /* --------------------------------------------------------------- */
@@ -1125,6 +1094,11 @@ vector<TString>  _any_procs = {};
 // ^--- I am not sure this is the best approach to define these standard processes
 //      initially I wanted to have a bunch of general sets, not the concrete per-channel ones
 
+
+/** \brief The initialization function for the known gen level processes in the stage2 output ntuples.
+
+\return T_known_defs_procs
+ */
 
 T_known_defs_procs create_known_defs_procs_stage2()
 	{
@@ -1430,8 +1404,6 @@ T_known_defs_procs create_known_defs_procs_stage2()
 
 	return m;
 	}
-
-//known_procs_info_stage2 = create_known_procs_info();
 
 
 

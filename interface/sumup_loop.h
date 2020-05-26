@@ -1,8 +1,34 @@
 #ifndef SUMUPLOOP_H
 #define SUMUPLOOP_H
 
-/** the interface to the sumup_loop process
+/** the general ntuple interface to the sumup_loop process
+
+Here the types (structs, functions) that compose the sumup_loop interface are defined.
+There are many intermediate objects. Their names start with _ underscore.
+The main definitions start with `T_` or `F_` for general "type" and a more specific "function".
+There is only 1 `F_` right now. And 7 `T_` that typedef objects like `std::map<string, <some stuff>>`.
+Out of 7 there are 3 simple final normalization corrections for MC.
+And 4 main collections of the parameter definitions for the record in `sumup_loop`:
+with definitions of the reconstructed final state channels,
+the gen-level processes,
+the systematic corrections,
+the distributions.
  */
+
+
+/*!
+    \defgroup Enumerations
+        Public enumeration types
+*/
+
+/*!
+    \defgroup NtupleInterface
+        The ntuple interface for the `sumup_loop`.
+        The collections of the definitions in the ntuple interface that are used in the `sumup_loop`.
+
+There can be multiple per-ntuple-type implementations of this:
+the same gen-level process is defined differently in original ntuples and in stage2...
+*/
 
 //#include "TH1F.h"
 //#include "TH2F.h"
@@ -108,7 +134,13 @@ typedef struct {
 	_F_sysweight   chan_sel_weight; /**< \brief the nominal event weight */
 } _S_chan_def;
 
-typedef map<TString, _S_chan_def> T_known_defs_channels; // used in sumup_loop main
+
+/**
+\ingroup NtupleInterface
+\brief The collection with the channel definitions in the ntuple interface (used in sumup_loop main)
+ */
+
+typedef map<TString, _S_chan_def> T_known_defs_channels;
 
 
 // ----- gen-level process
@@ -133,6 +165,11 @@ typedef struct {
 
 typedef struct {ObjSystematics obj_sys_id; _F_sysweight weight_func;} _S_systematic_definition;
 
+/**
+\ingroup NtupleInterface
+\brief The collection with the systematic definitions in the ntuple interface (used in sumup_loop main)
+ */
+
 typedef map<TString, _S_systematic_definition> T_known_defs_systs; // used in sumup_loop main
 
 // ----- distribution
@@ -155,27 +192,7 @@ typedef struct {
 	double* custom_bins;
 } _TH1D_histo_range;
 
-/*
-these do not really work
-_TH1D_histo_range range_linear(unsigned int nbins, double min, double max)
-	{
-	return (_TH1D_histo_range) {nbins, true, min, max};
-	}
-
-_TH1D_histo_range range_custom_base(const double custom_bins[], unsigned int nbins)
-	{
-	//unsigned int nbins = sizeof(custom_bins) / sizeof(custom_bins[0]);
-	return (_TH1D_histo_range) {nbins, false, -1, -1, {custom_bins}};
-	}
-
-//#define range_custom(...) range_custom_base(__VA_ARGS__, sizeof(__VA_ARGS__) / sizeof(__VA_ARGS__[0]))
-
-#define set_range_linear(range_var, nbins, min, max) range_var = {(nbins), true,  (min), (max)}
-#define set_range_custom(range_var, ...) unsigned int nbins = sizeof(__VA_ARGS__)/sizeof(__VA_ARGS__[0]) ; range_var = {(nbins), false, -1, -1, __VA_ARGS__}
-*/
-
 /** \brief The definition of an output histogram
-
  The function calculating the parameter, and the range of the histogram to store it.
  */
 
@@ -183,6 +200,11 @@ typedef struct {
 	double (*func)(ObjSystematics);
 	_TH1D_histo_range range;
 } _TH1D_histo_def;
+
+/**
+\ingroup NtupleInterface
+\brief The collection with the definitions of distributions in the ntuple interface
+ */
 
 typedef map<TString, _TH1D_histo_def> T_known_defs_distrs; // used in sumup_loop main
 
@@ -220,27 +242,11 @@ typedef map<TString, _TH1D_histo_def> T_known_defs_distrs; // used in sumup_loop
 #define SYSTS_QCD_MC   "NOMINAL"
 
 
-/** gen-level process per dtag
-
-there can be multiple per-ntuple-type implementations of this:
-the same gen-level process is defined differently in original ntuples and in stage2...
-therefore TODO: the known dtags must be produced in main on if (type of ntuples)
-for now just link them directly with stage2 ntuples interface
+/**
+\ingroup NtupleInterface
+\brief The collection with the definitions of distributions in the ntuple interface
  */
 typedef map<TString, _S_proc_ID_defs> T_known_defs_procs;
-//extern T_known_defs_procs known_procs_info_stage2;
-/* extern means it must be defined elsewhere -- in ntuple_stage2.cpp
-   let's just move this definition in ntuple_stage2 interface
- */
-
-/*
-map<TString, _S_proc_ID_defs> known_procs_info = create_known_procs_info(); <-- basically, this must be run in main like:
-
-if      (stage2)
-	T_known_defs_procs known_procs_info = create_known_procs_info(known_procs_info_stage2);
-else if (ntupler)
-	T_known_defs_procs known_procs_info = create_known_procs_info(known_procs_info_ntupler);
-*/
 
 
 

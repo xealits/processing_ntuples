@@ -28,11 +28,6 @@ In future we may try to separate them in an altogether different namespace,
 with a separate function to connect an input TTree to that namespace etc.
  */
 
-/*! 
-    \defgroup Enumerations
-        Public enumeration types
-*/
-
 #include <iostream>
 
 #include "TSystem.h"
