@@ -230,6 +230,10 @@
 
 #ifndef NTUPLEOUTPUT_LORENTZVECTOR_H
 #define NTUPLEOUTPUT_LORENTZVECTOR_H
+#include "TROOT.h"
+#include "TMath.h"
+#include "Math/LorentzVector.h"
+#include "Math/SMatrix.h"
 // the exact LorentzVector declaration
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVector;
 typedef ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag> Vector_3D;

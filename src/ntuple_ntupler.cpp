@@ -492,11 +492,12 @@ double NT_distr_tau_pt(ObjSystematics sys)
 
 double NT_calc_tau_sv_sign_geom(ObjSystematics sys)
 	{
-	unsigned int tau_refit_index = NT_tau_refited_index[0];
+	unsigned int tau_index = 0; // the leading tau
+	unsigned int tau_refit_index = NT_tau_refited_index[tau_index];
 	bool refitted = tau_refit_index > -1 &&
 		(NT_tau_SV_fit_track_OS_matched_track_dR[tau_refit_index] +
 		 NT_tau_SV_fit_track_SS1_matched_track_dR[tau_refit_index] +
-		 NT_tau_SV_fit_track_SS2_matched_track_dR[tau_refit_index]) < 0.002
+		 NT_tau_SV_fit_track_SS2_matched_track_dR[tau_refit_index]) < 0.002;
 	if (refitted)
                 return NT_tau_SV_geom_flightLenSign [tau_refit_index];
 	else
@@ -510,15 +511,19 @@ double NT_distr_tau_sv_sign(ObjSystematics sys)
 
 double NT_distr_tau_sv_sign_pat(ObjSystematics sys)
 	{
+	// the refit index is only for the information about the refitted tau SV
+	// the PAT data is saved in the original tau index
+	unsigned int tau_index = 0; // the leading tau
 	unsigned int tau_refit_index = NT_tau_refited_index[0];
 	bool refitted = tau_refit_index > -1 &&
 		(NT_tau_SV_fit_track_OS_matched_track_dR[tau_refit_index] +
 		 NT_tau_SV_fit_track_SS1_matched_track_dR[tau_refit_index] +
-		 NT_tau_SV_fit_track_SS2_matched_track_dR[tau_refit_index]) < 0.002
+		 NT_tau_SV_fit_track_SS2_matched_track_dR[tau_refit_index]) < 0.002;
+
 	// the conditions are kept the same to make a clean comparison
 	// but they mostly do not change the content of taus with the decay mode >=10
 	if (refitted)
-                return NT_tau_flightLengthSignificance[tau_index]
+                return NT_tau_flightLengthSignificance[tau_index];
 	else
 		return -111.;
 	}
@@ -552,8 +557,8 @@ double NT_distr_lj_var_t_mass(ObjSystematics sys)
 
 double transverse_mass_pts(double v1_x, double v1_y, double v2_x, double v2_y)
 	{
-	v1v2 = TMath::Sqrt((v1_x*v1_x + v1_y*v1_y)*(v2_x*v2_x + v2_y*v2_y))
-	return TMath::Sqrt(2*(v1v2 - (v1_x*v2_x + v1_y*v2_y)))
+	auto v1v2 = TMath::Sqrt((v1_x*v1_x + v1_y*v1_y)*(v2_x*v2_x + v2_y*v2_y));
+	return TMath::Sqrt(2*(v1v2 - (v1_x*v2_x + v1_y*v2_y)));
 	}
 
 double NT_distr_Mt_lep_met(ObjSystematics sys)
@@ -581,7 +586,7 @@ double NT_distr_Mt_lep_met(ObjSystematics sys)
 	else return NT_event_met_lep_mt;
 	*/
 
-	double mT_init = transverse_mass_pts(NT_lep_p4[0].Px(), NT_lep_p4[0].Py(), NT_met_init.Px(), NT_met_init.Py())
+	double mT_init = transverse_mass_pts(NT_lep_p4[0].Px(), NT_lep_p4[0].Py(), NT_met_init.Px(), NT_met_init.Py());
 	return mT_init;
 	}
 
@@ -687,7 +692,7 @@ unsigned int TAUS_ID_CUT_Tight  = 3; //  # Tight = 4-5, VTight = 5
 unsigned int TAUS_ID_CUT_Medium = 2;
 unsigned int TAUS_ID_CUT_VLoose = 0;
 unsigned int TAUS_ID_CUT = TAUS_ID_CUT_VLoose; // # TAUS_ID_CUT_Medium # Vloose cut for the shape
-bool ONLY_3PI_TAUS = False;
+bool ONLY_3PI_TAUS = false;
 double SV_SIGN_CUT = 2.5;
 
 unsigned int NT_calc_b_tagged_njets(ObjSystematics sys)
@@ -717,7 +722,7 @@ typedef struct Triggers {
 	bool pass_elel;
 	bool pass_el;
 	bool pass_mu_all;
-	bool pass_el_all;};
+	bool pass_el_all;} Triggers;
 
 Triggers NT_calc_triggers(ObjSystematics sys)
 	{
@@ -726,13 +731,13 @@ Triggers NT_calc_triggers(ObjSystematics sys)
 	bool pass_mu_id = abs(NT_leps_ID) == 13 && NT_HLT_mu && NT_lep_matched_HLT[0] && NT_no_iso_veto_leps && abs(NT_lep_dxy[0]) < 0.01 && abs(NT_lep_dz[0]) < 0.02;
 	bool pass_el_id = abs(NT_leps_ID) == 11 && (NT_HLT_el || NT_HLT_el_low_pt) && NT_lep_matched_HLT[0] && NT_no_iso_veto_leps;
 
-	bool pass_mu_iso = pass_mu_id && NT_lep_relIso[0] < 0.15  
-	bool pass_el_iso = pass_el_id && NT_lep_relIso[0] < 0.0588
+	bool pass_mu_iso = pass_mu_id && NT_lep_relIso[0] < 0.15  ;
+	bool pass_el_iso = pass_el_id && NT_lep_relIso[0] < 0.0588;
 
-	bool pass_mu_kino = pass_mu_id && NT_lep_p4[0].pt() > 29. && abs(NT_lep_p4[0].eta()) < 2.4
-	bool pass_el_kino = pass_el_id && NT_lep_p4[0].pt() > 34. && abs(NT_lep_p4[0].eta()) < 2.4 && (abs(NT_lep_p4[0].eta()) < 1.4442 || abs(NT_lep_p4[0].eta()) > 1.5660)
+	bool pass_mu_kino = pass_mu_id && NT_lep_p4[0].pt() > 29. && abs(NT_lep_p4[0].eta()) < 2.4;
+	bool pass_el_kino = pass_el_id && NT_lep_p4[0].pt() > 34. && abs(NT_lep_p4[0].eta()) < 2.4 && (abs(NT_lep_p4[0].eta()) < 1.4442 || abs(NT_lep_p4[0].eta()) > 1.5660);
 
-	trigs.pass_mu = pass_mu_id && pass_mu_kino && pass_mu_iso # && pass_mu_impact;
+	trigs.pass_mu = pass_mu_id && pass_mu_kino && pass_mu_iso; // && pass_mu_impact;
 	trigs.pass_el = pass_el_id && pass_el_kino && pass_el_iso;
 
 	bool pass_mu_id_all = abs(NT_leps_ID_allIso) == 13 && NT_HLT_mu && NT_lep_alliso_matched_HLT[0] && NT_nleps_veto_mu_all == 0 && NT_nleps_veto_el_all == 0;
@@ -983,7 +988,7 @@ bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 
 int NT_calc_channel_tt_elmu_selection_stages(ObjSystematics sys)
 	{
-	int channel_stage = 0
+	int channel_stage = 0;
 	Triggers trigs = NT_calc_triggers(sys);
 	bool main_tt_elmu_trig = trigs.pass_elmu_el; // pass_elmu or pass_elmu_el
 
@@ -1003,32 +1008,32 @@ int NT_calc_channel_tt_elmu_selection_stages(ObjSystematics sys)
 	//	channel_stage = 204
 
 	if   (pass_elmu_leps_os) {
-		channel_stage = 213
+		channel_stage = 213;
 
 		if (pass_elmu_leps_jets_bjet) {
-			channel_stage = 215
+			channel_stage = 215;
 			}
 		else if ( pass_elmu_leps_jets) {
-			channel_stage = 214
+			channel_stage = 214;
 			}
 		}
 
 	else if (pass_elmu_leps) {
-		channel_stage = 203
+		channel_stage = 203;
 
 		if (pass_elmu_leps_jets_bjet) {
-			channel_stage = 205
+			channel_stage = 205;
 			}
 		else if (pass_elmu_leps_jets) {
-			channel_stage = 204
+			channel_stage = 204;
 			}
 		}
 
 	else if (main_tt_elmu_trig) {
-		channel_stage = 202
+		channel_stage = 202;
 		}
 
-	return channel_stage
+	return channel_stage;
 	}
 
 
@@ -1048,7 +1053,7 @@ bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 
 int NT_calc_channel_dy_tautau_selection_stages(ObjSystematics sys)
 	{
-	int channel_stage = 0
+	int channel_stage = 0;
 	Triggers trigs = NT_calc_triggers(sys);
 
 	// muon and any charge tau and no b
@@ -1081,141 +1086,141 @@ int NT_calc_channel_dy_tautau_selection_stages(ObjSystematics sys)
 
 	if   (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Tight && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 135
+			channel_stage = 135;
 			}
 		else {
-			channel_stage = 134
+			channel_stage = 134;
 			}
 		}
 	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Tight) {
 		if (pass_dy_mass) {
-			channel_stage = 133
+			channel_stage = 133;
 			}
 		else {
-			channel_stage = 132
+			channel_stage = 132;
 			}
 		}
 
 	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Medium && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 125
+			channel_stage = 125;
 			}
 		else {
-			channel_stage = 124
+			channel_stage = 124;
 			}
 		}
 	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Medium) {
 		if (pass_dy_mass) {
-			channel_stage = 123
+			channel_stage = 123;
 			}
 		else {
-			channel_stage = 122
+			channel_stage = 122;
 			}
 		}
 
 	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_VLoose && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 115
+			channel_stage = 115;
 			}
 		else {
-			channel_stage = 114
+			channel_stage = 114;
 			}
 		}
 	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_VLoose) {
 		if (pass_dy_mass) {
-			channel_stage = 113
+			channel_stage = 113;
 			}
 		else {
-			channel_stage = 112
+			channel_stage = 112;
 			}
 		}
 
 	else if (pass_dy_objects_mu && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 105
+			channel_stage = 105;
 			}
 		else {
-			channel_stage = 104
+			channel_stage = 104;
 			}
 		}
 	else if (pass_dy_objects_mu) {
 		if (pass_dy_mass) {
-			channel_stage = 103
+			channel_stage = 103;
 			}
 		else {
-			channel_stage = 102
+			channel_stage = 102;
 			}
 		}
 
 	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Tight && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 235
+			channel_stage = 235;
 			}
 		else {
-			channel_stage = 234
+			channel_stage = 234;
 			}
 		}
 	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Tight) {
 		if (pass_dy_mass) {
-			channel_stage = 233
+			channel_stage = 233;
 			}
 		else {
-			channel_stage = 232
+			channel_stage = 232;
 			}
 		}
 
 	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Medium && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 225
+			channel_stage = 225;
 			}
 		else {
-			channel_stage = 224
+			channel_stage = 224;
 			}
 		}
 	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Medium) {
 		if (pass_dy_mass) {
-			channel_stage = 223
+			channel_stage = 223;
 			}
 		else {
-			channel_stage = 222
+			channel_stage = 222;
 			}
 		}
 
 	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_VLoose && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 215
+			channel_stage = 215;
 			}
 		else {
-			channel_stage = 214
+			channel_stage = 214;
 			}
 		}
 	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_VLoose) {
 		if (pass_dy_mass) {
-			channel_stage = 213
+			channel_stage = 213;
 			}
 		else {
-			channel_stage = 212
+			channel_stage = 212;
 			}
 		}
 
 	else if (pass_dy_objects_el && opposite_charge) {
 		if (pass_dy_mass) {
-			channel_stage = 205
+			channel_stage = 205;
 			}
 		else {
-			channel_stage = 204
+			channel_stage = 204;
 			}
 		}
 	else if (pass_dy_objects_el) {
 		if (pass_dy_mass) {
-			channel_stage = 203
+			channel_stage = 203;
 			}
 		else {
-			channel_stage = 202
+			channel_stage = 202;
 			}
 		}
 
-	return channel_stage
+	return channel_stage;
 	}
 
 
@@ -1274,7 +1279,7 @@ bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 
 int NT_calc_channel_dy_elmu_selection_stages(ObjSystematics sys)
 	{
-	int channel_stage = 0
+	int channel_stage = 0;
 	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
 	Triggers trigs = NT_calc_triggers(sys);
 
@@ -1291,16 +1296,16 @@ int NT_calc_channel_dy_elmu_selection_stages(ObjSystematics sys)
 	//	pass_dy_mass = 75. < pair_mass < 105.
 
 	if   (pass_dy_objects_elmu && no_b_jets && os_leptons) {
-		channel_stage = 105
+		channel_stage = 105;
 		}
 	else if (pass_dy_objects_elmu && no_b_jets) {
-		channel_stage = 103
+		channel_stage = 103;
 		}
 	else if (pass_dy_objects_elmu) {
-		channel_stage = 102
+		channel_stage = 102;
 		}
 
-	return channel_stage
+	return channel_stage;
 	}
 
 
@@ -1319,7 +1324,7 @@ bool NT_channel_dy_elmu_ss(ObjSystematics sys)
 
 int NT_calc_channel_dy_mumu_selection_stages(ObjSystematics sys)
 	{
-	int channel_stage = 0
+	int channel_stage = 0;
 	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
 	Triggers trigs = NT_calc_triggers(sys);
 
@@ -1333,30 +1338,30 @@ int NT_calc_channel_dy_mumu_selection_stages(ObjSystematics sys)
 	if (pass_dy_objects_mu || pass_dy_objects_el)
 		{
 		auto pair = NT_lep_p4[0] + NT_lep_p4[1];
-		auto pair_mass = pair.mass()
+		auto pair_mass = pair.mass();
 		pass_dy_mass = 75. < pair_mass && pair_mass < 105.;
 		}
 
 	if   (pass_dy_objects_mu && no_b_jets && pass_dy_mass) {
-		channel_stage = 105
+		channel_stage = 105;
 		}
 	else if (pass_dy_objects_mu && no_b_jets) {
-		channel_stage = 103
+		channel_stage = 103;
 		}
 	else if (pass_dy_objects_mu) {
-		channel_stage = 102
+		channel_stage = 102;
 		}
 	else if (pass_dy_objects_el && no_b_jets && pass_dy_mass) {
-		channel_stage = 115
+		channel_stage = 115;
 		}
 	else if (pass_dy_objects_el && no_b_jets) {
-		channel_stage = 113
+		channel_stage = 113;
 		}
 	else if (pass_dy_objects_el) {
-		channel_stage = 112
+		channel_stage = 112;
 		}
 
-	return channel_stage
+	return channel_stage;
 	}
 
 
@@ -1469,61 +1474,244 @@ bool NT_genproc_inclusive()
 	return true;
 	}
 
-// TODO TODO
+/** these functions are assigned to specific dtags
+    therefore just assume the NT variables relevant to those dtags are there
+ */
+
+static int genproc_dy_tautau = 1;
+static int genproc_dy_other  = 0;
+
+static int genproc_wjets_tauh = 2;
+static int genproc_wjets_taul = 1;
+static int genproc_wjets      = 0;
+
+static int genproc_qcd = 0;
+static int genproc_data = 0;
+
+static int genproc_stop_el    = 20;
+static int genproc_stop_mu    = 10;
+static int genproc_stop_lj    = 2;
+static int genproc_stop_elmu  = 1;
+static int genproc_stop_other = 0;
+
+
+static int genproc_tt_eltau3ch  = 42;
+static int genproc_tt_eltau     = 41;
+static int genproc_tt_mutau3ch  = 32;
+static int genproc_tt_mutau     = 31;
+
+static int genproc_tt_ljb       = 24;
+static int genproc_tt_ljw       = 23;
+static int genproc_tt_ljo       = 22;
+static int genproc_tt_lj        = 21;
+static int genproc_tt_taultauh  = 12;
+static int genproc_tt_taulj     = 11;
+
+static int genproc_tt_elmu       = 3;
+static int genproc_tt_ltaul      = 2;
+static int genproc_tt_taueltaumu = 1;
+
+static int genproc_tt_other = 0;
+
+int NT_calc_gen_proc_id_tt()
+	{
+	int t_wid  = abs(NT_gen_t_w_decay_id);
+	int tb_wid = abs(NT_gen_tb_w_decay_id);
+
+	if ((t_wid > 15*15 && tb_wid == 13) || (t_wid == 13 && tb_wid > 15*15)) {
+		// check if tau decayed in 3 charged particles
+		if ((t_wid >= 15*30 && tb_wid == 13) || (t_wid == 13 && tb_wid >= 15*30)) {
+			return genproc_tt_mutau3ch;
+			}
+		else {
+			return genproc_tt_mutau;
+			}
+		}
+
+	else if ((t_wid > 15*15 && tb_wid == 11) || (t_wid == 11 && tb_wid > 15*15)) {
+		if ((t_wid >= 15*30 && tb_wid == 11) || (t_wid == 11 && tb_wid >= 15*30)) {
+			return genproc_tt_eltau3ch;
+			}
+		else {
+			return genproc_tt_eltau;
+			}
+		}
+
+	else if (NT_gen_t_w_decay_id * NT_gen_tb_w_decay_id == -13*11) {
+		return genproc_tt_elmu;
+		}
+	//else if (t_wid * tb_wid == 15*13*15*11: # this should w||k, but:
+	else if ((t_wid == 15*13 && tb_wid == 15*11) || (t_wid == 15*11 && tb_wid == 15*13)) {
+		return genproc_tt_taueltaumu;
+		}
+	else if ((t_wid  == 13 && tb_wid == 15*11) || (t_wid  == 11 && tb_wid == 15*13) ||
+		 (tb_wid == 13 && t_wid  == 15*11) || (tb_wid == 11 &&  t_wid == 15*13)) {
+		return genproc_tt_ltaul; // # opposite leptons -- el-taumu etc;
+		}
+	else if (t_wid * tb_wid == 13 || t_wid * tb_wid == 11) {
+		return genproc_tt_lj;
+		}
+	else if ((t_wid > 15*15 && (tb_wid == 11*15 || tb_wid == 13*15)) ||
+		 ((t_wid == 11*15 || t_wid == 13*15) && tb_wid > 15*15)) {
+		return genproc_tt_taultauh;
+		}
+	else if ((t_wid == 1	 && tb_wid == 13*15) ||
+		 (t_wid == 13*15 && tb_wid == 1)     ||
+		 (t_wid == 1	 && tb_wid == 11*15) ||
+		 (t_wid == 11*15 && tb_wid == 1)) {
+		return genproc_tt_taulj;
+		}
+	else {
+		return genproc_tt_other;
+		};
+	}
+
+int NT_calc_gen_proc_id_dy()
+	{
+	int lep1_id, lep2_id;
+
+	if (NT_gen_N_zdecays > 0) {
+		lep1_id = abs(NT_gen_zdecays_IDs[0]);
+		lep2_id = abs(NT_gen_zdecays_IDs[1]);
+		}
+	else {
+		// check prompt leptns
+		// if no Z decay the leptons are there
+		lep1_id = abs(NT_gen_pythia8_prompt_leptons_IDs[0]);
+		lep2_id = abs(NT_gen_pythia8_prompt_leptons_IDs[1]);
+		}
+
+	// TODO: actually track tau decays fro DY? -- no need, it's a small background
+	if (lep1_id >= 15 && lep2_id >= 15) {
+		return genproc_dy_tautau;
+		}
+	else {
+		return genproc_dy_other;
+		}
+	}
+
+int NT_calc_gen_proc_id_wjets()
+	{
+	int lep1_id, lep2_id;
+
+	if (NT_gen_N_wdecays > 0) {
+		lep1_id = abs(NT_gen_wdecays_IDs[0]);
+		}
+	//W does not need these prompt leptons, but I keep them just in case
+	else {
+		// check prompt leptns
+		lep1_id = abs(NT_gen_pythia8_prompt_leptons_IDs[0]);
+		}
+
+	if (lep1_id >= 15*15) {
+		return genproc_wjets_tauh;
+		}
+	else if (lep1_id >= 15) // # 15*11 and 15*13
+		{
+		return genproc_wjets_taul;
+		}
+	// we use only WToLNu now, W->j does not happen
+	//elif lep1_id == 1:
+	//	proc = 'wjets_j'
+	else {
+		return genproc_wjets;
+		}
+	}
+
+int NT_calc_gen_proc_id_single_top()
+	{
+
+	// basically only difference is eltau/mutau
+	//w1_id = abs(NT_gen_wdecays_IDs[0])
+	// check the top decay insted
+	int w1_id = NT_gen_t_w_decay_id != -111 ? abs(NT_gen_t_w_decay_id) : abs(NT_gen_tb_w_decay_id);
+	int w2_id = 1;
+
+	//if (!isSTopTSchannels) {
+	if (NT_gen_wdecays_IDs.size() > 0) { // TODO confirm this works
+		// in tW there is an additional W produced with top
+		w2_id = abs(NT_gen_wdecays_IDs[0]);
+		//w2_id = abs(NT_gen_t_w_decay_id) if NT_gen_t_w_decay_id != -111 else abs(NT_gen_tb_w_decay_id)
+		}
+
+	// t/s channels emit top && a quark -- top ID + jets
+	if ((w1_id > 15*15 && w2_id == 13) || (w1_id == 13 && w2_id > 15*15)) { // # lt
+		return genproc_stop_mu;
+		}
+	else if ((w1_id > 15*15 && w2_id == 11) || (w1_id == 11 && w2_id > 15*15)) { // # lt
+		return genproc_stop_el;
+		}
+	else if ((w1_id == 11 && w2_id == 13) || (w1_id == 13 && w2_id == 11)) { // # is it faster than comparing to product?
+		return genproc_stop_elmu;
+		}
+	else if (w1_id * w2_id == 13 || w1_id * w2_id == 11) { // # lj
+		return genproc_stop_lj;
+		}
+	//else if ((w1_id > 15*15 && (w2_id == 11*15 || w2_id == 13*15)) ||
+	//	 ((w1_id == 11*15 || w1_id == 13*15) && w2_id > 15*15)) { // # taul tauh
+	//	proc = 'tt_taultauh'
+	else {
+		return genproc_stop_other;
+		}
+	}
 
 bool NT_genproc_tt_eltau3ch()
 	{
+	auto NT_gen_proc_id = NT_calc_gen_proc_id_tt();
 	return NT_gen_proc_id == 42;
 	}
 
 // a short-hand macro
 
-#define NT_genproc(procname, procID)         \
+#define NT_genproc(procname, calc_func, procID)         \
 bool NT_genproc_ ##procname(void)            \
 	{                                  \
+	auto NT_gen_proc_id = calc_func(); \
 	return NT_gen_proc_id == (procID); \
 	}
 
-NT_genproc(tt_eltau1ch, 41)
-NT_genproc(tt_mutau3ch, 32)
-NT_genproc(tt_mutau1ch, 31)
+NT_genproc(tt_eltau1ch, NT_calc_gen_proc_id_tt, 41)
+NT_genproc(tt_mutau3ch, NT_calc_gen_proc_id_tt, 32)
+NT_genproc(tt_mutau1ch, NT_calc_gen_proc_id_tt, 31)
 
-NT_genproc(tt_ljb        , 24)
-NT_genproc(tt_ljw        , 23)
-NT_genproc(tt_ljo        , 22)
-NT_genproc(tt_ljz        , 21)
-NT_genproc(tt_taultauh   , 12)
-NT_genproc(tt_taulj      , 11)
-NT_genproc(tt_elmu       , 3)
-NT_genproc(tt_ltaul      , 2)
-NT_genproc(tt_taueltaumu , 1)
+NT_genproc(tt_ljb        , NT_calc_gen_proc_id_tt, 24)
+NT_genproc(tt_ljw        , NT_calc_gen_proc_id_tt, 23)
+NT_genproc(tt_ljo        , NT_calc_gen_proc_id_tt, 22)
+NT_genproc(tt_ljz        , NT_calc_gen_proc_id_tt, 21)
+NT_genproc(tt_taultauh   , NT_calc_gen_proc_id_tt, 12)
+NT_genproc(tt_taulj      , NT_calc_gen_proc_id_tt, 11)
+NT_genproc(tt_elmu       , NT_calc_gen_proc_id_tt, 3)
+NT_genproc(tt_ltaul      , NT_calc_gen_proc_id_tt, 2)
+NT_genproc(tt_taueltaumu , NT_calc_gen_proc_id_tt, 1)
 //NT_genproc(tt_other      , 0) // no "tt_other"! it is a catchall process, they are handled automatically
 
-NT_genproc(dy_tautau , 1)
+NT_genproc(dy_tautau , NT_calc_gen_proc_id_dy, 1)
 
-NT_genproc(wjets_tauh , 2)
-NT_genproc(wjets_taul , 1)
+NT_genproc(wjets_tauh , NT_calc_gen_proc_id_wjets, 2)
+NT_genproc(wjets_taul , NT_calc_gen_proc_id_wjets, 1)
 
-NT_genproc(stop_eltau    , 20)
-NT_genproc(stop_mutau    , 10)
-NT_genproc(stop_lj    ,  2)
-NT_genproc(stop_elmu  ,  1)
+NT_genproc(stop_eltau , NT_calc_gen_proc_id_single_top, 20)
+NT_genproc(stop_mutau , NT_calc_gen_proc_id_single_top, 10)
+NT_genproc(stop_lj    , NT_calc_gen_proc_id_single_top,  2)
+NT_genproc(stop_elmu  , NT_calc_gen_proc_id_single_top,  1)
 
 bool NT_genproc_tt_eltau()
 	{
+	auto NT_gen_proc_id = NT_calc_gen_proc_id_tt();
 	return NT_gen_proc_id > 40 && NT_gen_proc_id < 43;
 	}
 
-#define NT_genproc_range(procname, procID_min, procID_max)         \
+#define NT_genproc_range_tt(procname, procID_min, procID_max)         \
 bool NT_genproc_ ##procname(void)          \
 	{                                  \
+	auto NT_gen_proc_id = NT_calc_gen_proc_id_tt(); \
 	return NT_gen_proc_id > (procID_min) && NT_gen_proc_id < (procID_max); \
 	}
 
-NT_genproc_range(tt_mutau, 30, 33)
-NT_genproc_range(tt_leptau, 30, 43)
+NT_genproc_range_tt(tt_mutau, 30, 33)
+NT_genproc_range_tt(tt_leptau, 30, 43)
 
-NT_genproc_range(tt_lj, 20, 30)
+NT_genproc_range_tt(tt_lj, 20, 30)
 
 // standard per-channel processes
 vector<TString> _eltau_tt_procs  = {"tt_eltau", "tt_taulj", "tt_lj"};
@@ -1873,6 +2061,8 @@ T_known_defs_procs create_known_defs_procs_ntupler()
 
 /* --------------------------------------------------------------- */
 // final normalizations
+
+// TODO: these are post-stage2 normalizations? recalculate them
 
 T_known_MC_normalization_per_somename create_known_MC_normalization_per_syst_ntupler()
 	{

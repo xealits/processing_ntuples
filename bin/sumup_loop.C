@@ -55,7 +55,7 @@ with a separate function to connect an input TTree to that namespace etc.
 
 #include "UserCode/proc/interface/handy_macros.h"
 
-#include "UserCode/proc/interface/sumup_loop.h"
+#include "UserCode/proc/interface/sumup_loop_ntuple.h"
 #include "UserCode/proc/interface/ntuple_stage2.h"
 
 using namespace std;
