@@ -442,6 +442,13 @@ double NT_distr_dilep_mass(ObjSystematics sys)
 		return -111.;
 	}
 
+double NT_calc_leading_tau_energy_scale_correction(ObjSystematics sys)
+	{
+	if      (sys == TESUp)   return NT_tau_decayMode[0] == 0 ? 0.995 + 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 + 0.012 : 1.006 + 0.012);
+	else if (sys == TESDown) return NT_tau_decayMode[0] == 0 ? 0.995 - 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 - 0.012 : 1.006 - 0.012);
+	else                     return NT_tau_decayMode[0] == 0 ? 0.995         : (NT_tau_decayMode[0] < 10 ? 1.011         : 1.006        );
+	}
+
 double NT_distr_tau_pt(ObjSystematics sys)
 	{
 
@@ -474,11 +481,13 @@ double NT_distr_tau_pt(ObjSystematics sys)
 	*/
 
 	double pt = NT_tau_p4[0].pt();
-	//if      (sys == TESUp)   return pt * NT_event_taus_TES_up[0];
-	//else if (sys == TESDown) return pt * NT_event_taus_TES_down[0];
-	if      (sys == TESUp)   return pt * (NT_tau_decayMode[0] == 0 ? 0.995 + 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 + 0.012 : 1.006 + 0.012));
-	else if (sys == TESDown) return pt * (NT_tau_decayMode[0] == 0 ? 0.995 - 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 - 0.012 : 1.006 - 0.012));
-	else                     return pt * (NT_tau_decayMode[0] == 0 ? 0.995         : (NT_tau_decayMode[0] < 10 ? 1.011         : 1.006        ));
+	////if      (sys == TESUp)   return pt * NT_event_taus_TES_up[0];
+	////else if (sys == TESDown) return pt * NT_event_taus_TES_down[0];
+	//if      (sys == TESUp)   return pt * (NT_tau_decayMode[0] == 0 ? 0.995 + 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 + 0.012 : 1.006 + 0.012));
+	//else if (sys == TESDown) return pt * (NT_tau_decayMode[0] == 0 ? 0.995 - 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 - 0.012 : 1.006 - 0.012));
+	//else                     return pt * (NT_tau_decayMode[0] == 0 ? 0.995         : (NT_tau_decayMode[0] < 10 ? 1.011         : 1.006        ));
+
+	return pt * NT_calc_leading_tau_energy_scale_correction(sys);
 	}
 
 double NT_calc_tau_sv_sign_geom(ObjSystematics sys)
@@ -572,7 +581,7 @@ double NT_distr_Mt_lep_met(ObjSystematics sys)
 	else return NT_event_met_lep_mt;
 	*/
 
-	double mT_init = transverse_mass_pts(lep_p4[0].Px(), lep_p4[0].Py(), NT_met_init.Px(), NT_met_init.Py())
+	double mT_init = transverse_mass_pts(NT_lep_p4[0].Px(), NT_lep_p4[0].Py(), NT_met_init.Px(), NT_met_init.Py())
 	return mT_init;
 	}
 
@@ -764,7 +773,7 @@ Triggers NT_calc_triggers(ObjSystematics sys)
 	return trigs;
 	}
 
-int NT_channel_tt_selection_stages(ObjSystematics sys)
+int NT_calc_channel_tt_selection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 
@@ -774,8 +783,8 @@ int NT_channel_tt_selection_stages(ObjSystematics sys)
 	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
 	Triggers trigs = NT_calc_triggers(sys);
 
-	bool there_is_lepton = lep_p4.size() == 1;
-	bool there_are_taus  = tau_p4.size() > 0;
+	bool there_is_lepton = NT_lep_p4.size() == 1;
+	bool there_are_taus  = NT_tau_p4.size() > 0;
 	bool lep_tau_os = (there_is_lepton && there_are_taus? NT_lep_id[0] * NT_tau_id[0] < 0 : false);
 
 	bool old_jet_sel = N_jets_b > 0 && there_is_lepton;
@@ -850,7 +859,7 @@ int NT_channel_tt_selection_stages(ObjSystematics sys)
 
 bool NT_channel_mu_sel(ObjSystematics sys)
 	{
-	int channel_stage = NT_channel_tt_selection_stages(sys);
+	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 9 || channel_stage == 7;
 	}
 
@@ -869,7 +878,7 @@ bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6;
 	*/
 
-	int channel_stage = NT_channel_tt_selection_stages(sys);
+	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 8 || channel_stage == 6;
 	}
 
@@ -887,13 +896,13 @@ bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
 
 bool NT_channel_el_sel(ObjSystematics sys)
 	{
-	int channel_stage = NT_channel_tt_selection_stages(sys);
+	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 19 || channel_stage == 17;
 	}
 
 bool NT_channel_el_sel_ss(ObjSystematics sys)
 	{
-	int channel_stage = NT_channel_tt_selection_stages(sys);
+	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 18 || channel_stage == 16;
 	}
 
@@ -936,32 +945,32 @@ bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
 bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel(sys);
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
 bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel_ss(sys);
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
 // union os mu_sel and el_sel
 bool NT_channel_lep_sel(ObjSystematics sys)
 	{
-	int relevant_selection_stage = NT_channel_tt_selection_stages(sys);
+	int relevant_selection_stage = NT_calc_channel_tt_selection_stages(sys);
 	return relevant_selection_stage == 9 || relevant_selection_stage == 7 || relevant_selection_stage == 19 || relevant_selection_stage == 17;
 	}
 
 bool NT_channel_lep_sel_ss(ObjSystematics sys)
 	{
-	int relevant_selection_stage = NT_channel_tt_selection_stages(sys);
+	int relevant_selection_stage = NT_calc_channel_tt_selection_stages(sys);
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6 || relevant_selection_stage == 18 || relevant_selection_stage == 16;
 	}
 
 bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel(sys);
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
 bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
@@ -969,102 +978,272 @@ bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 	bool sel = NT_channel_lep_sel_ss(sys);
 	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
 	//return sel && NT_event_taus_sv_sign[0] > 3.;
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-// TODO TODO
+int NT_calc_channel_tt_elmu_selection_stages(ObjSystematics sys)
+	{
+	int channel_stage = 0
+	Triggers trigs = NT_calc_triggers(sys);
+	bool main_tt_elmu_trig = trigs.pass_elmu_el; // pass_elmu or pass_elmu_el
+
+	unsigned int N_jets_b = NT_calc_b_tagged_njets(sys);
+
+	bool pass_elmu_leps    = main_tt_elmu_trig && NT_lep_id.size() == 2;
+	bool pass_elmu_leps_os = pass_elmu_leps ? NT_lep_id[0] * NT_lep_id[1] == -11*13 : false;
+
+	bool pass_elmu_leps_jets = pass_elmu_leps; // && N_jets[1] > 1
+	bool pass_elmu_leps_jets_bjet = pass_elmu_leps_jets && N_jets_b > 0; // only 1 b jets
+
+	//if   pass_elmu_leps_jets_bjet and pass_elmu_leps_os:
+	//	channel_stage = 206
+	//elif pass_elmu_leps_jets_bjet:
+	//	channel_stage = 205
+	//elif pass_elmu_leps_jets:
+	//	channel_stage = 204
+
+	if   (pass_elmu_leps_os) {
+		channel_stage = 213
+
+		if (pass_elmu_leps_jets_bjet) {
+			channel_stage = 215
+			}
+		else if ( pass_elmu_leps_jets) {
+			channel_stage = 214
+			}
+		}
+
+	else if (pass_elmu_leps) {
+		channel_stage = 203
+
+		if (pass_elmu_leps_jets_bjet) {
+			channel_stage = 205
+			}
+		else if (pass_elmu_leps_jets) {
+			channel_stage = 204
+			}
+		}
+
+	else if (main_tt_elmu_trig) {
+		channel_stage = 202
+		}
+
+	return channel_stage
+	}
+
 
 bool NT_channel_tt_elmu(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_em_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_em_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
-	else relevant_selection_stage = NT_selection_stage_em;
+	int relevant_selection_stage = NT_calc_channel_tt_elmu_selection_stages(sys);
 	return relevant_selection_stage > 210 && relevant_selection_stage < 220;
 	}
 
 bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_em_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_em_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_em_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_em_JESDown;
-	else relevant_selection_stage = NT_selection_stage_em;
+	int relevant_selection_stage = NT_calc_channel_tt_elmu_selection_stages(sys);
 	return relevant_selection_stage == 215;
 	}
 
 
 
+int NT_calc_channel_dy_tautau_selection_stages(ObjSystematics sys)
+	{
+	int channel_stage = 0
+	Triggers trigs = NT_calc_triggers(sys);
+
+	// muon and any charge tau and no b
+	bool there_are_taus  = NT_tau_p4.size() > 0;
+	bool there_is_lepton = NT_lep_p4.size() == 1;
+	unsigned int N_jets_b = NT_calc_b_tagged_njets(sys);
+
+	bool pass_leptau = there_is_lepton && there_are_taus && N_jets_b == 0;
+	bool pass_dy_objects_mu = trigs.pass_mu && pass_leptau;
+	bool pass_dy_objects_el = trigs.pass_el && pass_leptau;
+	bool pass_objects = pass_leptau; //pass_dy_objects_mu || pass_dy_objects_el;
+	if (!pass_objects) {return channel_stage;}
+
+	unsigned int tau_IDlev = (there_are_taus ? NT_tau_IDlev[0] : 0);
+
+	//pass_Tight_sel	 = old_jet_sel	and tau_IDlev > TAUS_ID_CUT_Tight
+	//pass_Tight_sel_os  = pass_Tight_sel and leps[4][0] * taus[0][2] < 0
+	//pass_old_sel	   = old_jet_sel and tau_IDlev > TAUS_ID_CUT_Medium
+	//pass_old_sel_os	= pass_old_sel and leps[4][0] * taus[0][2] < 0
+	//pass_old_selVLoose	   = old_jet_sel and tau_IDlev > TAUS_ID_CUT_VLoose
+	//pass_old_selVLoose_os	= pass_old_selVLoose and leps[4][0] * taus[0][2] < 0
+
+	//bool opposite_charge = pass_objects ? leps[4][0] * taus[0][2] < 0 : false;
+	bool opposite_charge = (pass_objects? NT_lep_id[0] * NT_tau_id[0] < 0 : false);
+
+	auto nom_tau = NT_tau_p4[0] * NT_calc_leading_tau_energy_scale_correction(sys);
+	auto pair    = NT_lep_p4[0] + nom_tau;
+	auto pair_mass = pair.mass();
+	bool pass_dy_mass = 75. < pair_mass && pair_mass < 105.;
+
+	if   (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Tight && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 135
+			}
+		else {
+			channel_stage = 134
+			}
+		}
+	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Tight) {
+		if (pass_dy_mass) {
+			channel_stage = 133
+			}
+		else {
+			channel_stage = 132
+			}
+		}
+
+	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Medium && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 125
+			}
+		else {
+			channel_stage = 124
+			}
+		}
+	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_Medium) {
+		if (pass_dy_mass) {
+			channel_stage = 123
+			}
+		else {
+			channel_stage = 122
+			}
+		}
+
+	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_VLoose && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 115
+			}
+		else {
+			channel_stage = 114
+			}
+		}
+	else if (pass_dy_objects_mu && tau_IDlev > TAUS_ID_CUT_VLoose) {
+		if (pass_dy_mass) {
+			channel_stage = 113
+			}
+		else {
+			channel_stage = 112
+			}
+		}
+
+	else if (pass_dy_objects_mu && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 105
+			}
+		else {
+			channel_stage = 104
+			}
+		}
+	else if (pass_dy_objects_mu) {
+		if (pass_dy_mass) {
+			channel_stage = 103
+			}
+		else {
+			channel_stage = 102
+			}
+		}
+
+	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Tight && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 235
+			}
+		else {
+			channel_stage = 234
+			}
+		}
+	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Tight) {
+		if (pass_dy_mass) {
+			channel_stage = 233
+			}
+		else {
+			channel_stage = 232
+			}
+		}
+
+	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Medium && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 225
+			}
+		else {
+			channel_stage = 224
+			}
+		}
+	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_Medium) {
+		if (pass_dy_mass) {
+			channel_stage = 223
+			}
+		else {
+			channel_stage = 222
+			}
+		}
+
+	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_VLoose && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 215
+			}
+		else {
+			channel_stage = 214
+			}
+		}
+	else if (pass_dy_objects_el && tau_IDlev > TAUS_ID_CUT_VLoose) {
+		if (pass_dy_mass) {
+			channel_stage = 213
+			}
+		else {
+			channel_stage = 212
+			}
+		}
+
+	else if (pass_dy_objects_el && opposite_charge) {
+		if (pass_dy_mass) {
+			channel_stage = 205
+			}
+		else {
+			channel_stage = 204
+			}
+		}
+	else if (pass_dy_objects_el) {
+		if (pass_dy_mass) {
+			channel_stage = 203
+			}
+		else {
+			channel_stage = 202
+			}
+		}
+
+	return channel_stage
+	}
+
+
 bool NT_channel_dy_mutau(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
-	else relevant_selection_stage = NT_selection_stage_dy;
-
+	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
-
 	return mT < 40 && (relevant_selection_stage == 135 || relevant_selection_stage == 134 || relevant_selection_stage == 125 || relevant_selection_stage == 124);
 	}
 
 bool NT_channel_dy_eltau(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
-	else relevant_selection_stage = NT_selection_stage_dy;
-
+	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
-
 	return mT < 40 && (relevant_selection_stage == 235 || relevant_selection_stage == 234 || relevant_selection_stage == 225 || relevant_selection_stage == 224);
 	}
 
 bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
-	else relevant_selection_stage = NT_selection_stage_dy;
-
+	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
-
 	return mT < 40 && (relevant_selection_stage == 133 || relevant_selection_stage == 132 || relevant_selection_stage == 123 || relevant_selection_stage == 122);
 	}
 
 bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_JESDown;
-	else if (sys == TESUp)     relevant_selection_stage = NT_selection_stage_dy_TESUp  ;
-	else if (sys == TESDown)   relevant_selection_stage = NT_selection_stage_dy_TESDown;
-	else relevant_selection_stage = NT_selection_stage_dy;
-
+	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
-
 	return mT < 40 && (relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222);
 	}
 
@@ -1072,73 +1251,124 @@ bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau(sys);
 	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau_ss(sys);
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
 bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau(sys);
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau_ss(sys);
-	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
+	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
 
 
+int NT_calc_channel_dy_elmu_selection_stages(ObjSystematics sys)
+	{
+	int channel_stage = 0
+	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
+	Triggers trigs = NT_calc_triggers(sys);
+
+	// muon and OS tau and no b
+	bool pass_dy_objects_elmu = (trigs.pass_elmu || trigs.pass_elmu_el) && NT_lep_id.size() == 2;
+	bool os_leptons = pass_dy_objects_elmu ? NT_lep_id[0] * NT_lep_id[1] < 0 : false;
+	unsigned int N_jets_b = NT_calc_b_tagged_njets(sys);
+	bool no_b_jets  = N_jets_b == 0;
+
+	//pass_dy_mass = False
+	//if pass_dy_objects_mu or pass_dy_objects_el:
+	//	pair	= leps[0][0] + leps[0][1]
+	//	pair_mass = pair.mass()
+	//	pass_dy_mass = 75. < pair_mass < 105.
+
+	if   (pass_dy_objects_elmu && no_b_jets && os_leptons) {
+		channel_stage = 105
+		}
+	else if (pass_dy_objects_elmu && no_b_jets) {
+		channel_stage = 103
+		}
+	else if (pass_dy_objects_elmu) {
+		channel_stage = 102
+		}
+
+	return channel_stage
+	}
+
+
 bool NT_channel_dy_elmu(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_elmu;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JESDown;
-	else relevant_selection_stage = NT_selection_stage_dy_elmu;
+	int relevant_selection_stage = NT_calc_channel_dy_elmu_selection_stages(sys);
 	return relevant_selection_stage == 105;
 	}
 
 bool NT_channel_dy_elmu_ss(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_elmu;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_elmu_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_elmu_JESDown;
-	else relevant_selection_stage = NT_selection_stage_dy_elmu;
+	int relevant_selection_stage = NT_calc_channel_dy_elmu_selection_stages(sys);
 	return relevant_selection_stage == 103;
+	}
+
+
+int NT_calc_channel_dy_mumu_selection_stages(ObjSystematics sys)
+	{
+	int channel_stage = 0
+	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
+	Triggers trigs = NT_calc_triggers(sys);
+
+	// muon and OS tau and no b
+	bool pass_dy_objects_mu = trigs.pass_mumu && NT_lep_id.size() == 2;
+	bool pass_dy_objects_el = trigs.pass_elel && NT_lep_id.size() == 2;
+	unsigned int N_jets_b = NT_calc_b_tagged_njets(sys);
+	bool no_b_jets = N_jets_b == 0;
+	bool pass_dy_mass = false;
+
+	if (pass_dy_objects_mu || pass_dy_objects_el)
+		{
+		auto pair = NT_lep_p4[0] + NT_lep_p4[1];
+		auto pair_mass = pair.mass()
+		pass_dy_mass = 75. < pair_mass && pair_mass < 105.;
+		}
+
+	if   (pass_dy_objects_mu && no_b_jets && pass_dy_mass) {
+		channel_stage = 105
+		}
+	else if (pass_dy_objects_mu && no_b_jets) {
+		channel_stage = 103
+		}
+	else if (pass_dy_objects_mu) {
+		channel_stage = 102
+		}
+	else if (pass_dy_objects_el && no_b_jets && pass_dy_mass) {
+		channel_stage = 115
+		}
+	else if (pass_dy_objects_el && no_b_jets) {
+		channel_stage = 113
+		}
+	else if (pass_dy_objects_el) {
+		channel_stage = 112
+		}
+
+	return channel_stage
 	}
 
 
 bool NT_channel_dy_mumu(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_mumu;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JESDown;
-	else relevant_selection_stage = NT_selection_stage_dy_mumu;
+	int relevant_selection_stage = NT_calc_channel_dy_mumu_selection_stages(sys);
 	return relevant_selection_stage == 102 || relevant_selection_stage == 103 || relevant_selection_stage == 105;
 	}
 
 bool NT_channel_dy_elel(ObjSystematics sys)
 	{
-	int relevant_selection_stage = 0;
-	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_mumu;
-	else if (sys == JERUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JERUp  ;
-	else if (sys == JERDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JERDown;
-	else if (sys == JESUp)     relevant_selection_stage = NT_selection_stage_dy_mumu_JESUp  ;
-	else if (sys == JESDown)   relevant_selection_stage = NT_selection_stage_dy_mumu_JESDown;
-	else relevant_selection_stage = NT_selection_stage_dy_mumu;
+	int relevant_selection_stage = NT_calc_channel_dy_mumu_selection_stages(sys);
 	return relevant_selection_stage == 112 || relevant_selection_stage == 113 || relevant_selection_stage == 115;
 	}
 
@@ -1238,6 +1468,8 @@ bool NT_genproc_inclusive()
 	{
 	return true;
 	}
+
+// TODO TODO
 
 bool NT_genproc_tt_eltau3ch()
 	{
