@@ -74,17 +74,24 @@
  *    2) the branch name in the ntuple is `Name`
  */
 
+#if defined(NTUPLE_INTERFACE_DECLARE_STATIC) // to use in C libs etc
+#    define DECLARE_PREFIX static
+#else
+#    define DECLARE_PREFIX
+#endif
+
 #if defined(NTUPLE_INTERFACE_CLASS_DECLARE) // ALSO: in EDM Classes NTuple is pointer to TFile Service!
+
 	// to declare vector of types (int/float etc): declate just vector
-	#define VECTOR_PARAMs_in_NTuple(NTuple, TYPE, Name)   std::vector<TYPE> NT_##Name; std::vector<TYPE>* pt_NT_##Name = &NT_##Name;
+	#define VECTOR_PARAMs_in_NTuple(NTuple, TYPE, Name)   DECLARE_PREFIX std::vector<TYPE> NT_##Name; DECLARE_PREFIX std::vector<TYPE>* pt_NT_##Name = &NT_##Name;
 	// to declare vector of objects: declate vector and a pointer to it
-	#define VECTOR_OBJECTs_in_NTuple(NTuple, Name, ...)   __VA_ARGS__ NT_##Name; __VA_ARGS__* pt_NT_##Name = &NT_##Name;
+	#define VECTOR_OBJECTs_in_NTuple(NTuple, Name, ...)   DECLARE_PREFIX __VA_ARGS__ NT_##Name; DECLARE_PREFIX __VA_ARGS__* pt_NT_##Name = &NT_##Name;
 	// objects and types (simple parameters)
-	#define OBJECT_in_NTuple(NTuple, Name, ...)     __VA_ARGS__   NT_##Name; __VA_ARGS__*  pt_NT_##Name = &NT_##Name; // __VA_ARGS__*  pt_NT_##Name = 0;
-	#define Float_t_in_NTuple(NTuple, Name)         Float_t NT_##Name;
-	#define Int_t_in_NTuple(NTuple, Name)           Int_t   NT_##Name;
-	#define ULong64_t_in_NTuple(NTuple, Name)       ULong64_t   NT_##Name;
-	#define Bool_t_in_NTuple(NTuple, Name)          Bool_t  NT_##Name;
+	#define OBJECT_in_NTuple(NTuple, Name, ...)     DECLARE_PREFIX __VA_ARGS__   NT_##Name; DECLARE_PREFIX __VA_ARGS__*  pt_NT_##Name = &NT_##Name; // __VA_ARGS__*  pt_NT_##Name = 0;
+	#define Float_t_in_NTuple(NTuple, Name)         DECLARE_PREFIX Float_t NT_##Name;
+	#define Int_t_in_NTuple(NTuple, Name)           DECLARE_PREFIX Int_t   NT_##Name;
+	#define ULong64_t_in_NTuple(NTuple, Name)       DECLARE_PREFIX ULong64_t   NT_##Name;
+	#define Bool_t_in_NTuple(NTuple, Name)          DECLARE_PREFIX Bool_t  NT_##Name;
 
 #elif defined(NTUPLE_INTERFACE_CLASS_INITIALIZE)
 	// hook up branch
@@ -726,4 +733,6 @@ OBJECT_in_NTuple(OUTNTUPLE, PV_cov, ROOT::Math::SMatrix<double, 3, 3, ROOT::Math
 #undef Int_t_in_NTuple
 #undef ULong64_t_in_NTuple
 #undef Bool_t_in_NTuple
+
+#undef DECLARE_PREFIX
 

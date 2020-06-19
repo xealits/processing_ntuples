@@ -3,8 +3,11 @@
 
 /* Global interface to the ttree, the name space for all the event-processing fucntions.
  */
+#define NTUPLE_INTERFACE_DECLARE_STATIC
 #define NTUPLE_INTERFACE_CLASS_DECLARE
 #include "ntupler_interface.h"
+#undef NTUPLE_INTERFACE_DECLARE_STATIC
+#undef NTUPLE_INTERFACE_CLASS_DECLARE
 
 /* --------------------------------------------------------------- */
 /* STD DEFS */
@@ -17,17 +20,17 @@
  */
 
 
-double NT_sysweight_NOMINAL_HLT_EL()
+static double NT_sysweight_NOMINAL_HLT_EL()
 	{
 	return 1.; // NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG;
 	}
 
-double NT_sysweight_NOMINAL_HLT_MU()
+static double NT_sysweight_NOMINAL_HLT_MU()
 	{
 	return 1.; // NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG;
 	}
 
-double NT_sysweight_NOMINAL_HLT_LEP()
+static double NT_sysweight_NOMINAL_HLT_LEP()
 	{
 	/* what this does is calculates the weights according to the lepton ID scale factors, and returns the final product
 	double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID;
@@ -39,7 +42,7 @@ double NT_sysweight_NOMINAL_HLT_LEP()
 	return 1.;
 	}
 
-double NT_sysweight_NOMINAL_HLT_EL_MedTau()
+static double NT_sysweight_NOMINAL_HLT_EL_MedTau()
 	{
 	// old ntupler output, from the 2016 xsection measurement
 	//return NT_event_weight*0.95;
@@ -47,32 +50,34 @@ double NT_sysweight_NOMINAL_HLT_EL_MedTau()
 	return 1.; // NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG * NT_event_taus_SF_Medium[0];
 	}
 
-double NT_sysweight_NOMINAL_HLT_MU_MedTau()
+static double NT_sysweight_NOMINAL_HLT_MU_MedTau()
 	{
 	// old ntupler output, from the 2016 xsection measurement
 	//return NT_event_weight*0.95;
 	return 1.; // NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG * NT_event_taus_SF_Medium[0];
 	}
 
-double NT_sysweight_NOMINAL_HLT_LEP_MedTau()
+static double NT_sysweight_NOMINAL_HLT_LEP_MedTau()
 	{
 	//double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID * NT_event_taus_SF_Medium[0];
 	//if (abs(NT_event_leptons_ids[0]) == 13)
 	//	return  NT_event_weight_LEPmuTRG * common;
 	//else
 	//	return  NT_event_weight_LEPelTRG * common;
-	return 1.;
+	double lep_weight = NT_sysweight_NOMINAL_HLT_LEP();
+	double tau_weight = 1.;
+	return lep_weight * tau_weight;
 	}
 
 // systematic uncertainties from the nominal weight
 
-double NT_sysweight_NOMINAL()
+static double NT_sysweight_NOMINAL()
 	{
 	return 1.;
 	}
 
 #define NT_sysweight(sysname, weight_expr)   \
-double NT_sysweight_ ##sysname(void)          \
+static double NT_sysweight_ ##sysname(void)          \
 	{                                  \
 	return weight_expr; \
 	}
@@ -422,17 +427,17 @@ T_known_defs_systs create_known_defs_systs_ntupler()
 
 
 
-double NT_distr_nvtx(ObjSystematics sys)
+static double NT_distr_nvtx(ObjSystematics sys)
 	{
 	return NT_nvtx;
 	}
 
-double NT_distr_leading_lep_pt(ObjSystematics sys)
+static double NT_distr_leading_lep_pt(ObjSystematics sys)
 	{
 	return NT_lep_p4[0].pt();
 	}
 
-double NT_distr_dilep_mass(ObjSystematics sys)
+static double NT_distr_dilep_mass(ObjSystematics sys)
 	{
 	if (NT_lep_p4.size()>1)
 		return (NT_lep_p4[0] + NT_lep_p4[1]).mass();
@@ -442,14 +447,14 @@ double NT_distr_dilep_mass(ObjSystematics sys)
 		return -111.;
 	}
 
-double NT_calc_leading_tau_energy_scale_correction(ObjSystematics sys)
+static double NT_calc_leading_tau_energy_scale_correction(ObjSystematics sys)
 	{
 	if      (sys == TESUp)   return NT_tau_decayMode[0] == 0 ? 0.995 + 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 + 0.012 : 1.006 + 0.012);
 	else if (sys == TESDown) return NT_tau_decayMode[0] == 0 ? 0.995 - 0.012 : (NT_tau_decayMode[0] < 10 ? 1.011 - 0.012 : 1.006 - 0.012);
 	else                     return NT_tau_decayMode[0] == 0 ? 0.995         : (NT_tau_decayMode[0] < 10 ? 1.011         : 1.006        );
 	}
 
-double NT_distr_tau_pt(ObjSystematics sys)
+static double NT_distr_tau_pt(ObjSystematics sys)
 	{
 
 	// from ntupler.py and std_defs.py:
@@ -490,7 +495,7 @@ double NT_distr_tau_pt(ObjSystematics sys)
 	return pt * NT_calc_leading_tau_energy_scale_correction(sys);
 	}
 
-double NT_calc_tau_sv_sign_geom(ObjSystematics sys)
+static double NT_calc_tau_sv_sign_geom(ObjSystematics sys)
 	{
 	unsigned int tau_index = 0; // the leading tau
 	unsigned int tau_refit_index = NT_tau_refited_index[tau_index];
@@ -504,12 +509,12 @@ double NT_calc_tau_sv_sign_geom(ObjSystematics sys)
 		return -111.;
 	}
 
-double NT_distr_tau_sv_sign(ObjSystematics sys)
+static double NT_distr_tau_sv_sign(ObjSystematics sys)
 	{
 	return NT_calc_tau_sv_sign_geom(sys);
 	}
 
-double NT_distr_tau_sv_sign_pat(ObjSystematics sys)
+static double NT_distr_tau_sv_sign_pat(ObjSystematics sys)
 	{
 	// the refit index is only for the information about the refitted tau SV
 	// the PAT data is saved in the original tau index
@@ -528,7 +533,7 @@ double NT_distr_tau_sv_sign_pat(ObjSystematics sys)
 		return -111.;
 	}
 
-double NT_distr_sum_cos(ObjSystematics sys)
+static double NT_distr_sum_cos(ObjSystematics sys)
 	{
 	// TODO here we need to propagae the object systematic to MET
 	// the problem with met is that even NOMINAL jets can have some corrections to be propagated to MET
@@ -540,28 +545,28 @@ double NT_distr_sum_cos(ObjSystematics sys)
 	}
 
 // TODO: these three are long calculations
-double NT_distr_lj_var(ObjSystematics sys)
+static double NT_distr_lj_var(ObjSystematics sys)
 	{
 	return -111.; //NT_event_jets_lj_var;
 	}
 
-double NT_distr_lj_var_w_mass(ObjSystematics sys)
+static double NT_distr_lj_var_w_mass(ObjSystematics sys)
 	{
 	return -111.; // NT_event_jets_lj_w_mass;
 	}
 
-double NT_distr_lj_var_t_mass(ObjSystematics sys)
+static double NT_distr_lj_var_t_mass(ObjSystematics sys)
 	{
 	return -111.; // NT_event_jets_lj_t_mass;
 	}
 
-double transverse_mass_pts(double v1_x, double v1_y, double v2_x, double v2_y)
+static double transverse_mass_pts(double v1_x, double v1_y, double v2_x, double v2_y)
 	{
 	auto v1v2 = TMath::Sqrt((v1_x*v1_x + v1_y*v1_y)*(v2_x*v2_x + v2_y*v2_y));
 	return TMath::Sqrt(2*(v1v2 - (v1_x*v2_x + v1_y*v2_y)));
 	}
 
-double NT_distr_Mt_lep_met(ObjSystematics sys)
+static double NT_distr_Mt_lep_met(ObjSystematics sys)
 	{
 
 	/* in stage2.py
@@ -590,7 +595,7 @@ double NT_distr_Mt_lep_met(ObjSystematics sys)
 	return mT_init;
 	}
 
-double NT_distr_met(ObjSystematics sys)
+static double NT_distr_met(ObjSystematics sys)
 	{
 
 	/*
@@ -629,8 +634,9 @@ T_known_defs_distrs create_known_defs_distrs_ntupler()
 	r = {40,  true,  30,  40};                                                     m["leading_lep_pt_el_edge35"] = {NT_distr_leading_lep_pt, r};
 	r = {40,  true,   0, 200};                                                     m["tau_pt"]         = {NT_distr_tau_pt, r};
 	// taus have smaller energy in ttbar, therefore we might want to look at a smaller range
-	r = {40,  true,   0, 150};                                                     m["tau_pt_range2"]  = {NT_distr_tau_pt, r};
-	r = {21,  true,  -1,  20};                                                     m["tau_sv_sign"]    = {NT_distr_tau_sv_sign, r};
+	r = {40,  true,   0, 150};                                                     m["tau_pt_range2"]   = {NT_distr_tau_pt, r};
+	r = {21,  true,  -1,  20};                                                     m["tau_sv_sign"]     = {NT_distr_tau_sv_sign, r};
+	r = {21,  true,  -1,  50};                                                     m["tau_sv_sign_pat"] = {NT_distr_tau_sv_sign_pat, r};
 
 	r = {100, true,   0, 400};                                                     m["dilep_mass"]     = {NT_distr_dilep_mass, r};
 	r = {40,  true,  80, 100};                                                     m["dilep_mass_dy"]  = {NT_distr_dilep_mass, r};
@@ -680,22 +686,22 @@ old std_defs.py:
 'tt_elmu_tight':  (lambda sel_stage, ev: (sel_stage == 205 and ev.event_leptons[0].pt() > 30. and ev.event_leptons[1].pt() > 30.), {'NOMINAL': lambda ev: ev.selection_stage_em}),
  */
 
-double b_tag_wp_loose  = 0.1522; // # 0.5426 # 0.460 #
-double b_tag_wp_medium = 0.4941; // # 0.1522 # 0.8484 # 0.8   #
-double b_tag_wp_tight  = 0.8001; // # 0.9535 # 0.935 #
+static double b_tag_wp_loose  = 0.1522; // # 0.5426 # 0.460 #
+static double b_tag_wp_medium = 0.4941; // # 0.1522 # 0.8484 # 0.8   #
+static double b_tag_wp_tight  = 0.8001; // # 0.9535 # 0.935 #
 
 //bool ISO_LEPS    = True
-double JETS_PT_CUT  = 20.; //  21.
-double JETS_ETA_CUT = 2.5; //  21.
-double TAUS_PT_CUT  = 20.; // # 21. # # 20GeV for DY->tautau selection
-unsigned int TAUS_ID_CUT_Tight  = 3; //  # Tight = 4-5, VTight = 5
-unsigned int TAUS_ID_CUT_Medium = 2;
-unsigned int TAUS_ID_CUT_VLoose = 0;
-unsigned int TAUS_ID_CUT = TAUS_ID_CUT_VLoose; // # TAUS_ID_CUT_Medium # Vloose cut for the shape
-bool ONLY_3PI_TAUS = false;
-double SV_SIGN_CUT = 2.5;
+static double JETS_PT_CUT  = 20.; //  21.
+static double JETS_ETA_CUT = 2.5; //  21.
+static double TAUS_PT_CUT  = 20.; // # 21. # # 20GeV for DY->tautau selection
+static unsigned int TAUS_ID_CUT_Tight  = 3; //  # Tight = 4-5, VTight = 5
+static unsigned int TAUS_ID_CUT_Medium = 2;
+static unsigned int TAUS_ID_CUT_VLoose = 0;
+static unsigned int TAUS_ID_CUT = TAUS_ID_CUT_VLoose; // # TAUS_ID_CUT_Medium # Vloose cut for the shape
+static bool ONLY_3PI_TAUS = false;
+static double SV_SIGN_CUT = 2.5;
 
-unsigned int NT_calc_b_tagged_njets(ObjSystematics sys)
+static unsigned int NT_calc_b_tagged_njets(ObjSystematics sys)
 	{
 	// TODO: correct
 	unsigned int n_bjets = 0;
@@ -724,7 +730,7 @@ typedef struct Triggers {
 	bool pass_mu_all;
 	bool pass_el_all;} Triggers;
 
-Triggers NT_calc_triggers(ObjSystematics sys)
+static Triggers NT_calc_triggers(ObjSystematics sys)
 	{
 	Triggers trigs;
 
@@ -778,7 +784,7 @@ Triggers NT_calc_triggers(ObjSystematics sys)
 	return trigs;
 	}
 
-int NT_calc_channel_tt_selection_stages(ObjSystematics sys)
+static int NT_calc_channel_tt_selection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 
@@ -862,13 +868,13 @@ int NT_calc_channel_tt_selection_stages(ObjSystematics sys)
 	return channel_stage;
 	}
 
-bool NT_channel_mu_sel(ObjSystematics sys)
+static bool NT_channel_mu_sel(ObjSystematics sys)
 	{
 	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 9 || channel_stage == 7;
 	}
 
-bool NT_channel_mu_sel_ss(ObjSystematics sys)
+static bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	{
 	/*
 	int relevant_selection_stage = 0;
@@ -887,32 +893,32 @@ bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	return channel_stage == 8 || channel_stage == 6;
 	}
 
-bool NT_channel_mu_sel_tauSV3(ObjSystematics sys)
+static bool NT_channel_mu_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_mu_sel(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_mu_sel_ss(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-bool NT_channel_el_sel(ObjSystematics sys)
+static bool NT_channel_el_sel(ObjSystematics sys)
 	{
 	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 19 || channel_stage == 17;
 	}
 
-bool NT_channel_el_sel_ss(ObjSystematics sys)
+static bool NT_channel_el_sel_ss(ObjSystematics sys)
 	{
 	int channel_stage = NT_calc_channel_tt_selection_stages(sys);
 	return channel_stage == 18 || channel_stage == 16;
 	}
 
 
-int NT_channel_tt_preselection_stages(ObjSystematics sys)
+static int NT_channel_tt_preselection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 	Triggers trigs = NT_calc_triggers(sys);
@@ -921,64 +927,64 @@ int NT_channel_tt_preselection_stages(ObjSystematics sys)
 	}
 
 // old ntupler presel!! from xsec measurement
-bool NT_channel_el_old_presel(ObjSystematics sys)
+static bool NT_channel_el_old_presel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_channel_tt_preselection_stages(sys);
 	return (relevant_selection_stage == 19 || relevant_selection_stage == 17);
 	}
 
-bool NT_channel_el_old_presel_ss(ObjSystematics sys)
+static bool NT_channel_el_old_presel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_channel_tt_preselection_stages(sys);
 	return (relevant_selection_stage == 18 || relevant_selection_stage == 16); // || relevant_selection_stage == 15);
 	}
 
-bool NT_channel_mu_old_presel(ObjSystematics sys)
+static bool NT_channel_mu_old_presel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_channel_tt_preselection_stages(sys);
 	//return relevant_selection_stage == 9;
 	return (relevant_selection_stage == 9 || relevant_selection_stage == 7);
 	}
 
-bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
+static bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_channel_tt_preselection_stages(sys);
 	return (relevant_selection_stage == 8 || relevant_selection_stage == 6);
 	}
 
 
-bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
+static bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel_ss(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
 // union os mu_sel and el_sel
-bool NT_channel_lep_sel(ObjSystematics sys)
+static bool NT_channel_lep_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_tt_selection_stages(sys);
 	return relevant_selection_stage == 9 || relevant_selection_stage == 7 || relevant_selection_stage == 19 || relevant_selection_stage == 17;
 	}
 
-bool NT_channel_lep_sel_ss(ObjSystematics sys)
+static bool NT_channel_lep_sel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_tt_selection_stages(sys);
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6 || relevant_selection_stage == 18 || relevant_selection_stage == 16;
 	}
 
-bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
+static bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel_ss(sys);
 	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
@@ -986,7 +992,7 @@ bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-int NT_calc_channel_tt_elmu_selection_stages(ObjSystematics sys)
+static int NT_calc_channel_tt_elmu_selection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 	Triggers trigs = NT_calc_triggers(sys);
@@ -1037,13 +1043,13 @@ int NT_calc_channel_tt_elmu_selection_stages(ObjSystematics sys)
 	}
 
 
-bool NT_channel_tt_elmu(ObjSystematics sys)
+static bool NT_channel_tt_elmu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_tt_elmu_selection_stages(sys);
 	return relevant_selection_stage > 210 && relevant_selection_stage < 220;
 	}
 
-bool NT_channel_tt_elmu_tight(ObjSystematics sys)
+static bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_tt_elmu_selection_stages(sys);
 	return relevant_selection_stage == 215;
@@ -1051,7 +1057,7 @@ bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 
 
 
-int NT_calc_channel_dy_tautau_selection_stages(ObjSystematics sys)
+static int NT_calc_channel_dy_tautau_selection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 	Triggers trigs = NT_calc_triggers(sys);
@@ -1224,52 +1230,52 @@ int NT_calc_channel_dy_tautau_selection_stages(ObjSystematics sys)
 	}
 
 
-bool NT_channel_dy_mutau(ObjSystematics sys)
+static bool NT_channel_dy_mutau(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
 	return mT < 40 && (relevant_selection_stage == 135 || relevant_selection_stage == 134 || relevant_selection_stage == 125 || relevant_selection_stage == 124);
 	}
 
-bool NT_channel_dy_eltau(ObjSystematics sys)
+static bool NT_channel_dy_eltau(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
 	return mT < 40 && (relevant_selection_stage == 235 || relevant_selection_stage == 234 || relevant_selection_stage == 225 || relevant_selection_stage == 224);
 	}
 
-bool NT_channel_dy_mutau_ss(ObjSystematics sys)
+static bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
 	return mT < 40 && (relevant_selection_stage == 133 || relevant_selection_stage == 132 || relevant_selection_stage == 123 || relevant_selection_stage == 122);
 	}
 
-bool NT_channel_dy_eltau_ss(ObjSystematics sys)
+static bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_tautau_selection_stages(sys);
 	double mT = NT_distr_Mt_lep_met(sys);
 	return mT < 40 && (relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222);
 	}
 
-bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau(sys);
 	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
-bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau_ss(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
 
-bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
 	}
-bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau_ss(sys);
 	return sel ?  NT_calc_tau_sv_sign_geom(sys) > 3. : false;
@@ -1277,7 +1283,7 @@ bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 
 
 
-int NT_calc_channel_dy_elmu_selection_stages(ObjSystematics sys)
+static int NT_calc_channel_dy_elmu_selection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
@@ -1309,20 +1315,20 @@ int NT_calc_channel_dy_elmu_selection_stages(ObjSystematics sys)
 	}
 
 
-bool NT_channel_dy_elmu(ObjSystematics sys)
+static bool NT_channel_dy_elmu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_elmu_selection_stages(sys);
 	return relevant_selection_stage == 105;
 	}
 
-bool NT_channel_dy_elmu_ss(ObjSystematics sys)
+static bool NT_channel_dy_elmu_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_elmu_selection_stages(sys);
 	return relevant_selection_stage == 103;
 	}
 
 
-int NT_calc_channel_dy_mumu_selection_stages(ObjSystematics sys)
+static int NT_calc_channel_dy_mumu_selection_stages(ObjSystematics sys)
 	{
 	int channel_stage = 0;
 	//pass_mu, pass_elmu, pass_elmu_el, pass_mumu, pass_elel, pass_el, pass_mu_all, pass_el_all = passed_triggers
@@ -1365,13 +1371,13 @@ int NT_calc_channel_dy_mumu_selection_stages(ObjSystematics sys)
 	}
 
 
-bool NT_channel_dy_mumu(ObjSystematics sys)
+static bool NT_channel_dy_mumu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_mumu_selection_stages(sys);
 	return relevant_selection_stage == 102 || relevant_selection_stage == 103 || relevant_selection_stage == 105;
 	}
 
-bool NT_channel_dy_elel(ObjSystematics sys)
+static bool NT_channel_dy_elel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = NT_calc_channel_dy_mumu_selection_stages(sys);
 	return relevant_selection_stage == 112 || relevant_selection_stage == 113 || relevant_selection_stage == 115;
@@ -1469,7 +1475,7 @@ However, it requires more typing, therefore I will make some short-hand macro.
 /** \brief passes all events, to use in inclusive cases
 */
 
-bool NT_genproc_inclusive()
+static bool NT_genproc_inclusive()
 	{
 	return true;
 	}
@@ -1513,7 +1519,7 @@ static int genproc_tt_taueltaumu = 1;
 
 static int genproc_tt_other = 0;
 
-int NT_calc_gen_proc_id_tt()
+static int NT_calc_gen_proc_id_tt()
 	{
 	int t_wid  = abs(NT_gen_t_w_decay_id);
 	int tb_wid = abs(NT_gen_tb_w_decay_id);
@@ -1566,7 +1572,7 @@ int NT_calc_gen_proc_id_tt()
 		};
 	}
 
-int NT_calc_gen_proc_id_dy()
+static int NT_calc_gen_proc_id_dy()
 	{
 	int lep1_id, lep2_id;
 
@@ -1590,7 +1596,7 @@ int NT_calc_gen_proc_id_dy()
 		}
 	}
 
-int NT_calc_gen_proc_id_wjets()
+static int NT_calc_gen_proc_id_wjets()
 	{
 	int lep1_id, lep2_id;
 
@@ -1618,7 +1624,7 @@ int NT_calc_gen_proc_id_wjets()
 		}
 	}
 
-int NT_calc_gen_proc_id_single_top()
+static int NT_calc_gen_proc_id_single_top()
 	{
 
 	// basically only difference is eltau/mutau
@@ -1655,7 +1661,7 @@ int NT_calc_gen_proc_id_single_top()
 		}
 	}
 
-bool NT_genproc_tt_eltau3ch()
+static bool NT_genproc_tt_eltau3ch()
 	{
 	auto NT_gen_proc_id = NT_calc_gen_proc_id_tt();
 	return NT_gen_proc_id == 42;
@@ -1664,7 +1670,7 @@ bool NT_genproc_tt_eltau3ch()
 // a short-hand macro
 
 #define NT_genproc(procname, calc_func, procID)         \
-bool NT_genproc_ ##procname(void)            \
+static bool NT_genproc_ ##procname(void)            \
 	{                                  \
 	auto NT_gen_proc_id = calc_func(); \
 	return NT_gen_proc_id == (procID); \
@@ -1695,14 +1701,14 @@ NT_genproc(stop_mutau , NT_calc_gen_proc_id_single_top, 10)
 NT_genproc(stop_lj    , NT_calc_gen_proc_id_single_top,  2)
 NT_genproc(stop_elmu  , NT_calc_gen_proc_id_single_top,  1)
 
-bool NT_genproc_tt_eltau()
+static bool NT_genproc_tt_eltau()
 	{
 	auto NT_gen_proc_id = NT_calc_gen_proc_id_tt();
 	return NT_gen_proc_id > 40 && NT_gen_proc_id < 43;
 	}
 
 #define NT_genproc_range_tt(procname, procID_min, procID_max)         \
-bool NT_genproc_ ##procname(void)          \
+static bool NT_genproc_ ##procname(void)          \
 	{                                  \
 	auto NT_gen_proc_id = NT_calc_gen_proc_id_tt(); \
 	return NT_gen_proc_id > (procID_min) && NT_gen_proc_id < (procID_max); \
@@ -1714,32 +1720,32 @@ NT_genproc_range_tt(tt_leptau, 30, 43)
 NT_genproc_range_tt(tt_lj, 20, 30)
 
 // standard per-channel processes
-vector<TString> _eltau_tt_procs  = {"tt_eltau", "tt_taulj", "tt_lj"};
-vector<TString> _mutau_tt_procs  = {"tt_mutau", "tt_taulj", "tt_lj"};
-vector<TString> _leptau_tt_procs = {"tt_leptau", "tt_taulj", "tt_lj"};
-vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
+static vector<TString> _eltau_tt_procs  = {"tt_eltau", "tt_taulj", "tt_lj"};
+static vector<TString> _mutau_tt_procs  = {"tt_mutau", "tt_taulj", "tt_lj"};
+static vector<TString> _leptau_tt_procs = {"tt_leptau", "tt_taulj", "tt_lj"};
+static vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
 //vector<TString> _mumu_tt_procs  = {"tt_inclusive"};
 //vector<TString> _elel_tt_procs  = {"tt_inclusive"};
 // actually empty vectors must work, the catchall process will handle this
-vector<TString> _mumu_tt_procs  = {};
-vector<TString> _elel_tt_procs  = {};
+static vector<TString> _mumu_tt_procs  = {};
+static vector<TString> _elel_tt_procs  = {};
 
-vector<TString> _leptau_dy_procs = {"dy_tautau"};
-vector<TString>  _incl_dy_procs = {};
+static vector<TString> _leptau_dy_procs = {"dy_tautau"};
+static vector<TString>  _incl_dy_procs = {};
 
-vector<TString> _eltau_stop_procs = {"stop_eltau", "stop_lj"};
-vector<TString> _mutau_stop_procs = {"stop_mutau", "stop_lj"};
-vector<TString>  _elmu_stop_procs = {"stop_elmu"};
-vector<TString>  _mumu_stop_procs = {};
-vector<TString>  _elel_stop_procs = {};
+static vector<TString> _eltau_stop_procs = {"stop_eltau", "stop_lj"};
+static vector<TString> _mutau_stop_procs = {"stop_mutau", "stop_lj"};
+static vector<TString>  _elmu_stop_procs = {"stop_elmu"};
+static vector<TString>  _mumu_stop_procs = {};
+static vector<TString>  _elel_stop_procs = {};
 
-vector<TString> _eltau_wjets_procs = {"wjets_tauh", "wjets_taul"};
-vector<TString> _mutau_wjets_procs = {"wjets_tauh", "wjets_taul"};
-vector<TString>  _elmu_wjets_procs = {};
-vector<TString>  _mumu_wjets_procs = {};
-vector<TString>  _elel_wjets_procs = {};
+static vector<TString> _eltau_wjets_procs = {"wjets_tauh", "wjets_taul"};
+static vector<TString> _mutau_wjets_procs = {"wjets_tauh", "wjets_taul"};
+static vector<TString>  _elmu_wjets_procs = {};
+static vector<TString>  _mumu_wjets_procs = {};
+static vector<TString>  _elel_wjets_procs = {};
 
-vector<TString>  _any_procs = {};
+static vector<TString>  _any_procs = {};
 
 // ^--- I am not sure this is the best approach to define these standard processes
 //      initially I wanted to have a bunch of general sets, not the concrete per-channel ones

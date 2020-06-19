@@ -17,17 +17,17 @@
  */
 
 
-double NT_sysweight_NOMINAL_HLT_EL()
+static double NT_sysweight_NOMINAL_HLT_EL()
 	{
 	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG;
 	}
 
-double NT_sysweight_NOMINAL_HLT_MU()
+static double NT_sysweight_NOMINAL_HLT_MU()
 	{
 	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG;
 	}
 
-double NT_sysweight_NOMINAL_HLT_LEP()
+static double NT_sysweight_NOMINAL_HLT_LEP()
 	{
 	double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID;
 	if (abs(NT_event_leptons_ids[0]) == 13)
@@ -36,7 +36,7 @@ double NT_sysweight_NOMINAL_HLT_LEP()
 		return  NT_event_weight_LEPelTRG * common;
 	}
 
-double NT_sysweight_NOMINAL_HLT_EL_MedTau()
+static double NT_sysweight_NOMINAL_HLT_EL_MedTau()
 	{
 	// old stage2 output, from the 2016 xsection measurement
 	//return NT_event_weight*0.95;
@@ -44,31 +44,33 @@ double NT_sysweight_NOMINAL_HLT_EL_MedTau()
 	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPelTRG * NT_event_taus_SF_Medium[0];
 	}
 
-double NT_sysweight_NOMINAL_HLT_MU_MedTau()
+static double NT_sysweight_NOMINAL_HLT_MU_MedTau()
 	{
 	// old stage2 output, from the 2016 xsection measurement
 	//return NT_event_weight*0.95;
 	return NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID* NT_event_weight_LEPmuTRG * NT_event_taus_SF_Medium[0];
 	}
 
-double NT_sysweight_NOMINAL_HLT_LEP_MedTau()
+static double NT_sysweight_NOMINAL_HLT_LEP_MedTau()
 	{
-	double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID * NT_event_taus_SF_Medium[0];
-	if (abs(NT_event_leptons_ids[0]) == 13)
-		return  NT_event_weight_LEPmuTRG * common;
-	else
-		return  NT_event_weight_LEPelTRG * common;
+	//double common = NT_event_weight*NT_event_weight_PU*NT_event_weight_LEPmuID*NT_event_weight_LEPelID * NT_event_taus_SF_Medium[0];
+	//if (abs(NT_event_leptons_ids[0]) == 13)
+	//	return  NT_event_weight_LEPmuTRG * common;
+	//else
+	//	return  NT_event_weight_LEPelTRG * common;
+	double lep_weight = NT_sysweight_NOMINAL_HLT_LEP();
+	return lep_weight * NT_event_taus_SF_Medium[0];
 	}
 
 // systematic uncertainties from the nominal weight
 
-double NT_sysweight_NOMINAL()
+static double NT_sysweight_NOMINAL()
 	{
 	return 1.;
 	}
 
 #define NT_sysweight(sysname, weight_expr)   \
-double NT_sysweight_ ##sysname(void)          \
+static double NT_sysweight_ ##sysname(void)          \
 	{                                  \
 	return weight_expr; \
 	}
@@ -408,17 +410,17 @@ T_known_defs_systs create_known_defs_systs_stage2()
 
 
 
-double NT_distr_nvtx(ObjSystematics sys)
+static double NT_distr_nvtx(ObjSystematics sys)
 	{
 	return NT_nvtx;
 	}
 
-double NT_distr_leading_lep_pt(ObjSystematics sys)
+static double NT_distr_leading_lep_pt(ObjSystematics sys)
 	{
 	return NT_event_leptons[0].pt();
 	}
 
-double NT_distr_dilep_mass(ObjSystematics sys)
+static double NT_distr_dilep_mass(ObjSystematics sys)
 	{
 	if (NT_event_leptons.size()>1)
 		return (NT_event_leptons[0] + NT_event_leptons[1]).mass();
@@ -428,7 +430,7 @@ double NT_distr_dilep_mass(ObjSystematics sys)
 		return -111.;
 	}
 
-double NT_distr_tau_pt(ObjSystematics sys)
+static double NT_distr_tau_pt(ObjSystematics sys)
 	{
 
 	// from stage2.py and std_defs.py:
@@ -449,7 +451,7 @@ double NT_distr_tau_pt(ObjSystematics sys)
 	else                     return pt;
 	}
 
-double NT_distr_tau_sv_sign(ObjSystematics sys)
+static double NT_distr_tau_sv_sign(ObjSystematics sys)
 	{
 	if (NT_event_taus_sv_sign.size()>0)
 		return NT_event_taus_sv_sign[0];
@@ -457,7 +459,7 @@ double NT_distr_tau_sv_sign(ObjSystematics sys)
 		return -111.;
 	}
 
-double NT_distr_sum_cos(ObjSystematics sys)
+static double NT_distr_sum_cos(ObjSystematics sys)
 	{
 	if (NT_event_leptons.size() == 0 || NT_event_taus.size() == 0) return -11.;
 	double cos_lep_met = TMath::Cos(NT_event_leptons[0].Phi() - NT_event_met.Phi());
@@ -466,22 +468,22 @@ double NT_distr_sum_cos(ObjSystematics sys)
 	}
 
 
-double NT_distr_lj_var(ObjSystematics sys)
+static double NT_distr_lj_var(ObjSystematics sys)
 	{
 	return NT_event_jets_lj_var;
 	}
 
-double NT_distr_lj_var_w_mass(ObjSystematics sys)
+static double NT_distr_lj_var_w_mass(ObjSystematics sys)
 	{
 	return NT_event_jets_lj_w_mass;
 	}
 
-double NT_distr_lj_var_t_mass(ObjSystematics sys)
+static double NT_distr_lj_var_t_mass(ObjSystematics sys)
 	{
 	return NT_event_jets_lj_t_mass;
 	}
 
-double NT_distr_Mt_lep_met(ObjSystematics sys)
+static double NT_distr_Mt_lep_met(ObjSystematics sys)
 	{
 
 	if      (sys == NOMINAL) return NT_event_met_lep_mt;
@@ -495,7 +497,7 @@ double NT_distr_Mt_lep_met(ObjSystematics sys)
 	else return NT_event_met_lep_mt;
 	}
 
-double NT_distr_met(ObjSystematics sys)
+static double NT_distr_met(ObjSystematics sys)
 	{
 
 	if      (sys == NOMINAL) return NT_event_met.pt();
@@ -582,7 +584,7 @@ old std_defs.py:
 'tt_elmu_tight':  (lambda sel_stage, ev: (sel_stage == 205 and ev.event_leptons[0].pt() > 30. and ev.event_leptons[1].pt() > 30.), {'NOMINAL': lambda ev: ev.selection_stage_em}),
  */
 
-bool NT_channel_mu_sel(ObjSystematics sys)
+static bool NT_channel_mu_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -596,7 +598,7 @@ bool NT_channel_mu_sel(ObjSystematics sys)
 	return relevant_selection_stage == 9 || relevant_selection_stage == 7;
 	}
 
-bool NT_channel_mu_sel_ss(ObjSystematics sys)
+static bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -610,19 +612,19 @@ bool NT_channel_mu_sel_ss(ObjSystematics sys)
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6;
 	}
 
-bool NT_channel_mu_sel_tauSV3(ObjSystematics sys)
+static bool NT_channel_mu_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_mu_sel(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
-bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_mu_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_mu_sel_ss(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
-bool NT_channel_el_sel(ObjSystematics sys)
+static bool NT_channel_el_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -636,7 +638,7 @@ bool NT_channel_el_sel(ObjSystematics sys)
 	return relevant_selection_stage == 19 || relevant_selection_stage == 17;
 	}
 
-bool NT_channel_el_sel_ss(ObjSystematics sys)
+static bool NT_channel_el_sel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -651,7 +653,7 @@ bool NT_channel_el_sel_ss(ObjSystematics sys)
 	}
 
 // old stage2 presel!! from xsec measurement
-bool NT_channel_el_old_presel(ObjSystematics sys)
+static bool NT_channel_el_old_presel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	//if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -665,14 +667,14 @@ bool NT_channel_el_old_presel(ObjSystematics sys)
 	return (relevant_selection_stage == 19 || relevant_selection_stage == 17);
 	}
 
-bool NT_channel_el_old_presel_ss(ObjSystematics sys)
+static bool NT_channel_el_old_presel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	relevant_selection_stage = NT_selection_stage_presel;
 	return (relevant_selection_stage == 18 || relevant_selection_stage == 16); // || relevant_selection_stage == 15);
 	}
 
-bool NT_channel_mu_old_presel(ObjSystematics sys)
+static bool NT_channel_mu_old_presel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	relevant_selection_stage = NT_selection_stage_presel;
@@ -680,7 +682,7 @@ bool NT_channel_mu_old_presel(ObjSystematics sys)
 	return (relevant_selection_stage == 9 || relevant_selection_stage == 7);
 	}
 
-bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
+static bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	relevant_selection_stage = NT_selection_stage_presel;
@@ -688,20 +690,20 @@ bool NT_channel_mu_old_presel_ss(ObjSystematics sys)
 	}
 
 
-bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
+static bool NT_channel_el_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
-bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_el_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_el_sel_ss(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
 // union os mu_sel and el_sel
-bool NT_channel_lep_sel(ObjSystematics sys)
+static bool NT_channel_lep_sel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -715,7 +717,7 @@ bool NT_channel_lep_sel(ObjSystematics sys)
 	return relevant_selection_stage == 9 || relevant_selection_stage == 7 || relevant_selection_stage == 19 || relevant_selection_stage == 17;
 	}
 
-bool NT_channel_lep_sel_ss(ObjSystematics sys)
+static bool NT_channel_lep_sel_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage;
@@ -729,13 +731,13 @@ bool NT_channel_lep_sel_ss(ObjSystematics sys)
 	return relevant_selection_stage == 8 || relevant_selection_stage == 6 || relevant_selection_stage == 18 || relevant_selection_stage == 16;
 	}
 
-bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
+static bool NT_channel_lep_sel_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
-bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_lep_sel_ss(sys);
 	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
@@ -744,7 +746,7 @@ bool NT_channel_lep_sel_ss_tauSV3(ObjSystematics sys)
 	}
 
 
-bool NT_channel_tt_elmu(ObjSystematics sys)
+static bool NT_channel_tt_elmu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
@@ -756,7 +758,7 @@ bool NT_channel_tt_elmu(ObjSystematics sys)
 	return relevant_selection_stage > 210 && relevant_selection_stage < 220;
 	}
 
-bool NT_channel_tt_elmu_tight(ObjSystematics sys)
+static bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_em;
@@ -770,7 +772,7 @@ bool NT_channel_tt_elmu_tight(ObjSystematics sys)
 
 
 
-bool NT_channel_dy_mutau(ObjSystematics sys)
+static bool NT_channel_dy_mutau(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
@@ -787,7 +789,7 @@ bool NT_channel_dy_mutau(ObjSystematics sys)
 	return mT < 40 && (relevant_selection_stage == 135 || relevant_selection_stage == 134 || relevant_selection_stage == 125 || relevant_selection_stage == 124);
 	}
 
-bool NT_channel_dy_eltau(ObjSystematics sys)
+static bool NT_channel_dy_eltau(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
@@ -804,7 +806,7 @@ bool NT_channel_dy_eltau(ObjSystematics sys)
 	return mT < 40 && (relevant_selection_stage == 235 || relevant_selection_stage == 234 || relevant_selection_stage == 225 || relevant_selection_stage == 224);
 	}
 
-bool NT_channel_dy_mutau_ss(ObjSystematics sys)
+static bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
@@ -821,7 +823,7 @@ bool NT_channel_dy_mutau_ss(ObjSystematics sys)
 	return mT < 40 && (relevant_selection_stage == 133 || relevant_selection_stage == 132 || relevant_selection_stage == 123 || relevant_selection_stage == 122);
 	}
 
-bool NT_channel_dy_eltau_ss(ObjSystematics sys)
+static bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy;
@@ -838,24 +840,24 @@ bool NT_channel_dy_eltau_ss(ObjSystematics sys)
 	return mT < 40 && (relevant_selection_stage == 233 || relevant_selection_stage == 232 || relevant_selection_stage == 223 || relevant_selection_stage == 222);
 	}
 
-bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_mutau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau(sys);
 	// I use the if expression to be sure the vector NT_event_taus_sv_sign is not empty!
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
-bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_mutau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_mutau_ss(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
 
-bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_eltau_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
 	}
-bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
+static bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 	{
 	bool sel = NT_channel_dy_eltau_ss(sys);
 	return sel ?  NT_event_taus_sv_sign[0] > 3. : false;
@@ -863,7 +865,7 @@ bool NT_channel_dy_eltau_ss_tauSV3(ObjSystematics sys)
 
 
 
-bool NT_channel_dy_elmu(ObjSystematics sys)
+static bool NT_channel_dy_elmu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_elmu;
@@ -875,7 +877,7 @@ bool NT_channel_dy_elmu(ObjSystematics sys)
 	return relevant_selection_stage == 105;
 	}
 
-bool NT_channel_dy_elmu_ss(ObjSystematics sys)
+static bool NT_channel_dy_elmu_ss(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_elmu;
@@ -888,7 +890,7 @@ bool NT_channel_dy_elmu_ss(ObjSystematics sys)
 	}
 
 
-bool NT_channel_dy_mumu(ObjSystematics sys)
+static bool NT_channel_dy_mumu(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_mumu;
@@ -900,7 +902,7 @@ bool NT_channel_dy_mumu(ObjSystematics sys)
 	return relevant_selection_stage == 102 || relevant_selection_stage == 103 || relevant_selection_stage == 105;
 	}
 
-bool NT_channel_dy_elel(ObjSystematics sys)
+static bool NT_channel_dy_elel(ObjSystematics sys)
 	{
 	int relevant_selection_stage = 0;
 	if      (sys == NOMINAL)   relevant_selection_stage = NT_selection_stage_dy_mumu;
@@ -1004,12 +1006,12 @@ However, it requires more typing, therefore I will make some short-hand macro.
 /** \brief passes all events, to use in inclusive cases
 */
 
-bool NT_genproc_inclusive()
+static bool NT_genproc_inclusive()
 	{
 	return true;
 	}
 
-bool NT_genproc_tt_eltau3ch()
+static bool NT_genproc_tt_eltau3ch()
 	{
 	return NT_gen_proc_id == 42;
 	}
@@ -1017,7 +1019,7 @@ bool NT_genproc_tt_eltau3ch()
 // a short-hand macro
 
 #define NT_genproc(procname, procID)         \
-bool NT_genproc_ ##procname(void)            \
+static bool NT_genproc_ ##procname(void)            \
 	{                                  \
 	return NT_gen_proc_id == (procID); \
 	}
@@ -1047,13 +1049,13 @@ NT_genproc(stop_mutau    , 10)
 NT_genproc(stop_lj    ,  2)
 NT_genproc(stop_elmu  ,  1)
 
-bool NT_genproc_tt_eltau()
+static bool NT_genproc_tt_eltau()
 	{
 	return NT_gen_proc_id > 40 && NT_gen_proc_id < 43;
 	}
 
 #define NT_genproc_range(procname, procID_min, procID_max)         \
-bool NT_genproc_ ##procname(void)          \
+static bool NT_genproc_ ##procname(void)          \
 	{                                  \
 	return NT_gen_proc_id > (procID_min) && NT_gen_proc_id < (procID_max); \
 	}
@@ -1064,32 +1066,32 @@ NT_genproc_range(tt_leptau, 30, 43)
 NT_genproc_range(tt_lj, 20, 30)
 
 // standard per-channel processes
-vector<TString> _eltau_tt_procs  = {"tt_eltau", "tt_taulj", "tt_lj"};
-vector<TString> _mutau_tt_procs  = {"tt_mutau", "tt_taulj", "tt_lj"};
-vector<TString> _leptau_tt_procs = {"tt_leptau", "tt_taulj", "tt_lj"};
-vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
+static vector<TString> _eltau_tt_procs  = {"tt_eltau", "tt_taulj", "tt_lj"};
+static vector<TString> _mutau_tt_procs  = {"tt_mutau", "tt_taulj", "tt_lj"};
+static vector<TString> _leptau_tt_procs = {"tt_leptau", "tt_taulj", "tt_lj"};
+static vector<TString>  _elmu_tt_procs = {"tt_elmu",  "tt_ltaul"};
 //vector<TString> _mumu_tt_procs  = {"tt_inclusive"};
 //vector<TString> _elel_tt_procs  = {"tt_inclusive"};
 // actually empty vectors must work, the catchall process will handle this
-vector<TString> _mumu_tt_procs  = {};
-vector<TString> _elel_tt_procs  = {};
+static vector<TString> _mumu_tt_procs  = {};
+static vector<TString> _elel_tt_procs  = {};
 
-vector<TString> _leptau_dy_procs = {"dy_tautau"};
-vector<TString>  _incl_dy_procs = {};
+static vector<TString> _leptau_dy_procs = {"dy_tautau"};
+static vector<TString>  _incl_dy_procs = {};
 
-vector<TString> _eltau_stop_procs = {"stop_eltau", "stop_lj"};
-vector<TString> _mutau_stop_procs = {"stop_mutau", "stop_lj"};
-vector<TString>  _elmu_stop_procs = {"stop_elmu"};
-vector<TString>  _mumu_stop_procs = {};
-vector<TString>  _elel_stop_procs = {};
+static vector<TString> _eltau_stop_procs = {"stop_eltau", "stop_lj"};
+static vector<TString> _mutau_stop_procs = {"stop_mutau", "stop_lj"};
+static vector<TString>  _elmu_stop_procs = {"stop_elmu"};
+static vector<TString>  _mumu_stop_procs = {};
+static vector<TString>  _elel_stop_procs = {};
 
-vector<TString> _eltau_wjets_procs = {"wjets_tauh", "wjets_taul"};
-vector<TString> _mutau_wjets_procs = {"wjets_tauh", "wjets_taul"};
-vector<TString>  _elmu_wjets_procs = {};
-vector<TString>  _mumu_wjets_procs = {};
-vector<TString>  _elel_wjets_procs = {};
+static vector<TString> _eltau_wjets_procs = {"wjets_tauh", "wjets_taul"};
+static vector<TString> _mutau_wjets_procs = {"wjets_tauh", "wjets_taul"};
+static vector<TString>  _elmu_wjets_procs = {};
+static vector<TString>  _mumu_wjets_procs = {};
+static vector<TString>  _elel_wjets_procs = {};
 
-vector<TString>  _any_procs = {};
+static vector<TString>  _any_procs = {};
 
 // ^--- I am not sure this is the best approach to define these standard processes
 //      initially I wanted to have a bunch of general sets, not the concrete per-channel ones

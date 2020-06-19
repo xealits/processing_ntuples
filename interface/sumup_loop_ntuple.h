@@ -44,15 +44,6 @@ the same gen-level process is defined differently in original ntuples and in sta
 
 using namespace std;
 
-/* --------------------------------------------------------------- */
-// helper functions for gdb
-// substitute TStrings with standard supported string everywhere
-
-const char* debug_TString_Data (TString& str) {return str.Data();}
-const char* debug_TH1D_Name    (TH1D& hist) {return hist.GetName();}
-
-/* --------------------------------------------------------------- */
-
 
 
 /**
