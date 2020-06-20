@@ -57,27 +57,29 @@ with a separate function to connect an input TTree to that namespace etc.
 
 #include "UserCode/proc/interface/sumup_loop_ntuple.h"
 #include "UserCode/proc/interface/ntuple_stage2.h"
+#include "UserCode/proc/interface/ntuple_ntupler.h"
+
+// the ntuple interface declarations
+// to be connected to one of the ntuple_ interfaces in main
+T_known_defs_systs    known_systematics;
+T_known_defs_channels known_defs_channels;
+T_known_defs_distrs   known_defs_distrs;
+
+T_known_defs_procs    known_procs_info;
+
+T_known_MC_normalization_per_somename    known_normalization_per_syst;
+T_known_MC_normalization_per_somename    known_normalization_per_proc;
+T_known_MC_normalization_per_somename    known_normalization_per_chan;
+
+//typedef int (*F_connect_ntuple_interface)(TTree*);
+F_connect_ntuple_interface connect_ntuple_interface;
+// -----
 
 using namespace std;
 
 // TODO: turn these into arguments for main
 bool do_not_overwrite     = true;
 bool normalise_per_weight = true;
-
-
-// -------------------- main record parameters
-
-// TODO: move this under an if in the main function
-//T_known_defs_systs   known_systematics   = known_systematics_stage2;
-//T_known_defs_channels known_defs_channels = known_defs_channels_stage2;
-//T_known_defs_distrs   known_defs_distrs   = known_defs_distrs_stage2;
-
-// another way
-T_known_defs_systs    known_systematics   = create_known_defs_systs_stage2();
-T_known_defs_channels known_defs_channels = create_known_defs_channels_stage2();
-T_known_defs_distrs   known_defs_distrs   = create_known_defs_distrs_stage2();
-
-// main record parameters --------------------
 
 /* --------------------------------------------------------------- */
 /* main structure of the event loop
@@ -325,9 +327,6 @@ MC2016_Summer16_QCD_HT-1500-2000                     MC2016_Summer16_TTJets_powh
 	return m;
 	}
 
-T_known_defs_procs        known_procs_info = create_known_defs_procs_stage2();
-map<TString, S_dtag_info> known_dtags_info = create_known_dtags_info(known_procs_info);
-
 // ----------------- dtag info
 
 
@@ -358,10 +357,6 @@ TH1D* weight_counter = NULL;
 
 // per dtag cross section -- make it a commandline option if you want
 bool normalise_per_cross_section = true;
-
-T_known_MC_normalization_per_somename    known_normalization_per_syst = create_known_MC_normalization_per_syst_stage2();
-T_known_MC_normalization_per_somename    known_normalization_per_proc = create_known_MC_normalization_per_proc_stage2();
-T_known_MC_normalization_per_somename    known_normalization_per_chan = create_known_MC_normalization_per_chan_stage2();
 
 void normalise_final(TH1D* histo, double cross_section, double scale, const TString& name_syst, const TString& name_chan, const TString& name_proc)
 	{
@@ -608,9 +603,6 @@ for (const auto& systname: requested_systematics)
 cerr_expr(n_systs_made << " " << n_chans_made << " " << n_procs_made << " " << n_distrs_made);
 return distrs_to_record;
 }
-
-//typedef int (*F_connect_ntuple_interface)(TTree*);
-F_connect_ntuple_interface connect_ntuple_interface = &connect_ntuple_interface_stage2;
 
 // this is a pure hack, but the flexibility allows this:
 //extern Int_t NT_nup;
@@ -939,7 +931,7 @@ argv++;
 
 if (argc < 7)
 	{
-	std::cout << "Usage:" << " 0|1<simulate_data> 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
+	std::cout << "Usage:" << " [0-1]<interface type> 0|1<simulate_data> 0|1<save_in_old_order> 0|1<do_WNJets_stitching> <lumi> <systs coma-separated> <chans> <procs> <distrs> output_filename input_filename [input_filename+]" << std::endl;
 	exit(1);
 	}
 
@@ -955,6 +947,8 @@ gROOT->Reset();
 // with NOMINAL systematic
 // and  data    proc name
 // histograms are filled with 1
+Int_t interface_type     = Int_t(atoi(*argv++)) == 1; argc--;
+
 bool simulate_data       = Int_t(atoi(*argv++)) == 1; argc--;
 
 bool save_in_old_order   = Int_t(atoi(*argv++)) == 1; argc--;
@@ -975,6 +969,56 @@ if  (do_not_overwrite)
 
 cerr_expr(do_WNJets_stitching << " " << output_filename);
 /* --------------------- */
+
+
+// -------------------- set the interface type
+string input_path_ttree;
+string input_path_weight_counter;
+
+// main record parameters
+switch (interface_type)
+{
+case 0:
+	known_systematics   = create_known_defs_systs_stage2();
+	known_defs_channels = create_known_defs_channels_stage2();
+	known_defs_distrs   = create_known_defs_distrs_stage2();
+
+	known_procs_info    = create_known_defs_procs_stage2();
+
+	known_normalization_per_syst = create_known_MC_normalization_per_syst_stage2();
+	known_normalization_per_proc = create_known_MC_normalization_per_proc_stage2();
+	known_normalization_per_chan = create_known_MC_normalization_per_chan_stage2();
+
+	connect_ntuple_interface = &connect_ntuple_interface_stage2;
+
+	input_path_ttree = "ttree_out";
+	input_path_weight_counter = "weight_counter";
+	break;
+
+case 1:
+	known_systematics   = create_known_defs_systs_ntupler();
+	known_defs_channels = create_known_defs_channels_ntupler();
+	known_defs_distrs   = create_known_defs_distrs_ntupler();
+
+	known_procs_info    = create_known_defs_procs_ntupler();
+
+	known_normalization_per_syst = create_known_MC_normalization_per_syst_ntupler();
+	known_normalization_per_proc = create_known_MC_normalization_per_proc_ntupler();
+	known_normalization_per_chan = create_known_MC_normalization_per_chan_ntupler();
+
+	connect_ntuple_interface = &connect_ntuple_interface_ntupler;
+
+	input_path_ttree = "ntupler/reduced_ttree";
+	input_path_weight_counter = "ntupler/weight_counter";
+	break;
+
+default:
+	Stopif(interface_type != 0 && interface_type != 1, exit(2);, "the interface type %d is not supported, the valid values are 0 (stage2) and 1 (ntupler)", interface_type);
+}
+
+map<TString, S_dtag_info> known_dtags_info = create_known_dtags_info(known_procs_info);
+
+// set the interface type --------------------
 
 
 //Int_t rebin_factor(atoi(argv[3]));
@@ -1052,13 +1096,13 @@ for (unsigned int cur_var = 0; cur_var<argc; cur_var++)
 	TFile* input_file  = TFile::Open(input_filename);
 	Stopif(!input_file,  continue, "cannot Open TFile in %s, skipping", input_filename.Data());
 
-	TTree* NT_output_ttree = (TTree*) input_file->Get("ttree_out");
+	TTree* NT_output_ttree = (TTree*) input_file->Get(input_path_ttree.c_str());
 	Stopif(!NT_output_ttree, continue, "cannot Get TTree in file %s, skipping", input_filename.Data());
 
 	if (normalise_per_weight)
 		{
 		// get weight distribution for the file
-		TH1D* weight_counter_in_file = (TH1D*) input_file->Get("weight_counter");
+		TH1D* weight_counter_in_file = (TH1D*) input_file->Get(input_path_weight_counter.c_str());
 		// if the common weight counter is still not set -- clone
 		if (!weight_counter)
 			{
