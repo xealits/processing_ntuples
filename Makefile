@@ -2,9 +2,9 @@ compile:
 	time scram b -j 5
 	touch compile
 
-histograms_to_fit: stage2_dir=lstore_outdirs/
-histograms_to_fit: nt=94v3
-histograms_to_fit: proc=processing1
+histograms_to_fit: interface_type=1
+histograms_to_fit: ntuples_dir=gstore_outdirs/
+histograms_to_fit: nt=94v15
 histograms_to_fit: hists=mc_2
 histograms_to_fit: distr_out=jobsums/distrs/
 histograms_to_fit: simulate_data_output=1
@@ -14,16 +14,42 @@ histograms_to_fit: systematics=std
 histograms_to_fit: channels=mu_sel,tt_elmu
 histograms_to_fit: processes=std
 histograms_to_fit: distrs=Mt_lep_met_c,leading_lep_pt
-histograms_to_fit: dtags_grep=.
+histograms_to_fit: dsets_grep=.
 histograms_to_fit: exe=sumup_loop
 histograms_to_fit:
+	mkdir -p ${distr_out}/${nt}/${hists}/
+	# same with xargs
+	#ls ${ntuples_dir}/${nt}/ | grep "${dsets_grep}" | xargs -P ${n_proc} -I DSET sh -c "time ${exe} ${interface_type} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${hists}/DSET.root `find ${ntuples_dir}/${nt}/DSET/ -name '*.root' | grep -v -i fail`"
+	for DSET in `ls ${ntuples_dir}/${nt}/ | grep ${dsets_grep}`; do \
+	  time ${exe} ${interface_type} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${hists}/$$DSET.root ${ntuples_dir}/${nt}/$$DSET/*/*/*/*.root ; \
+	done
+	#DSET_FILES=`find ${ntuples_dir}/${nt}/$$DSET -name "*.root" | grep -v -i fail`;
+	# gstore_outdirs//94v15/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/Ntupler_94v15_MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1/200225_121301/0000/
+	hadd ${distr_out}/distrs_${nt}__${hists}.root  ${distr_out}/${nt}/${hists}/*root
+
+histograms_to_fit_stage2: interface_type=0
+histograms_to_fit_stage2: stage2_dir=lstore_outdirs/
+histograms_to_fit_stage2: nt=94v3
+histograms_to_fit_stage2: proc=processing1
+histograms_to_fit_stage2: hists=mc_2
+histograms_to_fit_stage2: distr_out=jobsums/distrs/
+histograms_to_fit_stage2: simulate_data_output=1
+histograms_to_fit_stage2: n_proc=6
+histograms_to_fit_stage2: lumi=41300
+histograms_to_fit_stage2: systematics=std
+histograms_to_fit_stage2: channels=mu_sel,tt_elmu
+histograms_to_fit_stage2: processes=std
+histograms_to_fit_stage2: distrs=Mt_lep_met_c,leading_lep_pt
+histograms_to_fit_stage2: dtags_grep=.
+histograms_to_fit_stage2: exe=sumup_loop
+histograms_to_fit_stage2:
 	mkdir -p ${distr_out}/${nt}/${proc}/${hists}/
 	#for dtag in `ls ${stage2_dir}/${nt}/${proc}/`; do \
 	#   mkdir -p ${distr_out}/${nt}/${proc}/ ; \
 	#   time sumup_loop ${simulate_data_output} 1 0 ${lumi} std all std Mt_lep_met_c,leading_lep_pt ${distr_out}/${nt}/${proc}/$$dtag.root ${stage2_dir}/${nt}/${proc}/$$dtag/*root & \
 	#done
 	# same with xargs
-	ls ${stage2_dir}/${nt}/${proc}/ | grep "${dtags_grep}" | xargs -P ${n_proc} -I DTAG sh -c "time ${exe} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
+	ls ${stage2_dir}/${nt}/${proc}/ | grep "${dtags_grep}" | xargs -P ${n_proc} -I DTAG sh -c "time ${exe} ${interface_type} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${proc}/${hists}/DTAG.root ${stage2_dir}/${nt}/${proc}/DTAG/*root"
 	#hadd ${distr_out}/distrs_${nt}_${proc}_mc_1.root ${distr_out}/${nt}/${proc}/*root
 	hadd ${distr_out}/distrs_${nt}_${proc}_${hists}.root  ${distr_out}/${nt}/${proc}/${hists}/*root
 
