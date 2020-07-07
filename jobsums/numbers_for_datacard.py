@@ -377,10 +377,14 @@ if args.event_yields:
                 #
                 if not channel in chan_d: continue
                 integral  , uncertainty      = chan_d.get(channel)
-                data_yield, uncertainty_data = data_yields[channel]
-                if integral and args.ratios:
+
+                if not args.no_data:
+                  data_yield, uncertainty_data = data_yields[channel]
+                  if integral and args.ratios:
                     integral = integral / data_yield
-                line += separator + '$' + string_yield(integral) + ' \\pm ' + string_yield(uncertainty) + ' $'
+
+                line += separator + channel + '$' + string_yield(integral) + ' \\pm ' + string_yield(uncertainty) + ' $'
+
             print line + line_end
             # also calc sum
             for channel in channels:

@@ -190,7 +190,7 @@ map<TString, S_dtag_info> create_known_dtags_info(T_known_defs_procs known_procs
 	//map<const char*, S_dtag_info> m;
 	map<TString, S_dtag_info> m;
 
-	m["MC2017legacy_Fall17_WJets_madgraph"              ] = {.cross_section= 52940.                            ,
+	m["MC2017_Fall17_WJetsToLNu_13TeV"              ] = {.cross_section= 52940.                            ,
 		.usual_gen_lumi= 23102470.188817,
 		.std_procs = known_procs_info["wjets"],
 		.std_systs = {SYSTS_OTHER_MC}};
@@ -277,15 +277,15 @@ map<TString, S_dtag_info> create_known_dtags_info(T_known_defs_procs known_procs
 		.std_procs=known_procs_info["stop"],
 		.std_systs = {SYSTS_OTHER_MC}};
 
-	m["MC2017legacy_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              ,
+	m["MC2017_Fall17_TTToHadronic_13TeV"             ] = {.cross_section=   831.76 * W_qar_br2              ,
 		.usual_gen_lumi= 29213134.729453,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
-	m["MC2017legacy_Fall17_TTToSemiLeptonic"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br ,
+	m["MC2017_Fall17_TTToSemileptonic_13TeV"            ] = {.cross_section=   831.76 * 2*W_alllep_br*W_qar_br ,
 		.usual_gen_lumi= 21966343.919990,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};
-	m["MC2017legacy_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           ,
+	m["MC2017_Fall17_TTTo2L2Nu"                      ] = {.cross_section=   831.76 * W_alllep_br2           ,
 		.usual_gen_lumi=  2923730.883332,
 		.std_procs=known_procs_info["tt"],
 		.std_systs = {SYSTS_TT}};

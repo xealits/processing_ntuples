@@ -3,17 +3,17 @@ compile:
 	touch compile
 
 histograms_to_fit: interface_type=1
-histograms_to_fit: ntuples_dir=gstore_outdirs/
-histograms_to_fit: nt=94v15
+histograms_to_fit: ntuples_dir=/eos/user/a/asikdar/
+histograms_to_fit: nt=94v22
 histograms_to_fit: hists=mc_2
 histograms_to_fit: distr_out=jobsums/distrs/
 histograms_to_fit: simulate_data_output=1
 histograms_to_fit: n_proc=6
 histograms_to_fit: lumi=41300
 histograms_to_fit: systematics=std
-histograms_to_fit: channels=mu_sel,tt_elmu
+histograms_to_fit: channels=el_sel,mu_sel,tt_elmu,el_sel_tauSV3,mu_sel_tauSV3
 histograms_to_fit: processes=std
-histograms_to_fit: distrs=Mt_lep_met_c,leading_lep_pt
+histograms_to_fit: distrs=Mt_lep_met_c,leading_lep_pt,tau_sv_sign,dilep_mass,met_f
 histograms_to_fit: dsets_grep=.
 histograms_to_fit: exe=sumup_loop
 histograms_to_fit:
@@ -21,7 +21,7 @@ histograms_to_fit:
 	# same with xargs
 	#ls ${ntuples_dir}/${nt}/ | grep "${dsets_grep}" | xargs -P ${n_proc} -I DSET sh -c "time ${exe} ${interface_type} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${hists}/DSET.root `find ${ntuples_dir}/${nt}/DSET/ -name '*.root' | grep -v -i fail`"
 	for DSET in `ls ${ntuples_dir}/${nt}/ | grep ${dsets_grep}`; do \
-	  time ${exe} ${interface_type} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${hists}/$$DSET.root ${ntuples_dir}/${nt}/$$DSET/*/*/*/*.root ; \
+           time ${exe} ${interface_type} ${simulate_data_output} 1 0 ${lumi} ${systematics} ${channels} ${processes} ${distrs} ${distr_out}/${nt}/${hists}/$$DSET.root ${ntuples_dir}/${nt}/$$DSET/*/*/*/*.root ; \
 	done
 	#DSET_FILES=`find ${ntuples_dir}/${nt}/$$DSET -name "*.root" | grep -v -i fail`;
 	# gstore_outdirs//94v15/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/Ntupler_94v15_MC2017legacy_Fall17_DYJetsToLL_50toInf_madgraph_v1/200225_121301/0000/

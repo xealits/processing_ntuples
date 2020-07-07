@@ -120,7 +120,7 @@ parser.add_argument("--skip-legend",  action='store_true', help="don't plot the 
 
 parser.add_argument("--skip-QCD", action='store_true', help="skip MC QCD")
 
-parser.add_argument("--drop-bin", type=float, help="drop values in the bin")
+parser.add_argument("--drop-bin", help="list of drop values in the bin")
 
 parser.add_argument("--lumi-label", type=float, help="set lumi label on the plot")
 parser.add_argument("--title-x", type=str, default="", help="set title of X axis on the plot")
@@ -646,7 +646,8 @@ def get_histos(infile, channels, shape_channel, sys_name, distr_name, skip_QCD=a
 
            # drop bin
            if args.drop_bin:
-               bn_to_drop = histo.FindBin(args.drop_bin)
+             for drb in args.drop_bin.split(','):
+               bn_to_drop = histo.FindBin(float(drb))
                histo.SetBinContent (bn_to_drop, 0)
                histo.SetBinError   (bn_to_drop, 0)
 
@@ -974,7 +975,7 @@ elif args.top_legend:
 else:
     shift = args.legend_shift if args.legend_shift else 0.
     #leg = TLegend(0.7 - shift, 0.45, 0.89 - shift, 0.92)
-    leg = TLegend(0.7 - shift, 0.4, 0.89 - shift, 0.92)
+    leg = TLegend(0.7 - shift, 0.52, 0.89 - shift, 0.92)
 
 leg.SetTextFont(args.fonts1)
 leg.SetTextSize(args.font_size_axes_labels)
@@ -1503,7 +1504,8 @@ else:
 
     # drop bin
     if args.drop_bin:
-        bn_to_drop = histos_data_sum.FindBin(args.drop_bin)
+      for drb in args.drop_bin.split(','):
+        bn_to_drop = histos_data_sum.FindBin(float(drb))
         histos_data_sum.SetBinContent (bn_to_drop, 0)
         histos_data_sum.SetBinError   (bn_to_drop, 0)
 

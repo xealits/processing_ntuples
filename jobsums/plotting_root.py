@@ -14,6 +14,8 @@ def rgb(r, g, b):
 
 nick_info = {
 "data":        {'color': kWhite,   'legend': 'data'},
+"other":       {'color': kGray,    'legend': 'other'},
+
 "dy_other":    {'color': kGray,    'legend': 'DY #rightarrow other'},
 "dy_tautau":   {'color': kGray+2,  'legend': 'DY #rightarrow #tau#tau'},
 "dy":          {'color': kGray+2,  'legend': 'DY+jets'},
@@ -134,6 +136,8 @@ nick_order = {
 "dibosons_other" : -40,
 "qcd"       : -50,
 "qcd_other" : -50,
+
+"other" : -100,
 }
 
 def stack_n_legend(used_histos, shift=0., exp_legend=False, sort_dy=False, leg=None):
