@@ -1,3 +1,6 @@
+# testing new condor genjobs for sumup_loop
+python3 genjobs_sumup_loop.py 94v15 hists_3
+
 # nvtx figures for thesis
 # still not in stage2!!!! how?
 

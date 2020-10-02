@@ -12,7 +12,7 @@ test_ntupler: order=0
 test_ntupler: chans=all
 test_ntupler: compile
 #	sumup_loop ${interface_type} ${simulate_data_output} ${order} 1 41300 test ${chans} std Mt_lep_met_c,leading_lep_pt outfile_test_ntupler2.root ../gstore_outdirs/94v15/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/Ntupler_94v15_MC2017legacy_Fall17_TTTo2L2Nu/200225_121541/0000/MC2017legacy_Fall17_TTTo2L2Nu_1.root
-	sumup_loop ${interface_type} ${simulate_data_output} ${order} 1 41300 test ${chans} std Mt_lep_met_c,leading_lep_pt outfile_test_ntupler4.root ../gstore_outdirs/94v22/MC2017_Fall17_TTTo2L2Nu_1.root
+	sumup_loop ${interface_type} ${simulate_data_output} ${order} 1 41300 test ${chans} std leading_lep_pt,Mt_lep_met,electron_pt,muon_pt,tau_pt outfile_test_ntupler_temp1.root   ../gstore_outdirs/94v22/MC2017_Fall17_TTTo2L2Nu_1.root
 
 acceptance_test: interface_type=0
 acceptance_test: simulate_data_output=0
